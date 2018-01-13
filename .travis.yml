@@ -9,7 +9,6 @@ before_script:
   - cp .env.ci .env
   - composer install --prefer-source --no-interaction
   - php artisan key:generate
-  - php artisan migrate --seed
 
 script:
   - vendor/bin/phpunit tests
