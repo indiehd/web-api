@@ -38,7 +38,8 @@ module.exports = {
         'revert',
         'style',
         'tests',
-        'ui'
+        'ui',
+        `scaff`
       ]
     ]
   }
