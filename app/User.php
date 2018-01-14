@@ -26,4 +26,24 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function catalogable()
+    {
+        return $this->morphOne(CatalogEntity::class, 'catalogable');
+    }
+
+    public function fan()
+    {
+        return $this->hasOne(Fan::class);
+    }
+
+    public function songs()
+    {
+        return $this->catalogable ? $this->catalogable->songs : collect([]);
+    }
+
+    public function purchased()
+    {
+        return $this->belongsToMany(Song::class);
+    }
 }
