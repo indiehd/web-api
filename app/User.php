@@ -27,23 +27,28 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function catalogable()
+    public function entity()
     {
-        return $this->morphOne(CatalogEntity::class, 'catalogable');
+        return $this->fan ? $this->fan : $this->hasOne(CatalogEntity::class);
     }
 
-    public function fan()
+    public function catalogable()
     {
-        return $this->hasOne(Fan::class);
+        return $this->entity->catalogable;
     }
 
     public function songs()
     {
-        return $this->catalogable ? $this->catalogable->songs : collect([]);
+        return $this->catalogable() ? $this->catalogable()->songs : $this->purchased;
     }
 
     public function purchased()
     {
         return $this->belongsToMany(Song::class);
+    }
+
+    public function fan()
+    {
+        return $this->hasOne(Fan::class);
     }
 }
