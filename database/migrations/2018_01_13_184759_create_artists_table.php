@@ -15,6 +15,10 @@ class CreateArtistsTable extends Migration
     {
         Schema::create('artists', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->unsignedInteger('label_id')->nullable();
+            //$table->foreign('label_id')->references('id')->on('labels');
+
             $table->timestamps();
         });
     }

@@ -15,6 +15,13 @@ class CreateCatalogEntitiesTable extends Migration
     {
         Schema::create('catalog_entities', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->unsignedInteger('catalogable_id');
+            $table->string('catalogable_type');
+
             $table->timestamps();
         });
     }
