@@ -32,16 +32,6 @@ class User extends Authenticatable
         return $this->fan ? $this->fan : $this->hasOne(CatalogEntity::class);
     }
 
-    public function catalogable()
-    {
-        return $this->entity->catalogable;
-    }
-
-    public function songs()
-    {
-        return $this->catalogable() ? $this->catalogable()->songs : $this->purchased;
-    }
-
     public function purchased()
     {
         return $this->belongsToMany(Song::class);
