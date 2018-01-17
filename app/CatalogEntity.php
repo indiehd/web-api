@@ -12,4 +12,19 @@ class CatalogEntity extends Model
     {
         return $this->morphTo();
     }
+
+    public function user()
+    {
+        $this->belongsTo(User::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
