@@ -26,6 +26,8 @@ module.exports = {
       2,
       'always',
       [
+        'api',
+        'wip',
         'build',
         'chore',
         'ci',
