@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
-class CountriesSeeder extends Seeder
+class CountriesSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
