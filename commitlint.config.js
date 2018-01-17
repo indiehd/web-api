@@ -26,6 +26,7 @@ module.exports = {
       2,
       'always',
       [
+        'api',
         'wip',
         'build',
         'chore',
@@ -38,8 +39,7 @@ module.exports = {
         'revert',
         'style',
         'tests',
-        'ui',
-        `scaff`
+        'ui'
       ]
     ]
   }
