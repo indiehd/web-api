@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidatorInterface;
 
@@ -29,7 +30,7 @@ class UserController extends Controller
 
     public function all()
     {
-        return response($this->user->all(), 200);
+        return response(new UserCollection($this->user->all()), 200);
     }
 
     public function getById($id)
