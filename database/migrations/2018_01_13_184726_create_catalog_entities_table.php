@@ -24,7 +24,7 @@ class CreateCatalogEntitiesTable extends Migration
             // $table->foreign('country_code')->references('code')->on('countries');
             $table->string('official_url')->nullable();
             $table->string('profile_url');
-            $table->unsignedInteger('rank')->default(0);
+            $table->unsignedInteger('rank')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamp('approved_at')->nullable();
             $table->unsignedInteger('user_id');
