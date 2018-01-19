@@ -28,6 +28,7 @@ class CreateCatalogEntitiesTable extends Migration
             $table->string('alt_phone')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamp('approved_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('approver_id')->nullable();
