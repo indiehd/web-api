@@ -10,12 +10,7 @@ class AccountsSeeder extends BaseSeeder
      */
     public function run()
     {
-        $seed_count = 50;
-
-        $types = [
-            App\CatalogEntity::class,
-            App\Fan::class
-        ];
+        $seed_count = 100;
 
         $catalogable = [
             App\Artist::class,
@@ -23,25 +18,53 @@ class AccountsSeeder extends BaseSeeder
         ];
 
         for ($i = 1; $i <= $seed_count; $i++) {
-            $catalogable_type = $catalogable[rand(0, count($catalogable)-1)];
 
-            $type = $types[rand(0, count($types)-1)];
+            // add some randomness
+            if ([true,false][rand(0,1)]) {
 
-            if ($type === App\CatalogEntity::class) {
+                if ([true,false][rand(0,1)]) {
+                    // users with Artist AND Label Profiles
+                    $this->log('Creating a User with Label and Artist Profiles');
 
-                $this->log('Creating A CatalogEntity');
-                $this->log("CatalogEntity Type is: $catalogable_type");
+                    $user_id = factory(App\User::class)->create()->id;
 
-                factory($type)->create([
-                    'catalogable_id' => factory($catalogable_type)->create()->id,
-                    'catalogable_type' => $catalogable_type
-                ]);
+                    foreach ($catalogable as $item) {
+                        $entity = factory($item)->create();
 
+                        factory(App\CatalogEntity::class)->create([
+                            'user_id' => $user_id,
+                            'catalogable_id' => $entity->id,
+                            'catalogable_type' => $item
+                        ]);
+
+                        factory(App\Profile::class)->create([
+                            'profilable_id' => $entity->id,
+                            'profilable_type' => $item
+                        ]);
+                    }
+
+                } else {
+                    // users with Artist OR Label Profile
+                    $type = $catalogable[rand(0, count($catalogable)-1)];
+                    $this->log("Creating a User with a $type Profile");
+
+                    $entity = factory($type)->create();
+
+                    factory(App\CatalogEntity::class)->create([
+                        'user_id' => factory(App\User::class)->create()->id,
+                        'catalogable_id' => $entity->id,
+                        'catalogable_type' => $type
+                    ]);
+
+                    factory(App\Profile::class)->create([
+                        'profilable_id' => $entity->id,
+                        'profilable_type' => $type
+                    ]);
+                }
             } else {
-
-                $this->log('Creating A Fan');
-
-                factory($type)->create();
+                // users without any Catalogable Entities "Fans"
+                $this->log("Creating a User without any catalogable profiles");
+                factory(App\User::class)->create();
             }
         }
 

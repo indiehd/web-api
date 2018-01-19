@@ -25,8 +25,8 @@ class CreateProfilesTable extends Migration
             $table->string('official_url')->nullable();
             $table->string('profile_url');
             $table->unsignedInteger('rank')->nullable();
-            $table->unsignedInteger('catalogable_id');
-            $table->string('catalogable_type');
+            $table->unsignedInteger('profilable_id');
+            $table->string('profilable_type');
             $table->timestamps();
         });
     }

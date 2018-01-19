@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Artist extends Model
 {
 
-    public function profile()
+    public function catalogable()
     {
         return $this->morphOne(CatalogEntity::class, 'catalogable');
+    }
+
+    public function profile()
+    {
+        return $this->morphOne(Profile::class, 'profilable');
     }
 
     public function label()

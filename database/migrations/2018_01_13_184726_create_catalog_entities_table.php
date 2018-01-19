@@ -25,7 +25,7 @@ class CreateCatalogEntitiesTable extends Migration
             $table->char('country_code', 2);
             $table->string('postal_code');
             $table->string('phone');
-            $table->string('alt_phone');
+            $table->string('alt_phone')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamp('approved_at')->nullable();
             $table->unsignedInteger('user_id');
