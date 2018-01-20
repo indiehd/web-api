@@ -19,10 +19,18 @@ class AccountsSeeder extends BaseSeeder
 
         for ($i = 1; $i <= $seed_count; $i++) {
 
-            // add some randomness
-            if ([true,false][rand(0,1)]) {
+            /*
+             * We do this to randomly choose if we are generating
+             * a account WITH catalogable entities ELSE we generate a single "Fan Account".
+             */
+            if ($this->randomBoolean()) {
 
-                if ([true,false][rand(0,1)]) {
+                /*
+                 * If we are generating an account WITH catalogable entities,
+                 * we should randomly choose to either generate an account
+                 * with BOTH catalogable enities ELSE just 1 single random catalogable entity.
+                 */
+                if ($this->randomBoolean()) {
                     // users with Artist AND Label Profiles
                     $this->log('Creating a User with Label and Artist Profiles');
 
@@ -68,5 +76,15 @@ class AccountsSeeder extends BaseSeeder
             }
         }
 
+    }
+
+    /**
+     * Returns a random boolean
+     *
+     * @return boolean
+     */
+    private function randomBoolean()
+    {
+        return [true, false][rand(0, 1)];
     }
 }
