@@ -85,6 +85,6 @@ class AccountsSeeder extends BaseSeeder
      */
     private function randomBoolean()
     {
-        return [true, false][rand(0, 1)];
+        return (bool) rand(0, 1);
     }
 }
