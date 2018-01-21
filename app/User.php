@@ -13,6 +13,7 @@ class User extends EloquentUser
      * {@inheritDoc}
      */
     protected $fillable = [
+        'email',
         'username',
         'password',
         'permissions',
@@ -28,20 +29,15 @@ class User extends EloquentUser
     /**
      * {@inheritDoc}
      */
-    protected $loginNames = ['username'];
+    protected $loginNames = ['email'];
 
-    public function entity()
+    public function entities()
     {
-        return $this->fan ? $this->fan : $this->hasOne(CatalogEntity::class);
+        return $this->hasMany(CatalogEntity::class);
     }
 
     public function purchased()
     {
         return $this->belongsToMany(Song::class);
-    }
-
-    public function fan()
-    {
-        return $this->hasOne(Fan::class);
     }
 }

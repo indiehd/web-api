@@ -16,19 +16,19 @@ $factory->define(App\CatalogEntity::class, function (Faker $faker) {
     $deleter_id = $faker->boolean(15) ? $faker->numberBetween(1, App\User::count()) : null;
 
     return [
-        'moniker' => $faker->company,
-        'alt_moniker' => $faker->boolean(50) ? $faker->company : null,
-        'email' => $faker->email,
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'email' => $faker->boolean(50) ? $faker->email : null,
+        'address_one' => $faker->streetAddress,
+        'address_two' => $faker->boolean(25) ? $faker->secondaryAddress : null,
         'city' => $faker->city,
         'territory' => $faker->state,
         'country_code' => 'US',
-        'official_url' => $faker->url,
-        'profile_url' => $faker->slug,
-        'rank' => $faker->numberBetween(0, 100000),
+        'postal_code' => $faker->postcode,
+        'phone' => $faker->phoneNumber,
+        'alt_phone' => $faker->boolean(25) ? $faker->phoneNumber : null,
         'is_active' => $faker->boolean(50),
-        'user_id' => function () {
-            return factory(App\User::class)->create()->id;
-        },
+        'user_id' => null, // should be overwritten on creation
         'approver_id' => $approver_id,
         'deleter_id' => $deleter_id,
         'catalogable_id' => null, // should be overwritten on creation
