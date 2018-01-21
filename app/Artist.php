@@ -21,4 +21,9 @@ class Artist extends Model
     {
         return $this->belongsTo(Label::class);
     }
+
+    public function songs()
+    {
+        return $this->hasManyThrough(Song::class, Album::class);
+    }
 }
