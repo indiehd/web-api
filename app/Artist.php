@@ -26,4 +26,9 @@ class Artist extends Model
     {
         return $this->hasManyThrough(Song::class, Album::class);
     }
+
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
 }
