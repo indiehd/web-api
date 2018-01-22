@@ -10,8 +10,6 @@ use Illuminate\Contracts\Validation\Factory as ValidatorInterface;
 
 class UserController extends Controller
 {
-    // todo: create api routes
-
     /**
      * @var UserRepositoryInterface
      */

@@ -25,7 +25,6 @@ class UserResource extends Resource
 
     private function profile()
     {
-        // todo: Add a FanResource -mike
         return $this->fan ? $this->fan : new CatalogResource($this->entity);
     }
 }
