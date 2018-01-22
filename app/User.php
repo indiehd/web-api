@@ -3,27 +3,41 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cartalyst\Sentinel\Users\EloquentUser;
 
-class User extends Authenticatable
+class User extends EloquentUser
 {
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email',
+        'username',
+        'password',
+        'permissions',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $loginNames = ['email'];
+
+    public function entities()
+    {
+        return $this->hasMany(CatalogEntity::class);
+    }
+
+    public function purchased()
+    {
+        return $this->belongsToMany(Song::class);
+    }
 }
