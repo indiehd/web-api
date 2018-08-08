@@ -3,7 +3,7 @@
 class DatabaseSeeder extends BaseSeeder
 {
     /**
-     * Run the database seeds.
+     * Seed the application's database.
      *
      * @return void
      */
