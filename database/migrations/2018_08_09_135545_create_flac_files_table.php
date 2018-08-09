@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFlacFileTable extends Migration
+class CreateFlacFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateFlacFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('flac_file', function (Blueprint $table) {
+        Schema::create('flac_files', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('song_id');
             $table->unsignedBigInteger('file_size');
             $table->string('file_format');
             $table->string('data_format');
@@ -26,7 +25,7 @@ class CreateFlacFileTable extends Migration
             $table->unsignedTinyInteger('bits_per_sample');
             $table->unsignedDecimal('bitrate', 15, 7);
             $table->string('encoder');
-            $table->string('channel_model');
+            $table->string('channel_mode');
             $table->unsignedDecimal('compression_ratio', 15, 14);
             $table->string('encoding');
             $table->string('mime_type');
@@ -44,6 +43,6 @@ class CreateFlacFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('flac_file');
+        Schema::dropIfExists('flac_files');
     }
 }

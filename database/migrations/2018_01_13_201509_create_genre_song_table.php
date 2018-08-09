@@ -13,10 +13,10 @@ class CreateGenreSongTable extends Migration
      */
     public function up()
     {
-        Schema::create('genre_song', function (Blueprint $table) {
+        Schema::create('album_genre', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('genre_id')->unsigned();
-            $table->integer('song_id')->unsigned();
+            $table->unsignedInteger('album_id');
+            $table->unsignedInteger('genre_id');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateGenreSongTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('genre_song');
+        Schema::dropIfExists('album_genre');
     }
 }

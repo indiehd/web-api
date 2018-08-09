@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    public function songs()
+    public function albums()
     {
-        return $this->belongsToMany(Song::class);
+        return $this->belongsToMany(Album::class)
+            ->withTimestamps();
     }
 }

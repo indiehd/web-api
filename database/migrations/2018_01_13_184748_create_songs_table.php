@@ -17,17 +17,17 @@ class CreateSongsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('alt_name')->nullable();
+            $table->unsignedInteger('flac_file_id');
             $table->unsignedTinyInteger('track_number')->default(1);
-            $table->float('preview_start')->default(0.00);
+            $table->unsignedDecimal('preview_start', 7, 3)->default(0.000);
             $table->boolean('is_active')->default(true);
-            //$table->boolean('is_in_back_catalog')->default(false);
-            //$table->unsignedInteger('catalog_id');
-            //$table->foreign('catalog_id')->references('id')->on('catalogs');
+            // TODO Uncomment these once the back-catalog is implemented.
+            #$table->boolean('is_in_back_catalog')->default(false);
+            #$table->unsignedInteger('catalog_id');
+            // TODO Uncomment once SKUs are implemented.
             $table->unsignedInteger('sku_id');
-            $table->foreign('sku_id')->references('id')->on('skus');
             $table->unsignedInteger('album_id');
-            $table->foreign('album_id')->references('id')->on('albums');
-            $table->unique(['album_id', 'track_number']);
+            $table->unique(['album_id', 'track_number'], 'unique_track_per_album');
             $table->softDeletes();
             $table->timestamps();
         });

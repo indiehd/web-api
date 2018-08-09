@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(FlacFile::class, function (Faker $faker) {
+$factory->define(App\FlacFile::class, function (Faker $faker) {
     return [
         'file_size' => $faker->numberBetween(10000, 100000000),
         'file_format' => 'flac',
@@ -35,5 +35,6 @@ $factory->define(FlacFile::class, function (Faker $faker) {
         'mime_type' => 'audio/x-flac',
         'play_time_seconds' => $faker->randomFloat(7, 0, 9999),
         'md5_data_source' => $faker->md5(),
+        'sha256' => $faker->sha256(),
     ];
 });

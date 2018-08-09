@@ -15,4 +15,10 @@ class Album extends Model
     {
         return $this->belongsTo(Artist::class);
     }
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class)
+            ->withTimestamps();
+    }
 }

@@ -1,9 +1,34 @@
 <?php
 
+use App\Album;
+use App\Genre;
 use Faker\Generator as Faker;
 
-$factory->define(App\Album::class, function (Faker $faker) {
+/*
+|--------------------------------------------------------------------------
+| Model Factories
+|--------------------------------------------------------------------------
+|
+| This directory should contain each of the model factory definitions for
+| your application. Factories provide a convenient way to generate new
+| model instances for testing / seeding your application's database.
+|
+*/
+
+$factory->define(Album::class, function (Faker $faker) {
+
     return [
-        //
+        'title' => $faker->company,
+        'alt_title' => $faker->company,
+        'year' => $faker->year('now'),
+        'description' => $faker->sentence(10),
+        'has_explicit_lyrics' => $faker->boolean(25),
+        'is_active' => $faker->boolean(80)
     ];
+});
+
+$factory->afterCreating(Album::class, function ($album, $faker) {
+    $genres = Genre::inRandomOrder()->take(rand(0, 10));
+
+    $album->genres()->attach($genres->pluck('id'));
 });
