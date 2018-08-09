@@ -15,8 +15,10 @@ class CreateCountriesTable extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 2);
+            $table->string('code', 3)->unique();
             $table->string('name');
+            $table->boolean('us_state_dept_recognized')->default(false);
+            $table->boolean('pay_pal_supported')->default(false);
             $table->timestamps();
         });
     }
