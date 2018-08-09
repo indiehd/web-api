@@ -9,14 +9,14 @@
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "tests": "vendor/bin/phpunit tests",
-        "commitmsg": "commitlint -e $GIT_PARAMS",
-        "precommit": "npm run tests"
+        "commitmsg": "commitlint -e $GIT_PARAMS"
     },
     "devDependencies": {
         "@commitlint/cli": "^6.2.0",
         "@commitlint/config-conventional": "^6.1.3",
-        "axios": "^0.17",
-        "bootstrap-sass": "^3.3.7",
+        "axios": "^0.18",
+        "bootstrap": "^4.0.0",
+        "popper.js": "^1.12",
         "cross-env": "^5.2.0",
         "husky": "^0.14.3",
         "jquery": "^3.3.1",
