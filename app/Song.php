@@ -20,4 +20,9 @@ class Song extends Model
     {
         return $this->belongsToMany(Genre::class);
     }
+
+    public function flacFile()
+    {
+        return $this->hasOne(FlacFile::class);
+    }
 }
