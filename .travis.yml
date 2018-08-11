@@ -3,6 +3,9 @@ language: php
 php:
   - '7.1'
 
+addons:
+  mariadb: '10.3'
+
 sudo: false
 
 before_script:
