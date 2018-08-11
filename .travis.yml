@@ -13,6 +13,9 @@ before_script:
 
 before_install:
 - mysql -e 'CREATE DATABASE indiehd_test;'
+- mysql -e "CREATE USER 'homestead'@'%' IDENTIFIED BY 'secret';"
+- mysql --user=root -e "GRANT ALL PRIVILEGES ON indiehd_test.* TO 'homestead'@'%' WITH GRANT OPTION;"
+- mysql --user=root -e 'FLUSH PRIVILEGES;'
 
 services:
 - mysql
