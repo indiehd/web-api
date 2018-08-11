@@ -18,6 +18,6 @@ class Song extends Model
 
     public function flacFile()
     {
-        return $this->hasOne(FlacFile::class);
+        return $this->belongsTo(FlacFile::class);
     }
 }
