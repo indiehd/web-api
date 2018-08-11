@@ -10,7 +10,6 @@ sudo: false
 
 before_script:
 - cp .env.test .env
-- composer self-update
 - composer install --prefer-source --no-interaction
 - php artisan key:generate
 
