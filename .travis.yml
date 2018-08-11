@@ -6,9 +6,16 @@ php:
 sudo: false
 
 before_script:
-  - cp .env.ci .env
-  - composer install --prefer-source --no-interaction
-  - php artisan key:generate
+- cp .env.test .env
+- composer self-update
+- composer install --prefer-source --no-interaction
+- php artisan key:generate
+
+before_install:
+- mysql -e 'CREATE DATABASE indiehd_test;'
+
+services:
+- mysql
 
 script:
   - vendor/bin/phpunit tests
