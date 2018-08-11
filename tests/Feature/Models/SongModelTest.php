@@ -24,8 +24,6 @@ class SongModelTest extends TestCase
 
     /**
      * Ensure that any random Song belongs to an Album.
-     *
-     * @return true
      */
     public function test_albums_randomSong_belongsToAlbum()
     {
@@ -34,15 +32,16 @@ class SongModelTest extends TestCase
 
     /**
      * Ensure that any random Song has one FlacFile.
-     *
-     * @return true
      */
     public function test_flacFile_randomSong_hasOneFlacFile()
     {
         $this->assertInstanceOf(FlacFile::class, Song::inRandomOrder()->first()->flacFile);
     }
 
-    public function test_sku_randomSong_hasOneSku()
+    /**
+     * Ensure that any random Song belongs to a Sku.
+     */
+    public function test_sku_randomSong_belongsToSku()
     {
         $this->assertInstanceOf(Sku::class, Song::inRandomOrder()->first()->sku);
     }
