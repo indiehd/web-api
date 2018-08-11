@@ -20,4 +20,9 @@ class Song extends Model
     {
         return $this->belongsTo(FlacFile::class);
     }
+
+    public function sku()
+    {
+        return $this->belongsTo(Sku::class);
+    }
 }
