@@ -28,7 +28,7 @@ class AccountsSeeder extends BaseSeeder
                 /*
                  * If we are generating an account WITH catalogable entities,
                  * we should randomly choose to either generate an account
-                 * with BOTH catalogable enities ELSE just 1 single random catalogable entity.
+                 * with BOTH catalogable entities ELSE just 1 single random catalogable entity.
                  */
                 if ($this->randomBoolean()) {
                     // users with Artist AND Label Profiles
