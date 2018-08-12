@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use AlbumsSeeder;
+use DatabaseSeeder;
 use App\Song;
 use App\Album;
 use App\FlacFile;
@@ -19,7 +19,7 @@ class SongModelTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(AlbumsSeeder::class);
+        $this->seed(DatabaseSeeder::class);
     }
 
     /**

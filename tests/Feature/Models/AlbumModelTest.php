@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
+use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use AlbumsSeeder;
-use GenresSeeder;
+use DatabaseSeeder;
 use App\Album;
+use App\Artist;
 
 class AlbumModelTest extends TestCase
 {
@@ -17,8 +18,15 @@ class AlbumModelTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(GenresSeeder::class);
-        $this->seed(AlbumsSeeder::class);
+        $this->seed(DatabaseSeeder::class);
+    }
+
+    /**
+     * Ensure that any random album has one Artist.
+     */
+    public function test_artist_randomAlbum_hasOneArtist()
+    {
+        $this->assertInstanceOf(Artist::class, Album::inRandomOrder()->first()->artist);
     }
 
     /**
