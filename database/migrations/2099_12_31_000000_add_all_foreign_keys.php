@@ -26,6 +26,7 @@ class AddAllForeignKeys extends Migration
         });
 
         Schema::table('albums', function (Blueprint $table) {
+            $table->foreign('artist_id', 'artist_id_fk')->references('id')->on('artists');
             $table->foreign('deleter_id', 'deleter_id_fk')->references('id')->on('users');
         });
     }

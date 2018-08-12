@@ -1,6 +1,7 @@
 <?php
 
 use App\Album;
+use App\Artist;
 use App\Genre;
 use Faker\Generator as Faker;
 
@@ -18,6 +19,9 @@ use Faker\Generator as Faker;
 $factory->define(Album::class, function (Faker $faker) {
 
     return [
+        'artist_id' => function() {
+            return Artist::inRandomOrder()->first()->id;
+        },
         'title' => $faker->company,
         'alt_title' => $faker->company,
         'year' => $faker->year('now'),
