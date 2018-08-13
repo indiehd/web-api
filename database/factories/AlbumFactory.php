@@ -32,7 +32,7 @@ $factory->define(Album::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(Album::class, function ($album, $faker) {
-    $genres = Genre::inRandomOrder()->take(rand(0, 10))->get();
+    $genres = Genre::inRandomOrder()->take(rand(1, 10))->get();
 
     $album->genres()->attach($genres->pluck('id'));
 });
