@@ -1,10 +1,6 @@
 <?php
 
 use Faker\Generator as Faker;
-use Faker\Provider\en_US\Address;
-use Faker\Provider\en_US\Person;
-use Faker\Provider\en_US\PhoneNumber;
-use Faker\Provider\en_US\Company;
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
@@ -13,6 +9,8 @@ $factory->define(App\User::class, function (Faker $faker) {
     ];
 });
 
-$factory->afterCreating(App\User::class, function ($album, $faker) {
+$factory->afterCreating(App\User::class, function ($user, $faker) {
     // Create and associate an Account.
+
+    $user->account()->save(factory(App\Account::class)->make());
 });

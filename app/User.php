@@ -40,4 +40,9 @@ class User extends EloquentUser
     {
         return $this->belongsToMany(Song::class);
     }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class);
+    }
 }

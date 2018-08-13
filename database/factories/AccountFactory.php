@@ -1,8 +1,14 @@
 <?php
 
 use Faker\Generator as Faker;
+use Faker\Provider\en_US\Address;
+use Faker\Provider\en_US\Person;
+use Faker\Provider\en_US\PhoneNumber;
+use Faker\Provider\en_US\Company;
 
-$factory->define(Model::class, function (Faker $faker) {
+use App\Account;
+
+$factory->define(Account::class, function (Faker $faker) {
 
     $faker->addProvider(new Person($faker));
     $faker->addProvider(new Address($faker));
