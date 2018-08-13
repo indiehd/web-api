@@ -22,7 +22,7 @@ class AlbumModelTest extends TestCase
     }
 
     /**
-     * Ensure that any random album has one Artist.
+     * Ensure that any random Album has one Artist.
      */
     public function test_artist_randomAlbum_hasOneArtist()
     {
