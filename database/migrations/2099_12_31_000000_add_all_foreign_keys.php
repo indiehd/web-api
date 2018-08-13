@@ -17,7 +17,7 @@ class AddAllForeignKeys extends Migration
             $table->foreign('flac_file_id', 'flac_file_id_fk')->references('id')->on('flac_files');
             // TODO Uncomment these once the referenced objects exist.
             #$table->foreign('catalog_id')->references('id')->on('catalogs');
-            #$table->foreign('sku_id')->references('id')->on('skus');
+            $table->foreign('sku_id')->references('id')->on('skus');
         });
 
         Schema::table('album_genre', function (Blueprint $table) {
@@ -28,6 +28,10 @@ class AddAllForeignKeys extends Migration
         Schema::table('albums', function (Blueprint $table) {
             $table->foreign('artist_id', 'artist_id_fk')->references('id')->on('artists');
             $table->foreign('deleter_id', 'deleter_id_fk')->references('id')->on('users');
+        });
+
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->foreign('user_id', 'user_id_fk')->references('id')->on('users');
         });
     }
 
