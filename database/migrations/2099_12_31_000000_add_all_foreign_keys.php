@@ -32,6 +32,15 @@ class AddAllForeignKeys extends Migration
 
         Schema::table('accounts', function (Blueprint $table) {
             $table->foreign('user_id', 'user_id_fk')->references('id')->on('users');
+            $table->foreign('country_code', 'accounts_country_code_fk')->references('code')->on('countries');
+        });
+
+        Schema::table('catalog_entities', function (Blueprint $table) {
+            $table->foreign('country_code', 'catalog_entities_country_code_fk')->references('code')->on('countries');
+        });
+
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->foreign('country_code', 'profiles_country_code_fk')->references('code')->on('countries');
         });
     }
 

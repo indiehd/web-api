@@ -20,8 +20,7 @@ class CreateProfilesTable extends Migration
             $table->string('email')->nullable(); // alternate correspondence email
             $table->string('city');
             $table->string('territory');
-            $table->char('country_code', 2);
-            // $table->foreign('country_code')->references('code')->on('countries');
+            $table->char('country_code', 3);
             $table->string('official_url')->nullable();
             $table->string('profile_url');
             $table->unsignedInteger('rank')->nullable();
