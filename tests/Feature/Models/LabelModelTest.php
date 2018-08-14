@@ -13,7 +13,6 @@ use App\Artist;
 use App\Profile;
 use App\Label;
 use App\Album;
-use App\Song;
 
 class LabelModelTest extends TestCase
 {
@@ -56,7 +55,7 @@ class LabelModelTest extends TestCase
     {
         $artist = factory(Artist::class)->state('onLabel')->create();
 
-        $this->assertFalse($artist->label->artists->isEmpty());
+        $this->assertInstanceOf(Artist::class, $artist->label->artists->first());
     }
 
     /**
@@ -71,6 +70,6 @@ class LabelModelTest extends TestCase
 
         factory(Album::class)->create(['artist_id' => $artist->id]);
 
-        $this->assertFalse($artist->label->albums->isEmpty());
+        $this->assertInstanceOf(Album::class, $artist->label->albums->first());
     }
 }

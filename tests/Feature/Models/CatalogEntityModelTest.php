@@ -48,7 +48,7 @@ class CatalogEntityModelTest extends TestCase
      *
      * @return void
      */
-    public function test_user_anyRandomCatalogEntity_hasOneUser()
+    public function test_user_anyRandomCatalogEntity_belongsToUser()
     {
         $this->assertInstanceOf(User::class, CatalogEntity::inRandomOrder()->first()->user);
     }

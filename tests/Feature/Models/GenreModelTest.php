@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 use App\Album;
+use App\Genre;
 
 class GenreModelTest extends TestCase
 {
@@ -20,12 +21,12 @@ class GenreModelTest extends TestCase
     }
 
     /**
-     * Ensure that any random Album has one or more Genres.
+     * Ensure that any random Album belongs to one or more Genres.
      *
      * @return void
      */
-    public function test_albums_randomAlbum_hasManyGenres()
+    public function test_albums_randomAlbum_belongsToManyGenres()
     {
-        $this->assertFalse(Album::inRandomOrder()->first()->genres->isEmpty());
+        $this->assertInstanceOf(Genre::class, Album::inRandomOrder()->first()->genres->first());
     }
 }

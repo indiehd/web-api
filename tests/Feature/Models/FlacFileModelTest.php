@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 use App\FlacFile;
+use App\Song;
 
 class FlacFileModelTest extends TestCase
 {
@@ -26,6 +27,6 @@ class FlacFileModelTest extends TestCase
      */
     public function test_song_randomFlacFile_hasManySongs()
     {
-        $this->assertFalse(FlacFile::inRandomOrder()->first()->songs->isEmpty());
+        $this->assertInstanceOf(Song::class, FlacFile::inRandomOrder()->first()->songs->first());
     }
 }

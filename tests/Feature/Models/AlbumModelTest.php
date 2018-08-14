@@ -38,17 +38,17 @@ class AlbumModelTest extends TestCase
      *
      * @return void
      */
-    public function test_songs_randomAlbum_returnsNonEmptyCollectionWithSong()
+    public function test_songs_randomAlbum_hasManySongs()
     {
         $this->assertInstanceOf(Song::class, Album::inRandomOrder()->first()->songs->first());
     }
 
     /**
-     * Ensure that any random Album has one or more Genres.
+     * Ensure that any random Album belongs to one or more Genres.
      *
      * @return void
      */
-    public function test_genres_randomAlbum_returnsNonEmptyCollectionWithGenre()
+    public function test_genres_randomAlbum_belongsToManyGenres()
     {
         $this->assertInstanceOf(Genre::class, Album::inRandomOrder()->first()->genres->first());
     }

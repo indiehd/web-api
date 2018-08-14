@@ -95,6 +95,6 @@ class ArtistModelTest extends TestCase
             ]);
         }
 
-        $this->assertFalse($artist->albums()->first()->songs->isEmpty());
+        $this->assertInstanceOf(Song::class, $artist->albums()->first()->songs->first());
     }
 }
