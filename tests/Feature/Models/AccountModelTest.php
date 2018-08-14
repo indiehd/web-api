@@ -26,7 +26,7 @@ class AccountModelTest extends TestCase
      *
      * @return void
      */
-    public function test_user_randomAccount_hasOneUser()
+    public function test_user_randomAccount_belongsToUser()
     {
         $this->assertInstanceOf(User::class, Account::inRandomOrder()->first()->user);
     }

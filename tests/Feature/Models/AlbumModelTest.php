@@ -22,11 +22,11 @@ class AlbumModelTest extends TestCase
     }
 
     /**
-     * Ensure that any random Album has one Artist.
+     * Ensure that any random Album belongs to an Artist.
      *
      * @return void
      */
-    public function test_artist_randomAlbum_hasOneArtist()
+    public function test_artist_randomAlbum_belongsToArtist()
     {
         $this->assertInstanceOf(Artist::class, Album::inRandomOrder()->first()->artist);
     }
@@ -38,7 +38,7 @@ class AlbumModelTest extends TestCase
      */
     public function test_songs_randomAlbum_returnsNonEmptyCollection()
     {
-        $this->assertFalse(Album::inRandomOrder()->first()->songs->isEmpty());
+        $this->assertInstanceOf(Song::class, Album::inRandomOrder()->first()->songs->first());
     }
 
     /**
@@ -48,6 +48,6 @@ class AlbumModelTest extends TestCase
      */
     public function test_genres_randomAlbum_returnsNonEmptyCollection()
     {
-        $this->assertFalse(Album::inRandomOrder()->first()->genres->isEmpty());
+        $this->assertFalse(Genre::class, Album::inRandomOrder()->first()->genres->first());
     }
 }
