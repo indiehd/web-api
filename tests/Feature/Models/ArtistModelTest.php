@@ -60,8 +60,8 @@ class ArtistModelTest extends TestCase
     }
 
     /**
-     * Verify that when an Album is associated with an Artist, the Artist has
-     * many Albums that include the associated Album.
+     * Verify that when an Album is associated with a new Artist, the Artist has
+     * many Albums.
      *
      * @return void
      */
@@ -75,8 +75,8 @@ class ArtistModelTest extends TestCase
     }
 
     /**
-     * Verify that when an Album is associated with an Artist, the Artist has one
-     * or more Songs.
+     * Verify that when an Album is associated with a new Artist, the Artist has
+     * one or more Songs.
      *
      * @return void
      */
