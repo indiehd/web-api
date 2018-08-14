@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Models;
 
 use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
@@ -28,6 +28,8 @@ class ArtistModelTest extends TestCase
 
     /**
      * Ensure that any random Artist morphs to a CatalogableEntity.
+     *
+     * @return void
      */
     public function test_catalogable_randomArtist_morphsToCatalogableEntity()
     {
@@ -36,6 +38,8 @@ class ArtistModelTest extends TestCase
 
     /**
      * Ensure that any random Artist morphs to a Profile.
+     *
+     * @return void
      */
     public function test_profile_randomArtist_morphsToProfile()
     {
@@ -45,6 +49,8 @@ class ArtistModelTest extends TestCase
     /**
      * Verify that when an Artist is associated with a Label, the Artist belongs
      * to the Label.
+     *
+     * @return void
      */
     public function test_label_whenAssociatedWithArtist_artistBelongsToLabel()
     {
@@ -56,6 +62,8 @@ class ArtistModelTest extends TestCase
     /**
      * Verify that when an Album is associated with an Artist, the Artist has
      * many Albums that include the associated Album.
+     *
+     * @return void
      */
     public function test_albums_whenAssociatedWithArtist_artistHasManyAlbums()
     {
@@ -69,6 +77,8 @@ class ArtistModelTest extends TestCase
     /**
      * Verify that when an Album is associated with an Artist, the Artist has one
      * or more Songs.
+     *
+     * @return void
      */
     public function test_songs_whenAlbumAssociatedWithArtist_artistHasManySongs()
     {

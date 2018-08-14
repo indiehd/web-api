@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Models;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,6 +24,8 @@ class SongModelTest extends TestCase
 
     /**
      * Ensure that any random Song belongs to an Album.
+     *
+     * @return void
      */
     public function test_albums_randomSong_belongsToAlbum()
     {
@@ -32,6 +34,8 @@ class SongModelTest extends TestCase
 
     /**
      * Ensure that any random Song has one FlacFile.
+     *
+     * @return void
      */
     public function test_flacFile_randomSong_hasOneFlacFile()
     {
@@ -40,6 +44,8 @@ class SongModelTest extends TestCase
 
     /**
      * Ensure that any random Song belongs to a Sku.
+     *
+     * @return void
      */
     public function test_sku_randomSong_belongsToSku()
     {
