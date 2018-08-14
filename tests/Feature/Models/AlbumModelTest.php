@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Models;
 
 use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
