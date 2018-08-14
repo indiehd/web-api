@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,6 +23,8 @@ class AccountModelTest extends TestCase
 
     /**
      * Ensure that any random Account belongs to a User.
+     *
+     * @return void
      */
     public function test_user_randomAccount_hasOneUser()
     {

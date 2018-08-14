@@ -23,6 +23,8 @@ class AlbumModelTest extends TestCase
 
     /**
      * Ensure that any random Album has one Artist.
+     *
+     * @return void
      */
     public function test_artist_randomAlbum_hasOneArtist()
     {
@@ -32,7 +34,7 @@ class AlbumModelTest extends TestCase
     /**
      * Ensure that any random Album has one or more Songs.
      *
-     * @return true
+     * @return void
      */
     public function test_songs_randomAlbum_returnsNonEmptyCollection()
     {
@@ -42,7 +44,7 @@ class AlbumModelTest extends TestCase
     /**
      * Ensure that any random Album has one or more Genres.
      *
-     * @return true
+     * @return void
      */
     public function test_genres_randomAlbum_returnsNonEmptyCollection()
     {
