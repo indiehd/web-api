@@ -24,7 +24,6 @@ class CreateSongsTable extends Migration
             // TODO Uncomment these once the back-catalog is implemented.
             #$table->boolean('is_in_back_catalog')->default(false);
             #$table->unsignedInteger('catalog_id');
-            // TODO Uncomment once SKUs are implemented.
             $table->unsignedInteger('sku_id');
             $table->unsignedInteger('album_id');
             $table->unique(['album_id', 'track_number'], 'unique_track_per_album');
