@@ -33,11 +33,11 @@ class SongModelTest extends TestCase
     }
 
     /**
-     * Ensure that any random Song has one FlacFile.
+     * Ensure that any random Song belongs to a FlacFile.
      *
      * @return void
      */
-    public function test_flacFile_randomSong_hasOneFlacFile()
+    public function test_flacFile_randomSong_belongsToFlacFile()
     {
         $this->assertInstanceOf(FlacFile::class, Song::inRandomOrder()->first()->flacFile);
     }
