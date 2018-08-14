@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sku extends Model
 {
-    public function song()
+    public function songs()
     {
-        return $this->hasOne(Song::class);
+        return $this->hasMany(Song::class);
     }
 }
