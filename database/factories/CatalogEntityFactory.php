@@ -12,8 +12,8 @@ $factory->define(App\CatalogEntity::class, function (Faker $faker) {
     $faker->addProvider(new PhoneNumber($faker));
     $faker->addProvider(new Company($faker));
 
-    $approver_id = $faker->boolean(50) ? $faker->numberBetween(1, App\User::count()) : null;
-    $deleter_id = $faker->boolean(15) ? $faker->numberBetween(1, App\User::count()) : null;
+    $approver_id = $faker->boolean(50) ? App\User::inRandomOrder()->first()->id : null;
+    $deleter_id = $faker->boolean(15) ? App\User::inRandomOrder()->first()->id : null;
 
     return [
         'first_name' => $faker->firstName,
