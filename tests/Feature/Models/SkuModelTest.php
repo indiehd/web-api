@@ -9,7 +9,7 @@ use DatabaseSeeder;
 use App\Sku;
 use App\Song;
 
-class SongModelTest extends TestCase
+class SkuModelTest extends TestCase
 {
     use RefreshDatabase;
 

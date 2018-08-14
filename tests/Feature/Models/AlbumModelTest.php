@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 use App\Album;
 use App\Artist;
+use App\Song;
+use App\Genre;
 
 class AlbumModelTest extends TestCase
 {
@@ -36,7 +38,7 @@ class AlbumModelTest extends TestCase
      *
      * @return void
      */
-    public function test_songs_randomAlbum_returnsNonEmptyCollection()
+    public function test_songs_randomAlbum_returnsNonEmptyCollectionWithSong()
     {
         $this->assertInstanceOf(Song::class, Album::inRandomOrder()->first()->songs->first());
     }
@@ -46,8 +48,8 @@ class AlbumModelTest extends TestCase
      *
      * @return void
      */
-    public function test_genres_randomAlbum_returnsNonEmptyCollection()
+    public function test_genres_randomAlbum_returnsNonEmptyCollectionWithGenre()
     {
-        $this->assertFalse(Genre::class, Album::inRandomOrder()->first()->genres->first());
+        $this->assertInstanceOf(Genre::class, Album::inRandomOrder()->first()->genres->first());
     }
 }
