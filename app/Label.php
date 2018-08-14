@@ -20,4 +20,9 @@ class Label extends Model
     {
         return $this->hasMany(Artist::class);
     }
+
+    public function albums()
+    {
+        return $this->hasManyThrough(Album::class, Artist::class);
+    }
 }
