@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FlacFile extends Model
 {
-    public function song()
+    public function songs()
     {
-        return $this->belongsTo(Song::class);
+        return $this->hasMany(Song::class);
     }
 }
