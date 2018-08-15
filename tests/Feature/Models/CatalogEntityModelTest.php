@@ -32,7 +32,7 @@ class CatalogEntityModelTest extends TestCase
     {
         $catalogableTypes = DB::table('catalog_entities')
             ->select('catalogable_type')
-            ->distinct('catalogable_type')
+            ->distinct()
             ->groupBy('catalogable_type')
             ->get();
 

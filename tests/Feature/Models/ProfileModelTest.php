@@ -30,7 +30,7 @@ class ProfileModelTest extends TestCase
     {
         $profilableTypes = DB::table('profiles')
             ->select('profilable_type')
-            ->distinct('profilable_type')
+            ->distinct()
             ->groupBy('profilable_type')
             ->get();
 
