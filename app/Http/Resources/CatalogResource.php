@@ -18,22 +18,15 @@ class CatalogResource extends Resource
     {
         return [
             'id' => $this->id,
-            'moniker' => $this->moniker,
-            'alt_moniker' => $this->alt_moniker,
-            'city' => $this->city,
-            'territory' => $this->territory,
-            'country_code' => $this->country_code,
-            'country' => $this->country->name,
-            'official_url' => $this->official_url,
-            'profile_url' => $this->profile_url,
-            'rank' => $this->rank,
-            'is_active' => $this->is_active,
-            'approver' => $this->approver,
-            'approved_at' => $this->approved_at,
-            'account' => $this->user,
-            'deleter' => $this->deleter,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'moniker' => $this->profile->moniker,
+            'alt_moniker' => $this->profile->alt_moniker,
+            'city' => $this->profile->city,
+            'territory' => $this->profile->territory,
+            'country_code' => $this->profile->country_code,
+            'country' => $this->profile->country->name,
+            'official_url' => $this->profile->official_url,
+            'profile_url' => $this->profile->profile_url,
+            'rank' => $this->profile->rank,
         ];
     }
 }
