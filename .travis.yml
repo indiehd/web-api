@@ -1,3 +1,6 @@
+env:
+  - DISCORD_WEBHOOK="https://discordapp.com/api/webhooks/480159786286186546/AB1KcL2wz94yP3ZRVwVploKFk7ewaOn6evD6tVGQ8ywyWsMjVOXDfA0QZF2qaP7-ap9g"
+
 branches:
   except:
   - /^(?i:wip)-.*$/
@@ -13,6 +16,8 @@ addons:
 sudo: false
 
 before_script:
+- wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
 - cp .env.test .env
 - composer install --prefer-source --no-interaction
 - php artisan key:generate
@@ -28,6 +33,12 @@ services:
 
 script:
   - vendor/bin/phpunit tests
+
+after_success:
+  - ./send.sh success $DISCORD_WEBHOOK
+
+after_failure:
+  - ./send.sh failure $DISCORD_WEBHOOK
 
 notifications:
   email:
