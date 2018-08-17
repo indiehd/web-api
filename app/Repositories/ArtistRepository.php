@@ -50,7 +50,7 @@ class ArtistRepository implements ArtistRepositoryInterface
     {
         $model = $this->model()->create([]);
 
-        $this->profile()->create([
+        $this->profilable()->create([
             'moniker' => $data['moniker'],
             'city' => $data['city'],
             'territory' => $data['territory'],
@@ -75,5 +75,10 @@ class ArtistRepository implements ArtistRepositoryInterface
     public function delete($id)
     {
         return $this->findById($id)->delete();
+    }
+
+    public function profile()
+    {
+        $this->artist->profile();
     }
 }

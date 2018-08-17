@@ -6,7 +6,7 @@ use App\Contracts\ProfileRepositoryInterface;
 
 trait isProfilable
 {
-    public function profile()
+    public function profilable()
     {
         return resolve(ProfileRepositoryInterface::class);
     }
