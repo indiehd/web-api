@@ -20,9 +20,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/artists', function () {
-    return CatalogResource::collection(
-        Artist::with('profile')
-            ->get()
-    );
-})->name('api.artist.index');
+Route::namespace('Api')->group(function() {
+
+    /*
+     * Artists
+     */
+    Route::prefix('artists')->group(function () {
+        Route::get('/', 'ArtistController@index')->name('artist.index');
+        Route::get('/{id}', 'ArtistController@show')->name('artist.show');
+        Route::post('/create', 'ArtistController@store')->name('artist.store');
+        Route::put('/{id}', 'ArtistController@update')->name('artist.update');
+        Route::delete('/{id}', 'ArtistController@destroy')->name('artist.destroy');
+    });
+
+});

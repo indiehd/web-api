@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
+    protected $guarded = ['id'];
+
     public function profilable()
     {
         return $this->morphTo();
