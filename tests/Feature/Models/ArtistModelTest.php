@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Models;
 
-use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 
+use App\Contracts\ArtistRepositoryInterface;
 use App\CatalogEntity;
-use App\Artist;
 use App\Profile;
 use App\Label;
 use App\Album;
@@ -19,11 +17,17 @@ class ArtistModelTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var $artist ArtistRepositoryInterface
+     */
+    protected $artist;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->seed(DatabaseSeeder::class);
+        $this->artist = resolve(ArtistRepositoryInterface::class);
     }
 
     /**
@@ -33,7 +37,13 @@ class ArtistModelTest extends TestCase
      */
     public function test_catalogable_randomArtist_morphsToCatalogableEntity()
     {
-        $this->assertInstanceOf(CatalogEntity::class, Artist::inRandomOrder()->first()->catalogable);
+        $this->assertInstanceOf(
+            CatalogEntity::class,
+            $this->artist->model()
+                ->inRandomOrder()
+                ->first()
+                ->catalogable
+        );
     }
 
     /**
@@ -43,7 +53,13 @@ class ArtistModelTest extends TestCase
      */
     public function test_profile_randomArtist_morphsToProfile()
     {
-        $this->assertInstanceOf(Profile::class, Artist::inRandomOrder()->first()->profile);
+        $this->assertInstanceOf(
+            Profile::class,
+            $this->artist->model()
+                ->inRandomOrder()
+                ->first()
+                ->profile
+        );
     }
 
     /**
@@ -54,7 +70,7 @@ class ArtistModelTest extends TestCase
      */
     public function test_label_whenAssociatedWithArtist_artistBelongsToLabel()
     {
-        $artist = factory(Artist::class)->state('onLabel')->create();
+        $artist = factory($this->artist->class())->state('onLabel')->create();
 
         $this->assertInstanceOf(Label::class, $artist->label);
     }
@@ -67,7 +83,7 @@ class ArtistModelTest extends TestCase
      */
     public function test_albums_whenAssociatedWithArtist_artistHasManyAlbums()
     {
-        $artist = factory(Artist::class)->create();
+        $artist = factory($this->artist->class())->create();
 
         factory(Album::class)->create(['artist_id' => $artist->id]);
 
@@ -82,7 +98,7 @@ class ArtistModelTest extends TestCase
      */
     public function test_songs_whenAlbumAssociatedWithArtist_artistHasManySongs()
     {
-        $artist = factory(Artist::class)->create();
+        $artist = factory($this->artist->class())->create();
 
         $album = factory(Album::class)->create(['artist_id' => $artist->id]);
 
