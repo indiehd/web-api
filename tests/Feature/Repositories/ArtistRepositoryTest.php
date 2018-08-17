@@ -54,7 +54,7 @@ class ArtistRepositoryTest extends TestCase
      *
      * @return void
      */
-    public function test_method_model_isInstanceOf()
+    public function test_method_model_isInstanceOfArtist()
     {
         $this->assertInstanceOf($this->artist->class(), $this->artist->model());
     }
