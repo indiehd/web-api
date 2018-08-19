@@ -67,7 +67,7 @@ class ArtistRepository implements ArtistRepositoryInterface
     {
         $model = $this->findById($id);
 
-        $model->update($data);
+        $this->profilable()->update($model->profile->id, $data);
 
         return $model;
     }

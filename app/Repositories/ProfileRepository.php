@@ -27,8 +27,23 @@ class ProfileRepository implements ProfileRepositoryInterface
         return $this->class;
     }
 
+    public function model()
+    {
+        return $this->profile;
+    }
+
+    public function findById($id)
+    {
+        return $this->model()->find($id);
+    }
+
     public function create(array $data)
     {
-        return $this->profile->create($data);
+        return $this->model()->create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        return $this->findById($id)->update($data);
     }
 }
