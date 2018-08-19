@@ -95,11 +95,35 @@ class ArtistRepositoryTest extends TestCase
             'moniker' => 'moniker',
             'city' => 'city',
             'territory' => 'territory',
-            'country_code' => 'usa',
+            'country_code' => 'US',
             'profile_url' => 'profile_url',
         ]);
 
         $this->assertInstanceOf($this->artist->class(), $artist);
         $this->assertInstanceOf(Profile::class, $artist->profile);
+    }
+
+    /**
+     * Ensure that the update() method updates the model record in the database.
+     *
+     * @return void
+     */
+    public function test_method_update_updatesProfileForArtist()
+    {
+        $artist = $this->artist->create([
+            'moniker' => 'moniker',
+            'city' => 'city',
+            'territory' => 'territory',
+            'country_code' => 'US',
+            'profile_url' => 'profile_url',
+        ]);
+
+        $this->artist->update($artist->id, [
+            'country_code' => 'CA',
+        ]);
+
+        $this->assertTrue(
+            $this->artist->findById($artist->id)->profile->country->code === 'CA'
+        );
     }
 }
