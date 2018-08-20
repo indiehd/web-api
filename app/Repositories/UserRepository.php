@@ -8,6 +8,11 @@ use App\User;
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     /**
+     * @var string $class
+     */
+    protected $class = User::class;
+
+    /**
      * @var User
      */
     private $user;
@@ -15,6 +20,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    public function class()
+    {
+        return $this->class;
     }
 
     public function model()

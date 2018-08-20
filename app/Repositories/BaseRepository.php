@@ -6,8 +6,6 @@ use App\Contracts\BaseRepositoryInterface;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
-    abstract public function model();
-
     public function all()
     {
         return $this->model()->all();
@@ -17,10 +15,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model()->find($id);
     }
-
-    abstract public function create(array $data);
-
-    abstract public function update($id, array $data);
 
     public function delete($id)
     {

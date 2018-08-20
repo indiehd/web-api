@@ -4,6 +4,8 @@ namespace App\Contracts;
 
 interface BaseRepositoryInterface
 {
+    public function class();
+
     public function model();
 
     public function all();
