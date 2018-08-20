@@ -5,10 +5,15 @@ namespace App\Providers;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
 use App\Repositories\ArtistRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\AlbumRepository;
 use Illuminate\Support\ServiceProvider;
+
+use App\Album;
+use App\Observers\AlbumObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Album::observe(AlbumObserver::class);
     }
 
     /**
@@ -32,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(ArtistRepositoryInterface::class, ArtistRepository::class);
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
+        $this->app->bind(AlbumRepositoryInterface::class, AlbumRepository::class);
     }
 }
