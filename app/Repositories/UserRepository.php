@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Contracts\UserRepositoryInterface;
 use App\User;
 
-class UserRepository implements UserRepositoryInterface
+class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     /**
      * @var User
@@ -15,6 +15,11 @@ class UserRepository implements UserRepositoryInterface
     public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    public function model()
+    {
+        return $this->user;
     }
 
     public function all()
