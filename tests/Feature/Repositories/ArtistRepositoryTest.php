@@ -60,7 +60,7 @@ class ArtistRepositoryTest extends TestCase
     }
 
     /**
-     * Ensure the method all() returns ONLY a collection of Artist.
+     * Ensure the method all() returns ONLY a collection of Artists.
      *
      * @return void
      */
@@ -84,8 +84,8 @@ class ArtistRepositoryTest extends TestCase
     }
 
     /**
-     * Ensure the method create() creates a new record in the database and creates a profile for
-     * said Artist
+     * Ensure the create() method creates a new record in the database and creates a profile for
+     * said Artist.
      *
      * @return void
      */
