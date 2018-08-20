@@ -6,6 +6,8 @@ use App\Contracts\BaseRepositoryInterface;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
+    abstract public function model();
+
     public function all()
     {
         return $this->model()->all();
