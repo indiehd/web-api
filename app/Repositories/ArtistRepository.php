@@ -6,8 +6,9 @@ use App\Artist;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Traits\isProfilable;
+use App\Repositories\BaseRepository;
 
-class ArtistRepository implements ArtistRepositoryInterface
+class ArtistRepository extends BaseRepository implements ArtistRepositoryInterface
 {
     use isProfilable;
 

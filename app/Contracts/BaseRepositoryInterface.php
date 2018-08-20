@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface ArtistRepositoryInterface extends BaseRepositoryInterface
+interface BaseRepositoryInterface
 {
     public function class();
     public function model();
@@ -11,5 +11,4 @@ interface ArtistRepositoryInterface extends BaseRepositoryInterface
     public function create(array $data);
     public function update($id, array $data);
     public function delete($id);
-    public function profile();
 }

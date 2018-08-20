@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface ProfileRepositoryInterface
+interface ProfileRepositoryInterface extends BaseRepositoryInterface
 {
     public function model();
 
