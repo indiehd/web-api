@@ -91,13 +91,9 @@ class ArtistRepositoryTest extends TestCase
      */
     public function test_method_create_storesNewArtistAndCreatesProfileForArtist()
     {
-        $artist = $this->artist->create([
-            'moniker' => 'moniker',
-            'city' => 'city',
-            'territory' => 'territory',
-            'country_code' => 'US',
-            'profile_url' => 'profile_url',
-        ]);
+        $profile = factory(Profile::class)->make()->toArray();
+
+        $artist = $this->artist->create($profile);
 
         $this->assertInstanceOf($this->artist->class(), $artist);
         $this->assertInstanceOf(Profile::class, $artist->profile);
@@ -110,13 +106,9 @@ class ArtistRepositoryTest extends TestCase
      */
     public function test_method_update_updatesProfileForArtist()
     {
-        $artist = $this->artist->create([
-            'moniker' => 'moniker',
-            'city' => 'city',
-            'territory' => 'territory',
-            'country_code' => 'US',
-            'profile_url' => 'profile_url',
-        ]);
+        $profile = factory(Profile::class)->make(['country_code' => 'US'])->toArray();
+
+        $artist = $this->artist->create($profile);
 
         $this->artist->update($artist->id, [
             'country_code' => 'CA',
