@@ -119,6 +119,11 @@ class AlbumRepositoryTest extends TestCase
         );
     }
 
+    /**
+     * Ensure that the delete() method results in model deletion.
+     *
+     * return @void
+     */
     public function test_method_delete_deletesAlbum()
     {
         $artist = Artist::inRandomOrder()->first();
