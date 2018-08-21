@@ -2,11 +2,23 @@
 
 namespace Tests\Feature\Repositories;
 
+use App\Contracts\ProfileRepositoryInterface;
 use App\Profile;
 use App\Contracts\ArtistRepositoryInterface;
 
 class ArtistRepositoryTest extends RepositoryTestCase
 {
+    protected $profile;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        /*
+         * Add additional dependencies in the setUp() method AFTER parent::setUp()
+         */
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+    }
 
     /**
      * Sets the $repo property
@@ -24,12 +36,12 @@ class ArtistRepositoryTest extends RepositoryTestCase
      */
     public function test_method_create_storesNewModel()
     {
-        $profile = factory(Profile::class)->make()->toArray();
+        $profile = factory($this->profile->class())->make()->toArray();
 
         $artist = $this->repo->create($profile);
 
         $this->assertInstanceOf($this->repo->class(), $artist);
-        $this->assertInstanceOf(Profile::class, $artist->profile);
+        $this->assertInstanceOf($this->profile->class(), $artist->profile);
     }
 
     /**
@@ -39,7 +51,7 @@ class ArtistRepositoryTest extends RepositoryTestCase
      */
     public function test_method_update_updatesModel()
     {
-        $profile = factory(Profile::class)->make(['country_code' => 'US'])->toArray();
+        $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
 
         $artist = $this->repo->create($profile);
 
