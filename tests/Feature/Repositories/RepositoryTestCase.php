@@ -28,6 +28,14 @@ abstract class RepositoryTestCase extends TestCase
     abstract public function setRepository();
 
     /**
+     * Ensures the property $repo is instantiable
+     */
+    public function test_property_repo_isInstantiable()
+    {
+        $this->assertTrue($this->isInstantiable($this->repo));
+    }
+
+    /**
      * Ensure the method class() returns a string.
      *
      * @return void
@@ -44,7 +52,7 @@ abstract class RepositoryTestCase extends TestCase
      */
     public function test_method_class_isInstantiable()
     {
-        $this->assertInstanceOf($this->repo->class(), resolve($this->repo->class()));
+        $this->assertTrue($this->isInstantiable($this->repo->class()));
     }
 
     /**
