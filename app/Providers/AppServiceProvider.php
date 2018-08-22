@@ -12,7 +12,9 @@ use App\Repositories\UserRepository;
 use App\Repositories\AlbumRepository;
 use Illuminate\Support\ServiceProvider;
 
+use App\Artist;
 use App\Album;
+use App\Observers\ArtistObserver;
 use App\Observers\AlbumObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Artist::observe(ArtistObserver::class);
         Album::observe(AlbumObserver::class);
     }
 
