@@ -36,6 +36,8 @@ class AlbumObserver
      */
     public function deleting(Album $album)
     {
+        $album->songs()->delete();
+
         $album->genres()->detach();
     }
 

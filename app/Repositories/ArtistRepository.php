@@ -73,11 +73,6 @@ class ArtistRepository extends BaseRepository implements ArtistRepositoryInterfa
         return $model;
     }
 
-    public function delete($id)
-    {
-        return $this->findById($id)->delete();
-    }
-
     public function profile()
     {
         $this->artist->profile();

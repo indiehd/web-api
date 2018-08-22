@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Repositories;
 
+use DB;
+
 use App\Contracts\ProfileRepositoryInterface;
-use App\Profile;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
 
 class ArtistRepositoryTest extends RepositoryTestCase
 {
@@ -14,14 +16,13 @@ class ArtistRepositoryTest extends RepositoryTestCase
     {
         parent::setUp();
 
-        /*
-         * Add additional dependencies in the setUp() method AFTER parent::setUp()
-         */
         $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
     }
 
     /**
-     * Sets the $repo property
+     * @inheritdoc
      */
     public function setRepository()
     {
@@ -45,9 +46,7 @@ class ArtistRepositoryTest extends RepositoryTestCase
     }
 
     /**
-     * Ensure that the update() method updates the model record in the database.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function test_method_update_updatesModel()
     {
@@ -62,5 +61,23 @@ class ArtistRepositoryTest extends RepositoryTestCase
         $this->assertTrue(
             $this->repo->findById($artist->id)->profile->country->code === 'CA'
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesModel()
+    {
+        $artist = $this->repo->model()->inRandomOrder()->first();
+
+        factory($this->album->class())->create([
+            'artist_id' => $artist->id
+        ]);
+
+        DB::transaction(function () use ($artist) {
+            $artist->delete();
+        });
+
+        $this->assertNull($this->repo->findById($artist->id));
     }
 }

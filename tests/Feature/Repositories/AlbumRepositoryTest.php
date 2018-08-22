@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Repositories;
 
+use DB;
+
 use App\Contracts\ArtistRepositoryInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,12 +14,12 @@ class AlbumRepositoryTest extends RepositoryTestCase
     use RefreshDatabase;
 
     /**
-     * @var $album AlbumRepositoryInterface
+     * @var  $album  AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var  $artist  ArtistRepositoryInterface
      */
     protected $artist;
 
@@ -29,9 +31,7 @@ class AlbumRepositoryTest extends RepositoryTestCase
     }
 
     /**
-     * Sets the $repo property.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function setRepository()
     {
@@ -39,9 +39,7 @@ class AlbumRepositoryTest extends RepositoryTestCase
     }
 
     /**
-     * Ensure the method create() creates a new record in the database.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function test_method_create_storesNewModel()
     {
@@ -56,9 +54,7 @@ class AlbumRepositoryTest extends RepositoryTestCase
     }
 
     /**
-     * Ensure that the update() method updates the model record in the database.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function test_method_update_updatesModel()
     {
@@ -80,11 +76,9 @@ class AlbumRepositoryTest extends RepositoryTestCase
     }
 
     /**
-     * Ensure that the delete() method results in model deletion.
-     *
-     * return @void
+     * @inheritdoc
      */
-    public function test_method_delete_deletesAlbum()
+    public function test_method_delete_deletesModel()
     {
         $artist = $this->artist->model()->inRandomOrder()->first();
 
@@ -92,7 +86,9 @@ class AlbumRepositoryTest extends RepositoryTestCase
             'artist_id' => $artist->id
         ]);
 
-        $album->delete();
+        DB::transaction(function () use ($album) {
+            $album->delete();
+        });
 
         $this->assertNull($this->repo->findById($album->id));
     }
