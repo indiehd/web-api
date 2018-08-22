@@ -30,7 +30,7 @@ class ArtistRepositoryTest extends RepositoryTestCase
 
     /**
      * Ensure the method create() creates a new record in the database and creates a profile for
-     * said Artist
+     * said Artist.
      *
      * @return void
      */
