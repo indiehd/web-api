@@ -2,16 +2,12 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Album;
-use App\Artist;
-use Illuminate\Database\Eloquent\Collection;
-use Tests\TestCase;
+use App\Contracts\ArtistRepositoryInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use DatabaseSeeder;
 
 use App\Contracts\AlbumRepositoryInterface;
 
-class AlbumRepositoryTest extends TestCase
+class AlbumRepositoryTest extends RepositoryTestCase
 {
     use RefreshDatabase;
 
@@ -20,78 +16,42 @@ class AlbumRepositoryTest extends TestCase
      */
     protected $album;
 
+    /**
+     * @var $artist ArtistRepositoryInterface
+     */
+    protected $artist;
+
     public function setUp()
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
-
-        $this->album = resolve(AlbumRepositoryInterface::class);
+        $this->artist = resolve(ArtistRepositoryInterface::class);
     }
 
     /**
-     * Ensure the method class() returns a string.
+     * Sets the $repo property.
      *
      * @return void
      */
-    public function test_method_class_returnsString()
+    public function setRepository()
     {
-        $this->assertTrue(is_string($this->album->class()));
+        $this->repo = resolve(AlbumRepositoryInterface::class);
     }
 
     /**
-     * Ensure the method class() can be instantiated.
+     * Ensure the method create() creates a new record in the database.
      *
      * @return void
      */
-    public function test_method_class_isInstantiable()
+    public function test_method_create_storesNewModel()
     {
-        $this->assertInstanceOf(Album::class, resolve($this->album->class()));
-    }
-
-    /**
-     * Ensure the method model() is an instance of Album.
-     *
-     * @return void
-     */
-    public function test_method_model_isInstanceOfAlbum()
-    {
-        $this->assertInstanceOf($this->album->class(), $this->album->model());
-    }
-
-    /**
-     * Ensure the method all() returns ONLY a collection of Albums.
-     *
-     * @return void
-     */
-    public function test_method_all_returnsOnlyCollectionOfAlbums()
-    {
-        $albums = $this->album->all();
-        $this->assertInstanceOf(Collection::class, $albums);
-        $this->assertContainsOnlyInstancesOf($this->album->class(), $albums);
-    }
-
-    /**
-     * Ensure the method findById() returns a instance of Artist with the id of 1.
-     *
-     * @return void
-     */
-    public function test_method_findById_returnsInstanceOfAlbumWithIdOfOne()
-    {
-        $album = $this->album->findById(1);
-        $this->assertInstanceOf($this->album->class(), $album);
-        $this->assertTrue($album->id === 1);
-    }
-
-    public function test_method_create_storesNewAlbum()
-    {
-        $album = factory(Album::class)->make([
-            'artist_id' => Artist::inRandomOrder()->first()->id
+        $album = factory($this->repo->class())->make([
+            'artist_id' => $this->artist->model()->inRandomOrder()->first()->id
         ])->toArray();
 
         $this->assertInstanceOf(
-            Album::class,
-            $this->album->create($album)
+            $this->repo->class(),
+            $this->repo->create($album)
         );
     }
 
@@ -100,22 +60,22 @@ class AlbumRepositoryTest extends TestCase
      *
      * @return void
      */
-    public function test_method_update_updatesAlbum()
+    public function test_method_update_updatesModel()
     {
-        $artist = Artist::inRandomOrder()->first();
+        $artist = $this->artist->model()->inRandomOrder()->first();
 
-        $album = factory(Album::class)->create([
+        $album = factory($this->repo->class())->create([
             'artist_id' => $artist->id
         ]);
 
         $newTitle = 'Foo Bar';
 
-        $this->album->update($album->id, [
+        $this->repo->update($album->id, [
             'title' => $newTitle,
         ]);
 
         $this->assertTrue(
-            $this->album->findById($album->id)->title === $newTitle
+            $this->repo->findById($album->id)->title === $newTitle
         );
     }
 
@@ -126,14 +86,14 @@ class AlbumRepositoryTest extends TestCase
      */
     public function test_method_delete_deletesAlbum()
     {
-        $artist = Artist::inRandomOrder()->first();
+        $artist = $this->artist->model()->inRandomOrder()->first();
 
-        $album = factory(Album::class)->create([
+        $album = factory($this->repo->class())->create([
             'artist_id' => $artist->id
         ]);
 
         $album->delete();
 
-        $this->assertNull($this->album->findById($album->id));
+        $this->assertNull($this->repo->findById($album->id));
     }
 }
