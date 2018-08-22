@@ -25,10 +25,17 @@ abstract class RepositoryTestCase extends TestCase
         $this->setRepository();
     }
 
+    /**
+     * Sets the $repo property.
+     *
+     * @return void
+     */
     abstract public function setRepository();
 
     /**
-     * Ensures the property $repo is instantiable
+     * Ensure the property $repo is instantiable.
+     *
+     * @return void
      */
     public function test_property_repo_isInstantiable()
     {
@@ -66,7 +73,7 @@ abstract class RepositoryTestCase extends TestCase
     }
 
     /**
-     * Ensure the method all() returns ONLY a collection of Model.
+     * Ensure the method all() returns a Collection containing instances ONLY of Model.
      *
      * @return void
      */
@@ -78,7 +85,7 @@ abstract class RepositoryTestCase extends TestCase
     }
 
     /**
-     * Ensure the method findById() returns a instance of the model with the id of 1.
+     * Ensure the method findById() returns an instance of the model with the ID of 1.
      *
      * @return void
      */
@@ -90,7 +97,7 @@ abstract class RepositoryTestCase extends TestCase
     }
 
     /**
-     * Ensure the method create() creates a new record in the database
+     * Ensure the create() method creates a new record in the database.
      *
      * @return void
      */
