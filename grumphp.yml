@@ -13,3 +13,19 @@ parameters:
       case_insensitive: true
       multiline: true
       additional_modifiers: ''
+    phpcs:
+      standard: PSR2
+      severity: ~
+      error_severity: ~
+      warning_severity: ~
+      tab_width: ~
+      whitelist_patterns: []
+      encoding: ~
+      ignore_patterns:
+        - /^node_modules\/(.*)/
+        - /^vendor\/(.*)/
+        - /^storage\/(.*)/
+        - /^public\/(.*)/
+        - /^resources\/(.*)/
+      sniffs: []
+      triggered_by: [php]
