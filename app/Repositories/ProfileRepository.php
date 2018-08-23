@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Contracts\ProfileRepositoryInterface;
 use App\Profile;
-use App\Repositories\BaseRepository;
 
 class ProfileRepository extends BaseRepository implements ProfileRepositoryInterface
 {

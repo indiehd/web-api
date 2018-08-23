@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface AlbumRepositoryInterface extends BaseRepositoryInterface
+interface AlbumRepositoryInterface extends RepositoryShouldCrud
 {
 
 }

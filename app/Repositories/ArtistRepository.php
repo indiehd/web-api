@@ -4,9 +4,8 @@ namespace App\Repositories;
 
 use App\Artist;
 use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\RepositoryShouldCrud;
 use App\Traits\isProfilable;
-use App\Repositories\BaseRepository;
 
 class ArtistRepository extends BaseRepository implements ArtistRepositoryInterface
 {
