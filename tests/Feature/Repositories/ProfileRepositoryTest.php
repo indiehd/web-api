@@ -12,13 +12,6 @@ use App\Contracts\ProfileRepositoryInterface;
 
 class ProfileRepositoryTest extends RepositoryTestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * @var  $album  AlbumRepositoryInterface
-     */
-    #protected $album;
-
     /**
      * @var  $artist  ArtistRepositoryInterface
      */

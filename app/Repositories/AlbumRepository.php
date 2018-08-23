@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Album;
 use App\Contracts\AlbumRepositoryInterface;
-use App\Contracts\RepositoryShouldCrud;
 
 class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
 {
