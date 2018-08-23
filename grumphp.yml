@@ -29,3 +29,19 @@ parameters:
         - /^resources\/(.*)/
       sniffs: []
       triggered_by: [php]
+    git_blacklist:
+      keywords:
+          - "die("
+          - "var_dump("
+          - "exit;"
+          - "exit("
+          - "dd("
+      whitelist_patterns:
+        - /^app\/(.*)/
+        - /^bootstrap\/(.*)/
+        - /^config\/(.*)/
+        - /^database\/(.*)/
+        - /^routes\/(.*)/
+        - /^tests\/(.*)/
+      triggered_by: ['php']
+      regexp_type: G
