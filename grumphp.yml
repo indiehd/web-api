@@ -37,7 +37,7 @@ parameters:
           - "exit("
           - "dd("
       whitelist_patterns:
-        - /^app\/(.*)/
+        - /^app\/(?!Console)(.*)/
         - /^bootstrap\/(.*)/
         - /^config\/(.*)/
         - /^database\/(.*)/
