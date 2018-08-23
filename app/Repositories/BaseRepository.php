@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Contracts\BaseRepositoryInterface;
+use App\Contracts\RepositoryShouldRead;
 
-abstract class BaseRepository implements BaseRepositoryInterface
+abstract class BaseRepository implements RepositoryShouldRead
 {
     public function all()
     {

@@ -10,6 +10,9 @@ use App\Contracts\AlbumRepositoryInterface;
 
 class ArtistRepositoryTest extends RepositoryTestCase
 {
+    /**
+     * @var  $profile  ProfileRepositoryInterface
+     */
     protected $profile;
 
     public function setUp()

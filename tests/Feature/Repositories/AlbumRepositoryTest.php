@@ -5,14 +5,10 @@ namespace Tests\Feature\Repositories;
 use DB;
 
 use App\Contracts\ArtistRepositoryInterface;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use App\Contracts\AlbumRepositoryInterface;
 
 class AlbumRepositoryTest extends RepositoryTestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var  $album  AlbumRepositoryInterface
      */

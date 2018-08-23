@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface ArtistRepositoryInterface extends BaseRepositoryInterface
+interface ArtistRepositoryInterface extends RepositoryShouldCrud
 {
     public function profile();
 }
