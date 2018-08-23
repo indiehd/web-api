@@ -5,9 +5,6 @@ namespace Tests\Feature\Repositories;
 use DB;
 
 use App\Contracts\ArtistRepositoryInterface;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 
 class ProfileRepositoryTest extends RepositoryTestCase
@@ -37,7 +34,7 @@ class ProfileRepositoryTest extends RepositoryTestCase
      */
     public function test_method_create_storesNewModel()
     {
-        $artist = factory($this->artist->class())->create([]);
+        $artist = factory($this->artist->class())->create();
 
         $profile = factory($this->repo->class())->make([
             'profilable_id' => $artist->id,
@@ -55,7 +52,7 @@ class ProfileRepositoryTest extends RepositoryTestCase
      */
     public function test_method_update_updatesModel()
     {
-        $artist = factory($this->artist->class())->create([]);
+        $artist = factory($this->artist->class())->create();
 
         $profile = factory($this->repo->class())->create([
             'profilable_id' => $artist->id,
@@ -80,7 +77,7 @@ class ProfileRepositoryTest extends RepositoryTestCase
      */
     public function test_method_delete_deletesModel()
     {
-        $artist = factory($this->artist->class())->create([]);
+        $artist = factory($this->artist->class())->create();
 
         $profile = factory($this->repo->class())->create([
             'profilable_id' => $artist->id,

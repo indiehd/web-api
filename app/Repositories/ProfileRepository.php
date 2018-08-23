@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\RepositoryShouldCrud;
 use App\Profile;
 
 class ProfileRepository extends BaseRepository implements ProfileRepositoryInterface
