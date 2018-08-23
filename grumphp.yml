@@ -1,0 +1,15 @@
+parameters:
+  tasks:
+    git_commit_message:
+      allow_empty_message: false
+      enforce_capitalized_subject: false
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+      max_body_width: 72
+      max_subject_width: 72
+      matchers:
+          https://github.com/indiehd/docs/blob/master/CONTRIBUTING.md#styleguides: >
+            /^(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(\([a-zA-Z.\s]+\))?:\s[A-Za-z0-9,;'\"\\ ]{1,72}?$/
+      case_insensitive: true
+      multiline: true
+      additional_modifiers: ''
