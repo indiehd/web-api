@@ -3,10 +3,12 @@
 namespace App\Repositories;
 
 use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\RepositoryShouldCrud;
 use App\Profile;
-use App\Repositories\BaseRepository;
 
-class ProfileRepository extends BaseRepository implements ProfileRepositoryInterface
+class ProfileRepository extends BaseRepository implements
+    ProfileRepositoryInterface,
+    RepositoryShouldCrud
 {
     /**
      * @var string $class
