@@ -6,7 +6,7 @@ use DB;
 
 use App\Contracts\FlacFileRepositoryInterface;
 
-class FlacFileRepositoryTest extends RepositoryTestCase
+class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
     public function setUp()
     {

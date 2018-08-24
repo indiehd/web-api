@@ -8,7 +8,7 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 
-class ArtistRepositoryTest extends RepositoryTestCase
+class ArtistRepositoryTest extends RepositoryCrudTestCase
 {
     /**
      * @var  $profile  ProfileRepositoryInterface
