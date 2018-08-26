@@ -1,0 +1,47 @@
+parameters:
+  tasks:
+    git_commit_message:
+      allow_empty_message: false
+      enforce_capitalized_subject: false
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+      max_body_width: 72
+      max_subject_width: 72
+      matchers:
+          https://github.com/indiehd/docs/blob/master/CONTRIBUTING.md#styleguides: >
+            /^(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(\([a-zA-Z.\s]+\))?:\s[A-Za-z0-9,;'\"\\ ]{1,72}?$/
+      case_insensitive: true
+      multiline: true
+      additional_modifiers: ''
+    phpcs:
+      standard: PSR2
+      severity: ~
+      error_severity: ~
+      warning_severity: ~
+      tab_width: ~
+      whitelist_patterns: []
+      encoding: ~
+      ignore_patterns:
+        - /^node_modules\/(.*)/
+        - /^vendor\/(.*)/
+        - /^storage\/(.*)/
+        - /^public\/(.*)/
+        - /^resources\/(.*)/
+      sniffs: []
+      triggered_by: [php]
+    git_blacklist:
+      keywords:
+          - "die("
+          - "var_dump("
+          - "exit;"
+          - "exit("
+          - "dd("
+      whitelist_patterns:
+        - /^app\/(?!Console)(.*)/
+        - /^bootstrap\/(.*)/
+        - /^config\/(.*)/
+        - /^database\/(.*)/
+        - /^routes\/(.*)/
+        - /^tests\/(.*)/
+      triggered_by: ['php']
+      regexp_type: G
