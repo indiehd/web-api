@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface CountryRepositoryInterface
+interface CountryRepositoryInterface extends RepositoryShouldRead
 {
 
 }

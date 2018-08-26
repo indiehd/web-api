@@ -7,7 +7,7 @@ use DB;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 
-class AlbumRepositoryTest extends RepositoryTestCase
+class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
     /**
      * @var  $album  AlbumRepositoryInterface
