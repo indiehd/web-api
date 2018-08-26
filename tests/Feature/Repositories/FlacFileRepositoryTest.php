@@ -8,11 +8,6 @@ use App\Contracts\FlacFileRepositoryInterface;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * @inheritdoc
      */

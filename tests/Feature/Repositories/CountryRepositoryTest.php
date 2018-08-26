@@ -6,11 +6,6 @@ use App\Contracts\CountryRepositoryInterface;
 
 class CountryRepositoryTest extends RepositoryReadonlyTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * @inheritdoc
      */
