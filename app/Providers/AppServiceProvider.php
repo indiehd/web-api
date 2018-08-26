@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\ServiceProvider;
+
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
+use App\Contracts\GenreRepositoryInterface;
 
 use App\Repositories\ArtistRepository;
 use App\Repositories\ProfileRepository;
@@ -15,7 +18,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\AlbumRepository;
 use App\Repositories\FlacFileRepository;
 use App\Repositories\CountryRepository;
-use Illuminate\Support\ServiceProvider;
+use App\Repositories\GenreRepository;
 
 use App\Artist;
 use App\Album;
@@ -48,5 +51,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AlbumRepositoryInterface::class, AlbumRepository::class);
         $this->app->bind(FlacFileRepositoryInterface::class, FlacFileRepository::class);
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
+        $this->app->bind(GenreRepositoryInterface::class, GenreRepository::class);
     }
 }
