@@ -24,8 +24,12 @@ use App\Repositories\LabelRepository;
 
 use App\Artist;
 use App\Album;
+use App\Genre;
+use App\Label;
 use App\Observers\ArtistObserver;
 use App\Observers\AlbumObserver;
+use App\Observers\GenreObserver;
+use App\Observers\LabelObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Artist::observe(ArtistObserver::class);
         Album::observe(AlbumObserver::class);
+        Genre::observe(GenreObserver::class);
+        Label::observe(LabelObserver::class);
     }
 
     /**
