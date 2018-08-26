@@ -9,18 +9,6 @@ use Tests\TestCase;
 
 abstract class RepositoryCrudTestCase extends RepositoryReadOnlyTestCase
 {
-    #use RefreshDatabase;
-
-    /**
-     * @var $repo
-     */
-    protected $repo;
-
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * Ensure the create() method creates a new record in the database.
      *
