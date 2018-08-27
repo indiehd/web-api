@@ -29,7 +29,12 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewModel()
     {
-        $song = factory($this->repo->class())->make()->toArray();
+        $album = factory($this->album->class())->create();
+
+        $song = factory($this->repo->class())->make([
+            'album_id' => $album->id,
+            'track_number' => 1,
+        ])->toArray();
 
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -44,7 +49,10 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     {
         $album = factory($this->album->class())->create();
 
-        $song = factory($this->repo->class())->create(['album_id' => $album->id]);
+        $song = factory($this->repo->class())->create([
+            'album_id' => $album->id,
+            'track_number' => 1,
+        ]);
 
         $newValue = 'Foo Bar';
 
@@ -66,7 +74,10 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     {
         $album = factory($this->album->class())->create();
 
-        $song = factory($this->repo->class())->create(['album_id' => $album->id]);
+        $song = factory($this->repo->class())->create([
+            'album_id' => $album->id,
+            'track_number' => 1,
+        ]);
 
         DB::transaction(function () use ($song) {
             $song->delete();
