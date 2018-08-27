@@ -13,6 +13,7 @@ use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\SkuRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 
 use App\Repositories\ArtistRepository;
 use App\Repositories\ProfileRepository;
@@ -23,6 +24,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\GenreRepository;
 use App\Repositories\LabelRepository;
 use App\Repositories\SkuRepository;
+use App\Repositories\SongRepository;
 
 use App\Artist;
 use App\Album;
@@ -64,5 +66,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GenreRepositoryInterface::class, GenreRepository::class);
         $this->app->bind(LabelRepositoryInterface::class, LabelRepository::class);
         $this->app->bind(SkuRepositoryInterface::class, SkuRepository::class);
+        $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
     }
 }
