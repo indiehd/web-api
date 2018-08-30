@@ -2,32 +2,62 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Contracts\ArtistRepositoryInterface;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use DatabaseSeeder;
 
+use App\Country;
 use App\Artist;
-use App\Contracts\ProfileRepositoryInterface;
+use App\Profile;
 
 class ArtistControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var  $profile  ProfileRepositoryInterface
-     */
-    protected $profile;
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        $country = new Country();
+        $country->code = 'US';
+        $country->name = 'United States';
+        $country->save();
 
-        $this->profile = resolve(ProfileRepositoryInterface::class);
+        Artist::create();
 
-        $this->artist = resolve(ArtistRepositoryInterface::class);
+        Profile::create(
+            $this->getAllInputsInValidState() + [
+                'profilable_id' => 1,
+                'profilable_type' => Artist::class
+            ]
+        );
+    }
+
+    public function getJsonStructure()
+    {
+        return [
+            'id',
+            'moniker',
+            'alt_moniker',
+            'city',
+            'territory',
+            'country_code',
+            'official_url',
+            'profile_url',
+            'rank',
+        ];
+    }
+
+    public function getAllInputsInValidState()
+    {
+        return [
+            'moniker' => 'Joey\'s Basement Band',
+            'alt_moniker' => 'No Longer in the Garage',
+            'city' => 'New York City',
+            'territory' => 'New York',
+            'country_code' => 'US',
+            'official_url' => 'https://joeysbasementband.com',
+            'profile_url' => 'joeysbasementband',
+        ];
     }
 
     public function test_index_returnsMultipleJsonObjects()
@@ -36,60 +66,26 @@ class ArtistControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    [
-                        'id',
-                        'moniker',
-                        'alt_moniker',
-                        'city',
-                        'territory',
-                        'country_code',
-                        'official_url',
-                        'profile_url',
-                        'rank',
-                    ]
+                    $this->getJsonStructure()
                 ]
             ]);
     }
 
-    public function test_store()
+    public function test_store_returnsOneJsonObject()
     {
-        $profile = factory($this->profile->class())->make()->toArray();
-
-        $this->artist->create($profile);
-
-        $this->json('POST', route('artist.store'), $profile)
+        $this->json('POST', route('artist.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'moniker',
-                    'alt_moniker',
-                    'city',
-                    'territory',
-                    'country_code',
-                    'official_url',
-                    'profile_url',
-                    'rank',
-                ]
+                'data' => $this->getJsonStructure()
             ]);
     }
 
     public function test_show_returnsOneJsonObject()
     {
-        $this->json('GET', route('artist.show', ['id' => Artist::inRandomOrder()->first()->id]))
+        $this->json('GET', route('artist.show', ['id' => 1]))
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'moniker',
-                    'alt_moniker',
-                    'city',
-                    'territory',
-                    'country_code',
-                    'official_url',
-                    'profile_url',
-                    'rank',
-                ]
+                'data' => $this->getJsonStructure()
             ]);
     }
 }
