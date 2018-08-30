@@ -30,8 +30,8 @@ class StoreArtist extends FormRequest
             'city' => 'max:255',
             'territory' => 'max:255',
             'country_code' => 'exists:countries,code',
-            'official_url' => 'max:255',
-            'profile_url' => 'max:255', // TODO This requires further validation, to prevent tomfoolery, profanity, etc...
+            'official_url' => 'url',
+            'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc...
         ];
     }
 }
