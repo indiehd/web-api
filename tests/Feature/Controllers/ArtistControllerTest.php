@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controllers;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
@@ -11,7 +11,7 @@ use App\Contracts\ProfileRepositoryInterface;
 
 class ArtistControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function setUp()
     {
@@ -20,12 +20,10 @@ class ArtistControllerTest extends TestCase
         $this->country = resolve(CountryRepositoryInterface::class);
         $this->artist = resolve(ArtistRepositoryInterface::class);
         $this->profile = resolve(ProfileRepositoryInterface::class);
+    }
 
-        $country = $this->country->new();
-        $country->code = 'US';
-        $country->name = 'United States';
-        $country->save();
-
+    public function spawnArtist()
+    {
         $artist = $this->artist->model()->create();
 
         $this->profile->model()->create(
@@ -34,6 +32,8 @@ class ArtistControllerTest extends TestCase
                 'profilable_type' => $this->artist->class()
             ]
         );
+
+        return $artist;
     }
 
     public function getJsonStructure()
@@ -78,6 +78,8 @@ class ArtistControllerTest extends TestCase
 
     public function test_index_returnsMultipleJsonObjects()
     {
+        $this->spawnArtist();
+
         $this->json('GET', route('artist.index'))
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -108,10 +110,39 @@ class ArtistControllerTest extends TestCase
 
     public function test_show_returnsOneJsonObject()
     {
-        $this->json('GET', route('artist.show', ['id' => 1]))
+        $artist = $this->spawnArtist();
+
+        $this->json('GET', route('artist.show', ['id' => $artist->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    public function test_update_withValidInputs_returnsJsonObjectMatchingInputs()
+    {
+        $artist = $this->spawnArtist();
+
+        $inputs = $this->getAllInputsInValidState();
+
+        $inputs['alt_moniker'] = 'Back in the Garage';
+
+        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $inputs)
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => $inputs
+            ]);
+    }
+
+    public function test_update_withInvalidInputs_returnsErrorMessage()
+    {
+        $artist = $this->spawnArtist();
+
+        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $this->getInputsInInvalidState())
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+                'errors' => array_keys($this->getAllInputsInValidState())
             ]);
     }
 }
