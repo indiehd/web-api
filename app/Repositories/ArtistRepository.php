@@ -68,6 +68,9 @@ class ArtistRepository extends BaseRepository implements ArtistRepositoryInterfa
 
         $this->profilable()->update($model->profile->id, $data);
 
+        // TODO Do we want to return the UPDATED model? If so, we need to re-fetch it.
+        #$model = $this->findById($id);
+
         return $model;
     }
 
