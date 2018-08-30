@@ -5,9 +5,9 @@ namespace Tests\Feature\Controllers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use App\Country;
-use App\Artist;
-use App\Profile;
+use App\Contracts\CountryRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 
 class ArtistControllerTest extends TestCase
 {
@@ -17,17 +17,21 @@ class ArtistControllerTest extends TestCase
     {
         parent::setUp();
 
-        $country = new Country();
+        $this->country = resolve(CountryRepositoryInterface::class);
+        $this->artist = resolve(ArtistRepositoryInterface::class);
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $country = $this->country->new();
         $country->code = 'US';
         $country->name = 'United States';
         $country->save();
 
-        Artist::create();
+        $artist = $this->artist->model()->create();
 
-        Profile::create(
+        $this->profile->model()->create(
             $this->getAllInputsInValidState() + [
-                'profilable_id' => 1,
-                'profilable_type' => Artist::class
+                'profilable_id' => $artist->id,
+                'profilable_type' => $this->artist->class()
             ]
         );
     }
