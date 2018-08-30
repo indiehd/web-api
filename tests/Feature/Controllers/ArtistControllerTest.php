@@ -64,6 +64,18 @@ class ArtistControllerTest extends TestCase
         ];
     }
 
+    public function getInputsInInvalidState()
+    {
+        return [
+            'alt_moniker' => str_random(256),
+            'city' => str_random(256),
+            'territory' => str_random(256),
+            'country_code' => 'United States',
+            'official_url' => 'joeysbasementband.com',
+            'profile_url' => str_random(65),
+        ];
+    }
+
     public function test_index_returnsMultipleJsonObjects()
     {
         $this->json('GET', route('artist.index'))
@@ -75,12 +87,22 @@ class ArtistControllerTest extends TestCase
             ]);
     }
 
-    public function test_store_returnsOneJsonObject()
+    public function test_store_withValidInputs_returnsOneJsonObject()
     {
         $this->json('POST', route('artist.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    public function test_store_withInvalidInputs_returnsErrorMessage()
+    {
+        $this->json('POST', route('artist.store'), $this->getInputsInInvalidState())
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+                'errors' => array_keys($this->getAllInputsInValidState())
             ]);
     }
 
