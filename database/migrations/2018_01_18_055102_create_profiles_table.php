@@ -18,9 +18,9 @@ class CreateProfilesTable extends Migration
             $table->string('moniker');
             $table->string('alt_moniker')->nullable();
             $table->string('email')->nullable(); // alternate correspondence email
-            $table->string('city');
-            $table->string('territory');
-            $table->char('country_code', 3);
+            $table->string('city')->nullable();
+            $table->string('territory')->nullable();
+            $table->char('country_code', 3)->nullable();
             $table->string('official_url')->nullable();
             $table->string('profile_url');
             $table->unsignedInteger('rank')->nullable();
