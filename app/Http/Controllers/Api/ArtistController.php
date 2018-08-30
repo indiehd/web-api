@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\ArtistRepositoryInterface;
+use App\Http\Requests\StoreArtist;
 use App\Http\Resources\CatalogResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -44,7 +45,7 @@ class ArtistController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return CatalogResource
      */
-    public function store(Request $request)
+    public function store(StoreArtist $request)
     {
         return new CatalogResource($this->artist->create($request->all()));
     }
