@@ -25,13 +25,13 @@ class StoreArtist extends FormRequest
     {
         return [
             'moniker' => 'required|max:255',
-            'alt_moniker' => 'sometimes|required|max:255',
-            'email' => 'sometimes|required|email',
-            'city' => 'sometimes|required|max:255',
-            'territory' => 'sometimes|required|max:255',
-            'country_code' => 'sometimes|required|max:3',
-            'official_url' => 'sometimes|required:max:255',
-            'profile_url' => 'max:255', // This requires further validation, to prevent tomfoolery, profanity, etc...
+            'alt_moniker' => 'max:255',
+            'email' => 'email',
+            'city' => 'max:255',
+            'territory' => 'max:255',
+            'country_code' => 'exists:countries,code',
+            'official_url' => 'max:255',
+            'profile_url' => 'max:255', // TODO This requires further validation, to prevent tomfoolery, profanity, etc...
         ];
     }
 }
