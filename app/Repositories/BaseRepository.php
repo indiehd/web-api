@@ -11,6 +11,13 @@ abstract class BaseRepository implements RepositoryShouldRead
         return $this->model()->all();
     }
 
+    public function new()
+    {
+        $class = new \ReflectionClass($this->class());
+
+        return $class->newInstance();
+    }
+
     public function findById($id)
     {
         return $this->model()->find($id);
