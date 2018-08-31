@@ -82,9 +82,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
             'artist_id' => $artist->id
         ]);
 
-        DB::transaction(function () use ($album) {
-            $album->delete();
-        });
+        $album->delete();
 
         $this->assertNull($this->repo->findById($album->id));
     }

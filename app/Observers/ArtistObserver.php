@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use DB;
 use App\Artist;
 
 class ArtistObserver
@@ -36,7 +37,9 @@ class ArtistObserver
      */
     public function deleting(Artist $artist)
     {
-        $artist->albums()->delete();
+        DB::transaction(function () use ($artist) {
+            $artist->albums()->delete();
+        });
     }
 
     /**

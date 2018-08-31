@@ -77,9 +77,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
             'artist_id' => $artist->id
         ]);
 
-        DB::transaction(function () use ($artist) {
-            $artist->delete();
-        });
+        $artist->delete();
 
         $this->assertNull($this->repo->findById($artist->id));
     }

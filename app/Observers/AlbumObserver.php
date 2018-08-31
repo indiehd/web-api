@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use DB;
 use App\Album;
 
 class AlbumObserver
@@ -36,9 +37,11 @@ class AlbumObserver
      */
     public function deleting(Album $album)
     {
-        $album->songs()->delete();
+        DB::transaction(function () use ($album) {
+            $album->songs()->delete();
 
-        $album->genres()->detach();
+            $album->genres()->detach();
+        });
     }
 
     /**
