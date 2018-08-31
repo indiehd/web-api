@@ -23,6 +23,7 @@ abstract class TestCase extends BaseTestCase
             static::$migrationsRun = true;
 
             Artisan::call('db:seed', ['--class' => 'CountriesSeeder']);
+            Artisan::call('db:seed', ['--class' => 'GenresSeeder']);
         }
     }
 

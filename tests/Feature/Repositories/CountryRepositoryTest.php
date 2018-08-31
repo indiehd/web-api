@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Repositories;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Contracts\CountryRepositoryInterface;
 
 class CountryRepositoryTest extends RepositoryReadonlyTestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @inheritdoc
      */

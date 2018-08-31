@@ -4,7 +4,7 @@ namespace Tests\Feature\Models;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use DatabaseSeeder;
 use App\Song;
 use App\Album;
@@ -13,7 +13,7 @@ use App\Sku;
 
 class SongModelTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function setUp()
     {

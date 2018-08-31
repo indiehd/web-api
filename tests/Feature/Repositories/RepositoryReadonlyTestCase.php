@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Repositories;
 
+use Tests\TestCase;
+
 use DatabaseSeeder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 abstract class RepositoryReadOnlyTestCase extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @var $repo
@@ -82,17 +83,5 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
         $models = $this->repo->all();
         $this->assertInstanceOf(Collection::class, $models);
         $this->assertContainsOnlyInstancesOf($this->repo->class(), $models);
-    }
-
-    /**
-     * Ensure the method findById() returns an instance of the model with the ID of 1.
-     *
-     * @return void
-     */
-    public function test_method_findById_returnsInstanceOfModelWithIdOfOne()
-    {
-        $model = $this->repo->findById(1);
-        $this->assertInstanceOf($this->repo->class(), $model);
-        $this->assertTrue($model->id === 1);
     }
 }

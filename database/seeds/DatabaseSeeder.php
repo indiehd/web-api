@@ -9,9 +9,9 @@ class DatabaseSeeder extends BaseSeeder
      */
     public function run()
     {
-        $this->call(CountriesSeeder::class);
+        #$this->call(CountriesSeeder::class);
 
-        $this->call(GenresSeeder::class);
+        #$this->call(GenresSeeder::class);
 
         $this->call(AccountsSeeder::class);
 

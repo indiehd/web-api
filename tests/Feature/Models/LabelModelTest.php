@@ -5,7 +5,7 @@ namespace Tests\Feature\Models;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use DatabaseSeeder;
 
 use App\CatalogEntity;
@@ -16,7 +16,7 @@ use App\Album;
 
 class LabelModelTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function setUp()
     {

@@ -2,11 +2,6 @@
 
 namespace Tests\Feature\Repositories;
 
-use DatabaseSeeder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
 abstract class RepositoryCrudTestCase extends RepositoryReadOnlyTestCase
 {
     /**

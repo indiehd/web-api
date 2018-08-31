@@ -4,14 +4,14 @@ namespace Tests\Feature\Models;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use DatabaseSeeder;
 use App\Sku;
 use App\Song;
 
 class SkuModelTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function setUp()
     {
