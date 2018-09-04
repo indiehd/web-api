@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Models;
 
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use DB;
-use DatabaseSeeder;
-use App\Profile;
+use CountriesSeeder;
+use App\CatalogEntity;
 
 class ProfileModelTest extends TestCase
 {
@@ -17,7 +19,15 @@ class ProfileModelTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(CountriesSeeder::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->label = resolve(LabelRepositoryInterface::class);
+
+        $this->user = resolve(UserRepositoryInterface::class);
     }
 
     /**
@@ -28,16 +38,34 @@ class ProfileModelTest extends TestCase
      */
     public function test_profilable_allDistinctTypes_morphToProfile()
     {
-        $profilableTypes = DB::table('profiles')
-            ->select('profilable_type')
-            ->distinct()
-            ->groupBy('profilable_type')
-            ->get();
+        $artist = factory($this->artist->class())->create();
 
-        foreach ($profilableTypes as $type) {
-            $randomModelOfType = (new $type->profilable_type)::inRandomOrder()->first();
+        factory(CatalogEntity::class)->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->artist->class()
+        ]);
 
-            $this->assertInstanceOf(Profile::class, $randomModelOfType->profile);
-        }
+        factory($this->profile->class())->create([
+            'profilable_id' => $artist->id,
+            'profilable_type' => $this->artist->class()
+        ]);
+
+        $this->assertInstanceOf($this->profile->class(), $artist->profile);
+
+        $label = factory($this->label->class())->create();
+
+        factory(CatalogEntity::class)->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $label->id,
+            'catalogable_type' => $this->label->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $label->id,
+            'profilable_type' => $this->label->class()
+        ]);
+
+        $this->assertInstanceOf($this->profile->class(), $label->profile);
     }
 }
