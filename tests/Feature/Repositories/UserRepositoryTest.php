@@ -2,14 +2,16 @@
 
 namespace Tests\Feature\Repositories;
 
-use DB;
-use Illuminate\Foundation\Testing\WithFaker;
-
 use App\Contracts\UserRepositoryInterface;
 
 class UserRepositoryTest extends RepositoryCrudTestCase
 {
-    use WithFaker;
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->seed('CountriesSeeder');
+    }
 
     /**
      * @inheritdoc
@@ -42,7 +44,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = factory($this->repo->class())->create();
 
-        $newValue = $this->faker->userName();
+        $newValue = str_random(32);
 
         $property = 'username';
 
@@ -62,9 +64,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = factory($this->repo->class())->create();
 
-        DB::transaction(function () use ($user) {
-            $user->delete();
-        });
+        $user->delete();
 
         $this->assertNull($this->repo->findById($user->id));
     }
