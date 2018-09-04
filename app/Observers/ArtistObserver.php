@@ -37,7 +37,11 @@ class ArtistObserver
      */
     public function deleting(Artist $artist)
     {
-        $artist->albums()->delete();
+        DB::transaction(function () use ($artist) {
+            $artist->albums()->each(function ($model) {
+                $model->delete();
+            });
+        });
     }
 
     /**
