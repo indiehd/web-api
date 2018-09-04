@@ -37,11 +37,9 @@ class AlbumObserver
      */
     public function deleting(Album $album)
     {
-        DB::transaction(function () use ($album) {
-            $album->songs()->delete();
+        $album->songs()->delete();
 
-            $album->genres()->detach();
-        });
+        $album->genres()->detach();
     }
 
     /**

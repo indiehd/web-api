@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use DB;
 use App\Contracts\RepositoryShouldRead;
 
 abstract class BaseRepository implements RepositoryShouldRead
@@ -25,6 +26,8 @@ abstract class BaseRepository implements RepositoryShouldRead
 
     public function delete($id)
     {
-        return $this->findById($id)->delete();
+        DB::transaction(function () use ($id) {
+            return $this->findById($id)->delete();
+        });
     }
 }
