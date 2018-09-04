@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
+use Artisan;
 use DB;
 
 use App\Contracts\SongRepositoryInterface;
@@ -12,6 +13,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     public function setUp()
     {
         parent::setUp();
+
+        Artisan::call('db:seed', ['--class' => 'CatalogSeeder']);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
     }

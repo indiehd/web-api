@@ -1,16 +1,14 @@
 <?php
 
-class DatabaseSeeder extends BaseSeeder
+class CatalogSeeder extends BaseSeeder
 {
     /**
-     * Seed the application's database.
+     * Seed the database tables that comprise the Digital Catalog.
      *
      * @return void
      */
     public function run()
     {
-        $this->call(StaticDataSeeder::class);
-
         $this->call(AccountsSeeder::class);
 
         $this->call(AlbumsSeeder::class);

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Repositories;
 
+use Artisan;
+
 use Tests\TestCase;
 
 use DatabaseSeeder;
@@ -12,6 +14,8 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
 {
     use DatabaseTransactions;
 
+    protected static $staticSeedsRun = false;
+
     /**
      * @var $repo
      */
@@ -21,7 +25,9 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        if (!static::$staticSeedsRun) {
+            Artisan::call('db:seed', ['--class' => 'StaticDataSeeder']);
+        }
 
         $this->setRepository();
     }
