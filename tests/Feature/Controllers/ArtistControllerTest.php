@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controllers;
 
+use CountriesSeeder;
+
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
@@ -12,7 +14,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->seed('CatalogSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->country = resolve(CountryRepositoryInterface::class);
         $this->artist = resolve(ArtistRepositoryInterface::class);
