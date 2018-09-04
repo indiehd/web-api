@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Repositories;
 
-use Artisan;
-use DB;
-
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 
@@ -14,7 +11,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        Artisan::call('db:seed', ['--class' => 'CatalogSeeder']);
+        $this->seed('CatalogSeeder');
 
         $this->album = resolve(AlbumRepositoryInterface::class);
     }
@@ -82,9 +79,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
             'track_number' => 1,
         ]);
 
-        DB::transaction(function () use ($song) {
-            $song->delete();
-        });
+        $song->delete();
 
         $this->assertNull($this->repo->findById($song->id));
     }

@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Repositories;
 
-use Artisan;
-use DB;
-
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
@@ -20,7 +17,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        Artisan::call('db:seed', ['--class' => 'CatalogSeeder']);
+        $this->seed('CatalogSeeder');
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 

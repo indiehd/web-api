@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Controllers;
 
-use Artisan;
-
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use App\Contracts\CountryRepositoryInterface;
@@ -19,7 +16,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        Artisan::call('db:seed', ['--class' => 'CatalogSeeder']);
+        $this->seed('CatalogSeeder');
 
         $this->country = resolve(CountryRepositoryInterface::class);
         $this->artist = resolve(ArtistRepositoryInterface::class);

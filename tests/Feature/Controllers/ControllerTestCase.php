@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Controllers;
 
-use Artisan;
-
 use Tests\TestCase;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -19,7 +17,7 @@ abstract class ControllerTestCase extends TestCase
         parent::setUp();
 
         if (!static::$staticSeedsRun) {
-            Artisan::call('db:seed', ['--class' => 'StaticDataSeeder']);
+            $this->seed('StaticDataSeeder');
         }
     }
 }

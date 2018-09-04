@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Repositories;
 
-use Artisan;
-use DB;
-
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
@@ -20,7 +17,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        Artisan::call('db:seed', ['--class' => 'CatalogSeeder']);
+        $this->seed('CatalogSeeder');
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
@@ -80,9 +77,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
             'label_id' => $label->id
         ]);
 
-        DB::transaction(function () use ($label) {
-            $label->delete();
-        });
+        $label->delete();
 
         $this->assertNull($this->repo->findById($label->id));
     }
