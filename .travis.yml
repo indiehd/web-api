@@ -18,7 +18,7 @@ sudo: false
 before_script:
 - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
 - chmod +x send.sh
-- cp .env.test .env
+- cp .env.testing .env
 - composer install --prefer-source --no-interaction
 - php artisan key:generate
 
