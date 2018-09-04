@@ -4,9 +4,9 @@ namespace Tests\Feature\Controllers;
 
 use Tests\TestCase;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class ControllerTestCase extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 }

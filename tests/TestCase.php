@@ -11,17 +11,9 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected static $migrationsRun = false;
-
     public function setUp()
     {
         parent::setUp();
-
-        if (!static::$migrationsRun) {
-            Artisan::call('migrate:fresh');
-
-            static::$migrationsRun = true;
-        }
     }
 
     protected function isInstantiable($class)

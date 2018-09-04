@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 
 use App\Contracts\ArtistRepositoryInterface;
@@ -15,7 +15,7 @@ use App\Song;
 
 class ArtistModelTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * @var $artist ArtistRepositoryInterface

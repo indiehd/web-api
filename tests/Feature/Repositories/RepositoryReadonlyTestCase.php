@@ -5,11 +5,11 @@ namespace Tests\Feature\Repositories;
 use Tests\TestCase;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class RepositoryReadOnlyTestCase extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * @var $repo

@@ -4,7 +4,7 @@ namespace Tests\Feature\Models;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use DatabaseSeeder;
 
 use DB;
@@ -13,7 +13,7 @@ use App\CatalogEntity;
 
 class CatalogEntityModelTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     public function setUp()
     {
