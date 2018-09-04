@@ -20,7 +20,7 @@ $factory->define(Album::class, function (Faker $faker) {
 
     return [
         'artist_id' => function() {
-            return Artist::inRandomOrder()->first()->id;
+            return factory(App\Artist::class)->create()->id;
         },
         'title' => $faker->company,
         'alt_title' => $faker->company,
