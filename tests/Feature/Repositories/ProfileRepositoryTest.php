@@ -18,6 +18,8 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
+        $this->seed('CatalogSeeder');
+
         $this->artist = resolve(ArtistRepositoryInterface::class);
     }
 

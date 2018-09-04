@@ -9,6 +9,8 @@ class CatalogSeeder extends BaseSeeder
      */
     public function run()
     {
+        $this->call(StaticDataSeeder::class);
+
         $this->call(AccountsSeeder::class);
 
         $this->call(AlbumsSeeder::class);

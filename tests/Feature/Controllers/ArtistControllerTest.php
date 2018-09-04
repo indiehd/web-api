@@ -2,16 +2,12 @@
 
 namespace Tests\Feature\Controllers;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 
 class ArtistControllerTest extends ControllerTestCase
 {
-    use DatabaseTransactions;
-
     public function setUp()
     {
         parent::setUp();

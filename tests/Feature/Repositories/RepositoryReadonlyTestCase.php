@@ -11,8 +11,6 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
 {
     use DatabaseTransactions;
 
-    protected static $staticSeedsRun = false;
-
     /**
      * @var $repo
      */
@@ -21,10 +19,6 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        if (!static::$staticSeedsRun) {
-            $this->seed('StaticDataSeeder');
-        }
 
         $this->setRepository();
     }

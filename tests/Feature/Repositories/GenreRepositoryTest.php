@@ -8,6 +8,13 @@ use App\Contracts\GenreRepositoryInterface;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->seed('StaticDataSeeder');
+    }
+
     /**
      * @inheritdoc
      */
