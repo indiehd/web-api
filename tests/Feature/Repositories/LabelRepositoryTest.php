@@ -17,7 +17,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CatalogSeeder');
+        $this->seed('CountriesSeeder');
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
@@ -71,7 +71,9 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesModel()
     {
-        $label = $this->repo->model()->inRandomOrder()->first();
+        $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
+
+        $label = $this->repo->create($profile);
 
         factory($this->artist->class())->create([
             'label_id' => $label->id

@@ -21,7 +21,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CatalogSeeder');
+        #$this->seed('CatalogSeeder');
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
     }
@@ -39,8 +39,10 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewModel()
     {
+        $artist = factory($this->artist->class())->create();
+
         $album = factory($this->repo->class())->make([
-            'artist_id' => $this->artist->model()->inRandomOrder()->first()->id
+            'artist_id' => $artist->id
         ])->toArray();
 
         $this->assertInstanceOf(
@@ -54,7 +56,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesModel()
     {
-        $artist = $this->artist->model()->inRandomOrder()->first();
+        $artist = factory($this->artist->class())->create();
 
         $album = factory($this->repo->class())->create([
             'artist_id' => $artist->id
@@ -76,7 +78,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesModel()
     {
-        $artist = $this->artist->model()->inRandomOrder()->first();
+        $artist = factory($this->artist->class())->create();
 
         $album = factory($this->repo->class())->create([
             'artist_id' => $artist->id

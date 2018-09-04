@@ -17,7 +17,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CatalogSeeder');
+        $this->seed('CountriesSeeder');
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
@@ -71,7 +71,9 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesModel()
     {
-        $artist = $this->repo->model()->inRandomOrder()->first();
+        $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
+
+        $artist = $this->repo->create($profile);
 
         factory($this->album->class())->create([
             'artist_id' => $artist->id
