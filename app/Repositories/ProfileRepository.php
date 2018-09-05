@@ -44,8 +44,8 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
 
     public function update($id, array $data)
     {
-        $this->findById($id)->update($data);
-
-        return $this->findById($id);
+        $user = $this->findById($id);
+        $user->update($data);
+        return $user;
     }
 }
