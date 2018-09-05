@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatalogEntity extends Model
 {
+    protected $guarded = ['id'];
+
     protected $morphClass = 'CatalogEntity';
 
     public function catalogable()
