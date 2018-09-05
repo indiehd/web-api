@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
@@ -15,6 +16,7 @@ use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\SkuRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 
+use App\Repositories\AccountRepository;
 use App\Repositories\ArtistRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
@@ -61,6 +63,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(AccountRepositoryInterface::class, AccountRepository::class);
         $this->app->bind(ArtistRepositoryInterface::class, ArtistRepository::class);
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(AlbumRepositoryInterface::class, AlbumRepository::class);
