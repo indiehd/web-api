@@ -44,9 +44,8 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
 
     public function update($id, array $data)
     {
-        return $this->findById($id)->update($data);
+        $this->findById($id)->update($data);
 
-        // TODO Do we want to return the UPDATED model? If so, we need to re-fetch it.
-        #return $this->findById($id);
+        return $this->findById($id);
     }
 }
