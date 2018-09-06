@@ -22,23 +22,59 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
         $this->profile = $profile;
     }
 
+    /**
+     * Returns the class namespace
+     *
+     * @return string
+     */
     public function class()
     {
         return $this->class;
     }
 
+    /**
+     * Returns the Repositories Model instance
+     *
+     * @return Profile
+     */
     public function model()
     {
         return $this->profile;
     }
 
+    /**
+     * Get the model by the given id
+     *
+     * @param $id
+     * @return mixed
+     */
     public function findById($id)
     {
         return $this->model()->find($id);
     }
 
+    /**
+     * Creates a new model resource and saves it to the database
+     *
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data)
     {
         return $this->model()->create($data);
+    }
+
+    /**
+     * Updates a model resource and saves it to the database
+     *
+     * @param $id
+     * @param array $data
+     * @return mixed
+     */
+    public function update($id, array $data)
+    {
+        $this->findById($id)->update($data);
+
+        return $this->findById($id);
     }
 }
