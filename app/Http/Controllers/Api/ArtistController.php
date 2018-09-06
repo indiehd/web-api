@@ -17,6 +17,7 @@ class ArtistController extends Controller
 
     /**
      * ArtistController constructor.
+     *
      * @param ArtistRepositoryInterface $artist
      */
     public function __construct(ArtistRepositoryInterface $artist)
