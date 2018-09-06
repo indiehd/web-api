@@ -61,7 +61,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $genre = factory($this->class())->create();
+        $genre = factory($this->repo->class())->create();
 
         $updated = $this->repo->update($genre->id, []);
 
