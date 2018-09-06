@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
+use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 
 class UserRepositoryTest extends RepositoryCrudTestCase
@@ -19,6 +20,8 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(UserRepositoryInterface::class);
+
+        $this->account = resolve(AccountRepositoryInterface::class);
     }
 
     /**
@@ -28,11 +31,14 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = factory($this->repo->class())->make();
 
+        $account = factory(get_class($this->repo->account))->make();
+
         $this->assertInstanceOf(
             $this->repo->class(),
             $this->repo->create([
                 'username' => $user->username,
                 'password' => $user->password,
+                'email' => $account->email,
             ])
         );
     }

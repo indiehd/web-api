@@ -21,7 +21,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        #$this->seed('CatalogSeeder');
+        $this->seed('CountriesSeeder');
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
     }

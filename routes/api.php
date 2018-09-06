@@ -30,6 +30,17 @@ Route::namespace('Api')->group(function () {
     });
 
     /*
+     * Users
+     */
+    Route::prefix('users')->group(function () {
+        Route::get('/', 'UserController@all')->name('user.index');
+        Route::get('/{id}', 'UserController@show')->name('user.show');
+        Route::post('/create', 'UserController@store')->name('user.store');
+        Route::put('/{id}', 'UserController@update')->name('user.update');
+        Route::delete('/{id}', 'UserController@destroy')->name('user.destroy');
+    });
+
+    /*
      * Artists
      */
     Route::prefix('artists')->group(function () {

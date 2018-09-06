@@ -5,10 +5,10 @@ namespace Tests\Feature\Controllers;
 use CountriesSeeder;
 
 use App\Contracts\CountryRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\Contracts\AccountRepositoryInterface;
 
-class ArtistControllerTest extends ControllerTestCase
+class UserControllerTest extends ControllerTestCase
 {
     public function setUp()
     {
@@ -17,65 +17,64 @@ class ArtistControllerTest extends ControllerTestCase
         $this->seed(CountriesSeeder::class);
 
         $this->country = resolve(CountryRepositoryInterface::class);
-        $this->artist = resolve(ArtistRepositoryInterface::class);
-        $this->profile = resolve(ProfileRepositoryInterface::class);
+        $this->user = resolve(UserRepositoryInterface::class);
+        $this->account = resolve(AccountRepositoryInterface::class);
     }
 
-    public function spawnArtist()
+    public function spawnUser()
     {
-        $artist = $this->artist->model()->create();
+        $user = $this->user->model()->create($this->getAllInputsInValidState());
 
-        $this->profile->model()->create(
-            $this->getAllInputsInValidState() + [
-                'profilable_id' => $artist->id,
-                'profilable_type' => $this->artist->class()
+        $this->account->model()->create(
+            [
+                'user_id' => $user->id,
+                'email' => 'foobar@example.com',
+                'first_name' => 'Foobius',
+                'last_name' => 'Barius',
+                'address_one' => '123 Any Street',
+                'address_two' => 'Apt 1',
+                'city' => 'New York',
+                'territory' => 'New York',
+                'country_code' => 'US',
+                'postal_code' => '10110',
+                #'phone' => '+1 510 200 3000',
+                #'alt_phone' => '',
             ]
         );
 
-        return $artist;
+        return $user;
     }
 
     public function getJsonStructure()
     {
         return [
             'id',
-            'label',
-            'profile',
-            'songs',
-            'albums',
+            'username',
+            'account',
         ];
     }
 
     public function getAllInputsInValidState()
     {
         return [
-            'moniker' => 'Joey\'s Basement Band',
-            'alt_moniker' => 'No Longer in the Garage',
-            'city' => 'New York City',
-            'territory' => 'New York',
-            'country_code' => 'US',
-            'official_url' => 'https://joeysbasementband.com',
-            'profile_url' => 'joeysbasementband',
+            'username' => 'FoobiusBarius',
+            'password' => 'secretsauce',
         ];
     }
 
     public function getInputsInInvalidState()
     {
         return [
-            'alt_moniker' => str_random(256),
-            'city' => str_random(256),
-            'territory' => str_random(256),
-            'country_code' => 'United States',
-            'official_url' => 'joeysbasementband.com',
-            'profile_url' => str_random(65),
+            'username' => 'short',
+            'password' => 'foo',
         ];
     }
 
     public function test_index_returnsMultipleJsonObjects()
     {
-        $this->spawnArtist();
+        $this->spawnUser();
 
-        $this->json('GET', route('artist.index'))
+        $this->json('GET', route('user.index'))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -86,7 +85,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withValidInputs_returnsOneJsonObject()
     {
-        $this->json('POST', route('artist.store'), $this->getAllInputsInValidState())
+        $this->json('POST', route('user.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -95,7 +94,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withInvalidInputs_returnsErrorMessage()
     {
-        $this->json('POST', route('artist.store'), $this->getInputsInInvalidState())
+        $this->json('POST', route('user.store'), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -105,9 +104,9 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_show_returnsOneJsonObject()
     {
-        $artist = $this->spawnArtist();
+        $user = $this->spawnUser();
 
-        $this->json('GET', route('artist.show', ['id' => $artist->id]))
+        $this->json('GET', route('user.show', ['id' => $user->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -116,26 +115,31 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_update_withValidInputs_returnsJsonObjectMatchingInputs()
     {
-        $artist = $this->spawnArtist();
+        $user = $this->spawnUser();
 
         $inputs = $this->getAllInputsInValidState();
 
-        $inputs['alt_moniker'] = 'Back in the Garage';
+        $inputs['username'] = 'FoobiusBazius';
 
-        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $inputs)
+        $this->json('PUT', route('user.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'profile' => $inputs
-                ]
+                    'account' => $inputs,
+                ] + array_flip([
+                        'id',
+                        'username',
+                        'permissions',
+                        'last_login',
+                    ])
             ]);
     }
 
     public function test_update_withInvalidInputs_returnsErrorMessage()
     {
-        $artist = $this->spawnArtist();
+        $user = $this->spawnUser();
 
-        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $this->getInputsInInvalidState())
+        $this->json('PUT', route('user.update', ['id' => $user->id]), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',

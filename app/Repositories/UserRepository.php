@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\UserRepositoryInterface;
 use App\User;
+use App\Account;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -13,13 +14,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     protected $class = User::class;
 
     /**
-     * @var User
+     * @var \App\User
      */
     private $user;
 
-    public function __construct(User $user)
+    /**
+     * @var \App\Account
+     */
+    public $account;
+
+    public function __construct(
+        User $user,
+        Account $account
+    )
     {
         $this->user = $user;
+
+        $this->account = $account;
     }
 
     public function class()
@@ -54,7 +65,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function create(array $data)
     {
-        return $this->user->create($data);
+        $user = $this->user->create([
+            'username' => $data['username'],
+            'password' => $data['password'],
+        ]);
+
+        $this->account->create([
+            'user_id' => $user->id,
+            'email' => $data['email'],
+        ]);
+
+        return $user;
     }
 
     public function delete($id)
