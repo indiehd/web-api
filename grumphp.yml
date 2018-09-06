@@ -27,6 +27,7 @@ parameters:
         - /^storage\/(.*)/
         - /^public\/(.*)/
         - /^resources\/(.*)/
+        - /^database\/(.*)/
       sniffs: []
       triggered_by: [php]
     git_blacklist:
