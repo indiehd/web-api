@@ -66,7 +66,7 @@ class UserController extends Controller
     {
         $validation = $this->validator->make($data, $rules);
 
-        if($validation->fails()) {
+        if ($validation->fails()) {
             return response($validation->errors()->toArray(), 400);
         }
 

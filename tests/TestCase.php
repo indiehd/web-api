@@ -21,7 +21,7 @@ abstract class TestCase extends BaseTestCase
         try {
             $class = new ReflectionClass($class);
             return $class->isInstantiable();
-        } catch(\ReflectionException $e) {
+        } catch (\ReflectionException $e) {
             throw new $e;
         }
     }
