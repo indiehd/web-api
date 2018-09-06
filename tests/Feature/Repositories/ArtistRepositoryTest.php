@@ -38,7 +38,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      *
      * @return void
      */
-    public function test_method_create_storesNewModel()
+    public function test_method_create_storesNewResource()
     {
         $profile = factory($this->profile->class())->make()->toArray();
 
@@ -51,7 +51,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesModel()
+    public function test_method_update_updatesResource()
     {
         $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
 
@@ -69,7 +69,21 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesModel()
+    public function test_method_update_returnsModelInstance()
+    {
+        $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
+
+        $artist = $this->repo->create($profile);
+
+        $updated = $this->repo->update($artist->id, []);
+
+        $this->assertInstanceOf($this->repo->class(), $updated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesResource()
     {
         $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
 

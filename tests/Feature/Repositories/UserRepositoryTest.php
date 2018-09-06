@@ -24,7 +24,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewModel()
+    public function test_method_create_storesNewResource()
     {
         $user = factory($this->repo->class())->make();
 
@@ -40,7 +40,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesModel()
+    public function test_method_update_updatesResource()
     {
         $user = factory($this->repo->class())->create();
 
@@ -60,7 +60,19 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesModel()
+    public function test_method_update_returnsModelInstance()
+    {
+        $user = factory($this->repo->class())->create();
+
+        $updated = $this->repo->update($user->id, []);
+
+        $this->assertInstanceOf($this->repo->class(), $updated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesResource()
     {
         $user = factory($this->repo->class())->create();
 

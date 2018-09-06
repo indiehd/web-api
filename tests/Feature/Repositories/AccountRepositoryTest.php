@@ -33,7 +33,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewModel()
+    public function test_method_create_storesNewResource()
     {
         $account = factory($this->repo->class())->make([
             'user_id' => factory($this->user->class())->create()->id
@@ -48,7 +48,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesModel()
+    public function test_method_update_updatesResource()
     {
         $account = factory($this->repo->class())->create([
             'user_id' => factory($this->user->class())->create()->id
@@ -68,7 +68,21 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesModel()
+    public function test_method_update_returnsModelInstance()
+    {
+        $account = factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id
+        ]);
+
+        $updated = $this->repo->update($account->id, []);
+
+        $this->assertInstanceOf($this->repo->class(), $updated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesResource()
     {
         $account = factory($this->repo->class())->make([
             'user_id' => factory($this->user->class())->create()->id

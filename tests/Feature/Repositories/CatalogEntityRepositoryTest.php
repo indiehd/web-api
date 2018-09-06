@@ -42,7 +42,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewModel()
+    public function test_method_create_storesNewResource()
     {
         $artist = factory($this->artist->class())->create();
 
@@ -61,7 +61,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesModel()
+    public function test_method_update_updatesResource()
     {
         $artist = factory($this->artist->class())->create();
 
@@ -87,7 +87,25 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesModel()
+    public function test_method_update_returnsModelInstance()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        $catalogEntity = factory($this->repo->class())->create([
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->repo->class(),
+            'user_id' => factory($this->user->class())->create()->id
+        ]);
+
+        $updated = $this->repo->update($catalogEntity->id, []);
+
+        $this->assertInstanceOf($this->repo->class(), $updated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesResource()
     {
         $artist = factory($this->artist->class())->create();
 
