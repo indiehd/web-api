@@ -30,4 +30,13 @@ abstract class BaseRepository implements RepositoryShouldRead
             return $this->findById($id)->delete();
         });
     }
+
+    public function update($id, array $data)
+    {
+        $model = $this->findById($id);
+
+        $model->update($data);
+
+        return $model;
+    }
 }

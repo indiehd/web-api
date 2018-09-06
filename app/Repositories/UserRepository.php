@@ -57,15 +57,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->user->create($data);
     }
 
-    public function update($id, array $data)
-    {
-        $user = $this->findById($id);
-
-        $user->update($data);
-
-        return $user;
-    }
-
     public function delete($id)
     {
         return $this->findById($id)->delete();

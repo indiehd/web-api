@@ -41,11 +41,4 @@ class ProfileRepository extends BaseRepository implements ProfileRepositoryInter
     {
         return $this->model()->create($data);
     }
-
-    public function update($id, array $data)
-    {
-        $this->findById($id)->update($data);
-
-        return $this->findById($id);
-    }
 }

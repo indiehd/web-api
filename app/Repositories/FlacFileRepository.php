@@ -36,9 +36,4 @@ class FlacFileRepository extends BaseRepository implements FlacFileRepositoryInt
     {
         return $this->model()->create($data);
     }
-
-    public function update($id, array $data)
-    {
-        return $this->model()->find($id)->update($data);
-    }
 }
