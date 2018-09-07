@@ -15,10 +15,10 @@ class ArtistResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => new LabelResource($this->whenLoaded('label')),
-            'profile' => new ProfileResource($this->whenLoaded('profile')),
-            'songs' => SongResource::collection($this->whenLoaded('songs')),
-            'albums' => AlbumResource::collection($this->whenLoaded('albums')),
+            'label' => new LabelResource($this->label),
+            'profile' => new ProfileResource($this->profile),
+            'songs' => SongResource::collection($this->songs),
+            'albums' => AlbumResource::collection($this->albums),
         ];
     }
 }
