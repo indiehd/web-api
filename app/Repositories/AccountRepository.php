@@ -46,11 +46,4 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
     {
         return $this->model()->create($data);
     }
-
-    public function update($id, array $data)
-    {
-        $this->model()->find($id)->update($data);
-
-        return $this->findById($id);
-    }
 }

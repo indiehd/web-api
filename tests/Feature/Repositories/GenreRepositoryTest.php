@@ -26,7 +26,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewModel()
+    public function test_method_create_storesNewResource()
     {
         $genre = $this->repo->model()->inRandomOrder()->first();
 
@@ -39,7 +39,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesModel()
+    public function test_method_update_updatesResource()
     {
         $genre = $this->repo->model()->inRandomOrder()->first();
 
@@ -59,7 +59,19 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesModel()
+    public function test_method_update_returnsModelInstance()
+    {
+        $genre = factory($this->repo->class())->create();
+
+        $updated = $this->repo->update($genre->id, []);
+
+        $this->assertInstanceOf($this->repo->class(), $updated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_delete_deletesResource()
     {
         $genre = $this->repo->model()->inRandomOrder()->first();
 
