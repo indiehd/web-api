@@ -8,8 +8,6 @@ class Artist extends Model
 {
     protected $guarded = ['id'];
 
-    protected $with = ['label', 'profile', 'songs', 'albums'];
-
     public function catalogable()
     {
         return $this->morphOne(CatalogEntity::class, 'catalogable');
