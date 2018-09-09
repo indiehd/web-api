@@ -13,3 +13,11 @@ $factory->state(App\Artist::class, 'onLabel', [
         return factory(App\Label::class)->create()->id;
     },
 ]);
+
+$factory->afterCreating(App\Artist::class, function ($artist, $faker) {
+    factory(App\CatalogEntity::class)->create([
+        'user_id' => factory(App\User::class)->create()->id,
+        'catalogable_id' => $artist->id,
+        'catalogable_type' => App\Artist::class
+    ]);
+});
