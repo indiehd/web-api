@@ -14,6 +14,18 @@ class SongResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'=> $this->id,
+            'name' => $this->name,
+            'alt_name' => $this->alt_name,
+            'flac_file' => new FlacFileResource($this->flac_file),
+            'track_number' => $this->track_number,
+            'preview_start' => $this->preview_start,
+            'is_active' => $this->is_active,
+            'sku' => new SkuResource($this->sku),
+            'album' => new AlbumResource($this->whenLoaded('album')),
+            'deleted_at' => $this->deleted_at,
+            'artist' => new ArtistResource($this->whenLoaded('artist')),
+        ];
     }
 }

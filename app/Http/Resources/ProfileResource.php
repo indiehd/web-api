@@ -14,6 +14,16 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'moniker' => $this->moniker,
+            'alt_moniker' => $this->alt_moniker,
+            'city' => $this->city,
+            'territory' => $this->territory,
+            'country_code' => $this->country_code,
+            'country' => $this->country->name,
+            'official_url' => $this->official_url,
+            'profile_url' => $this->profile_url,
+            'rank' => $this->rank,
+        ];
     }
 }

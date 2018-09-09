@@ -17,6 +17,7 @@ class ArtistResource extends JsonResource
         return [
             'label' => new LabelResource($this->label),
             'profile' => new ProfileResource($this->profile),
+            'catalog_profile' => new CatalogResource($this->whenLoaded('catalogable')),
             'songs' => SongResource::collection($this->songs),
             'albums' => AlbumResource::collection($this->albums),
         ];
