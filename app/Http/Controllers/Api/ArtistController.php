@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\ArtistRepositoryInterface;
 use App\Http\Requests\StoreArtist;
-use App\Http\Resources\CatalogResource;
+use App\Http\Resources\ArtistResource;
 use App\Http\Controllers\Controller;
 
 class ArtistController extends Controller
@@ -32,10 +32,8 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return CatalogResource::collection(
-            $this->artist->model()
-                ->with('profile')
-                ->get()
+        return ArtistResource::collection(
+            $this->artist->model()->get()
         );
     }
 
@@ -43,22 +41,22 @@ class ArtistController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreArtist $request
-     * @return CatalogResource
+     * @return ArtistResource
      */
     public function store(StoreArtist $request)
     {
-        return new CatalogResource($this->artist->create($request->all()));
+        return new ArtistResource($this->artist->create($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int $id
-     * @return CatalogResource
+     * @return ArtistResource
      */
     public function show($id)
     {
-        return new CatalogResource($this->artist->findById($id));
+        return new ArtistResource($this->artist->findById($id));
     }
 
     /**
@@ -66,7 +64,7 @@ class ArtistController extends Controller
      *
      * @param  \App\Http\Requests\StoreArtist $request
      * @param  int $id
-     * @return CatalogResource
+     * @return ArtistResource
      */
     public function update(StoreArtist $request, $id)
     {
@@ -74,7 +72,7 @@ class ArtistController extends Controller
 
         // Re-fetch the model so that it reflects the updates.
 
-        return new CatalogResource($this->artist->findById($id));
+        return new ArtistResource($this->artist->findById($id));
     }
 
     /**
