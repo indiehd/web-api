@@ -10,4 +10,9 @@ class Country extends Model
     {
         return $this->hasMany(Profile::class, 'country_code', 'code');
     }
+
+    public function catalogEntities()
+    {
+        return $this->hasMany(CatalogEntity::class, 'country_code', 'code');
+    }
 }
