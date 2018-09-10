@@ -20,7 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::namespace('Api')->group(function() {
+Route::namespace('Api')->group(function () {
+
+    /*
+     * Users
+     */
+    Route::prefix('users')->group(function () {
+        Route::post('/{id}/password', 'PasswordController@update')->name('password.update');
+    });
 
     /*
      * Artists
@@ -32,5 +39,4 @@ Route::namespace('Api')->group(function() {
         Route::put('/{id}', 'ArtistController@update')->name('artist.update');
         Route::delete('/{id}', 'ArtistController@destroy')->name('artist.destroy');
     });
-
 });
