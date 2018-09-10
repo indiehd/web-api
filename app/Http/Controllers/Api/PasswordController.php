@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\UpdatePassword;
 use App\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -14,15 +15,21 @@ class PasswordController extends Controller
      */
     private $user;
 
-    public function __construct(UserRepository $user)
+    /**
+     * @var Hasher
+     */
+    private $hasher;
+
+    public function __construct(UserRepository $user, Hasher $hasher)
     {
         $this->user = $user;
+        $this->hasher = $hasher;
     }
 
     public function update(UpdatePassword $request, $id)
     {
         return $this->user->update($id, [
-            'password' => bcrypt($request->password)
+            'password' => $this->hasher->make($request->password)
         ]);
     }
 }
