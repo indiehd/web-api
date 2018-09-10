@@ -15,6 +15,7 @@ class ArtistResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'label' => new LabelResource($this->label),
             'profile' => new ProfileResource($this->profile),
             'catalog_profile' => new CatalogResource($this->whenLoaded('catalogable')),
