@@ -35,6 +35,6 @@ class Artist extends Model
 
     public function user()
     {
-        return $this->catalogable->user;
+        return $this->catalogable->user();
     }
 }
