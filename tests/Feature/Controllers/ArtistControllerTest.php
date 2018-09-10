@@ -39,14 +39,10 @@ class ArtistControllerTest extends ControllerTestCase
     {
         return [
             'id',
-            'moniker',
-            'alt_moniker',
-            'city',
-            'territory',
-            'country_code',
-            'official_url',
-            'profile_url',
-            'rank',
+            'label',
+            'profile',
+            'songs',
+            'albums',
         ];
     }
 
@@ -129,7 +125,9 @@ class ArtistControllerTest extends ControllerTestCase
         $this->json('PUT', route('artist.update', ['id' => $artist->id]), $inputs)
             ->assertStatus(200)
             ->assertJson([
-                'data' => $inputs
+                'data' => [
+                    'profile' => $inputs
+                ]
             ]);
     }
 
