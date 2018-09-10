@@ -25,7 +25,7 @@ class UpdatePassword extends FormRequest
     {
         return [
             'current_password' => 'required',
-            'new_password' => 'required|alpha_dash|max:255',
+            'new_password' => 'required|min:8|max:4096',
         ];
     }
 }
