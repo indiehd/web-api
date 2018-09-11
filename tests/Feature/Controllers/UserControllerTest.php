@@ -26,20 +26,7 @@ class UserControllerTest extends ControllerTestCase
         $user = $this->user->model()->create($this->getAllInputsInValidState());
 
         $this->account->model()->create(
-            [
-                'user_id' => $user->id,
-                'email' => 'foobar@example.com',
-                'first_name' => 'Foobius',
-                'last_name' => 'Barius',
-                'address_one' => '123 Any Street',
-                'address_two' => 'Apt 1',
-                'city' => 'New York',
-                'territory' => 'New York',
-                'country_code' => 'US',
-                'postal_code' => '10110',
-                #'phone' => '+1 510 200 3000',
-                #'alt_phone' => '',
-            ]
+            ['user_id' => $user->id] + $this->getAllAccountInputsInValidState()
         );
 
         return $user;
@@ -54,11 +41,29 @@ class UserControllerTest extends ControllerTestCase
         ];
     }
 
+    public function getAllAccountInputsInValidState()
+    {
+        return [
+            'email' => 'foobar@example.com',
+            'first_name' => 'Foobius',
+            'last_name' => 'Barius',
+            'address_one' => '123 Any Street',
+            'address_two' => 'Apt 1',
+            'city' => 'New York',
+            'territory' => 'New York',
+            'country_code' => 'US',
+            'postal_code' => '10110',
+            'phone' => '+1 510 200 3000',
+            'alt_phone' => null,
+        ];
+    }
+
     public function getAllInputsInValidState()
     {
         return [
             'username' => 'FoobiusBarius',
             'password' => 'secretsauce',
+            'account' => $this->getAllAccountInputsInValidState()
         ];
     }
 
@@ -67,7 +72,36 @@ class UserControllerTest extends ControllerTestCase
         return [
             'username' => 'short',
             'password' => 'foo',
+            'account' => $this->getAllAccountInputsInInvalidState(),
         ];
+    }
+
+    public function getAllAccountInputsInInvalidState()
+    {
+        return [
+            'email' => 'foo@',
+            'first_name' => str_random(65),
+            'last_name' => str_random(65),
+            'address_one' => str_random(256),
+            'address_two' => str_random(256),
+            'city' => str_random(65),
+            'territory' => str_random(65),
+            'country_code' => 'United States',
+            'postal_code' => str_random(65),
+            'phone' => str_random(65),
+            'alt_phone' => str_random(65),
+        ];
+    }
+
+    public function getErrorMessageKeys()
+    {
+        $errorMessageKeys = array_diff_key($this->getAllInputsInValidState(), array_flip(['account']));
+
+        foreach ($this->getAllAccountInputsInInvalidState() as $k => $v) {
+            $errorMessageKeys['account.' . $k] = null;
+        }
+
+        return $errorMessageKeys;
     }
 
     public function test_index_returnsMultipleJsonObjects()
@@ -98,7 +132,7 @@ class UserControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->getAllInputsInValidState())
+                'errors' => array_keys($this->getErrorMessageKeys())
             ]);
     }
 
@@ -125,13 +159,12 @@ class UserControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'account' => $inputs,
-                ] + array_flip([
-                        'id',
-                        'username',
-                        'permissions',
-                        'last_login',
-                    ])
+                    'id' => $user->id,
+                    'username' => $inputs['username'],
+                    'account' => $this->getAllAccountInputsInValidState(),
+                    'permissions' => [],
+                    'last_login' => null,
+                ]
             ]);
     }
 
@@ -143,7 +176,7 @@ class UserControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->getAllInputsInValidState())
+                'errors' => array_keys($this->getErrorMessageKeys())
             ]);
     }
 }

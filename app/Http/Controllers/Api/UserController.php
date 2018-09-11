@@ -9,6 +9,7 @@ use App\Http\Requests\UpdatePassword;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUser;
 use Illuminate\Contracts\Hashing\Hasher;
+use App\Http\Requests\UpdateUser;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidatorInterface;
 
@@ -88,7 +89,7 @@ class UserController extends Controller
      * @param  int $id
      * @return UserResource
      */
-    public function update(StoreUser $request, $id)
+    public function update(UpdateUser $request, $id)
     {
         $this->user->update($id, $request->all());
 
