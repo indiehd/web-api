@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePassword;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUser;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidatorInterface;
 
@@ -21,21 +23,28 @@ class UserController extends Controller
      * @var AccountRepositoryInterface
      */
     protected $account;
+    /**
+     * @var Hasher
+     */
+    private $hasher;
 
     /**
      * AccountController constructor.
      *
      * @param UserRepositoryInterface $user
      * @param AccountRepositoryInterface $account
+     * @param Hasher $hasher
      */
     public function __construct(
         UserRepositoryInterface $user,
-        AccountRepositoryInterface $account
-    )
-    {
+        AccountRepositoryInterface $account,
+        Hasher $hasher
+    ) {
         $this->user = $user;
 
         $this->account = $account;
+
+        $this->hasher = $hasher;
     }
 
     /**
@@ -86,6 +95,13 @@ class UserController extends Controller
         // Re-fetch the model so that it reflects the updates.
 
         return new UserResource($this->user->findById($id));
+    }
+
+    public function updatePassword(UpdatePassword $request, $id)
+    {
+        return $this->user->update($id, [
+            'password' => $this->hasher->make($request->password)
+        ]);
     }
 
     /**
