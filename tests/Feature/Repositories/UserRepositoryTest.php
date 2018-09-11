@@ -31,14 +31,14 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = factory($this->repo->class())->make();
 
-        $account = factory(get_class($this->repo->account))->make();
+        $account = factory(get_class($this->repo->account))->make()->toArray();
 
         $this->assertInstanceOf(
             $this->repo->class(),
             $this->repo->create([
                 'username' => $user->username,
                 'password' => $user->password,
-                'email' => $account->email,
+                'account' => $account,
             ])
         );
     }
