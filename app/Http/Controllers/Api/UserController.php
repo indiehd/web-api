@@ -31,8 +31,7 @@ class UserController extends Controller
     public function __construct(
         UserRepositoryInterface $user,
         AccountRepositoryInterface $account
-    )
-    {
+    ) {
         $this->user = $user;
 
         $this->account = $account;

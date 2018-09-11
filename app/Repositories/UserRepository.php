@@ -26,8 +26,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function __construct(
         User $user,
         Account $account
-    )
-    {
+    ) {
         $this->user = $user;
 
         $this->account = $account;
