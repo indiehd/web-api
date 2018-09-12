@@ -31,7 +31,7 @@ class StoreArtist extends FormRequest
             'territory' => 'max:255',
             'country_code' => 'exists:countries,code',
             'official_url' => 'url',
-            'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc...
+            'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc..
         ];
     }
 }

@@ -96,6 +96,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $validation = $this->validator->make($data, $rules);
+
+        if ($validation->fails()) {
+            return response($validation->errors()->toArray(), 400);
+        }
+  
         $user = $this->user->findById($id);
         $user->delete();
 
