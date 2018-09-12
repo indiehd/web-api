@@ -7,6 +7,7 @@ use CountriesSeeder;
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
+use Illuminate\Contracts\Hashing\Hasher;
 
 class UserControllerTest extends ControllerTestCase
 {
@@ -19,6 +20,8 @@ class UserControllerTest extends ControllerTestCase
         $this->country = resolve(CountryRepositoryInterface::class);
         $this->user = resolve(UserRepositoryInterface::class);
         $this->account = resolve(AccountRepositoryInterface::class);
+
+        $this->hasher = resolve(Hasher::class);
     }
 
     public function spawnUser()
@@ -178,5 +181,37 @@ class UserControllerTest extends ControllerTestCase
                 'message',
                 'errors' => array_keys($this->getErrorMessageKeys())
             ]);
+    }
+
+    public function test_storePassword_withValidInput_authenticationWorksForPassword()
+    {
+        $inputs = $this->getAllInputsInValidState();
+
+        $this->json('POST', route('user.store'), $inputs)
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+
+        $user = $this->user->model()->where('username', $inputs['username'])->first();
+
+        $this->assertTrue($this->hasher->check($inputs['password'], $user->password));
+    }
+
+    public function test_updatePassword_withValidInput_authenticationWorksForPassword()
+    {
+        $user = $this->spawnUser();
+
+        $inputs = ['password' => 'secretsauce'];
+
+        $this->json('PUT', route('user.update', ['id' => $user->id]), $inputs)
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+
+        $user = $this->user->findById($user->id);
+
+        $this->assertTrue($this->hasher->check($inputs['password'], $user->password));
     }
 }
