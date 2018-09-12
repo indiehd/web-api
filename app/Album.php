@@ -23,4 +23,9 @@ class Album extends Model
         return $this->belongsToMany(Genre::class)
             ->withTimestamps();
     }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class, 'deleter_id');
+    }
 }

@@ -11,6 +11,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
+        $this->seed('CountriesSeeder');
+
         $this->album = resolve(AlbumRepositoryInterface::class);
     }
 
