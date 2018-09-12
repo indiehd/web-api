@@ -126,7 +126,11 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'profile' => $inputs
+                    'id' => $artist->id,
+                    'label' => null,
+                    'profile' => $inputs,
+                    'songs' => [],
+                    'albums' => [],
                 ]
             ]);
     }
