@@ -51,3 +51,6 @@ parameters:
         - /^tests\/(.*)/
       triggered_by: ['php']
       regexp_type: G
+  ascii:
+    failed: ~
+    succeeded: ~
