@@ -8,8 +8,8 @@ parameters:
       max_body_width: 72
       max_subject_width: 72
       matchers:
-        Invalid Type/Scope Pattern http://docs.indiehd.com/#/CONTRIBUTING?id=git-commit-messages: >
-          /^(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(:\s|(\(.+\)?:\s))|(Merge branch '.+'\s.+|Merge remote-tracking branch '.+'|Merge pull request #\d+\s.+)/
+        http://docs.indiehd.com/#/CONTRIBUTING?id=git-commit-messages: >
+          /^(?!.+[.!?])(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(:\s|(\(.+\)?:\s))([a-zA-Z0-9-_ #@,'\/\\"]+)|^(Merge branch '.+'\s.+|Merge remote-tracking branch '.+'|Merge pull request #\d+\s.+)/
       case_insensitive: false
       multiline: true
       additional_modifiers: ''
