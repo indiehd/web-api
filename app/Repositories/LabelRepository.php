@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Label;
 use App\Contracts\LabelRepositoryInterface;
-use App\Traits\isProfilable;
+use App\Traits\IsProfilable;
 
 class LabelRepository extends BaseRepository implements LabelRepositoryInterface
 {
-    use isProfilable;
+    use IsProfilable;
 
     /**
      * @var string $class

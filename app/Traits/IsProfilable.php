@@ -4,11 +4,10 @@ namespace App\Traits;
 
 use App\Contracts\ProfileRepositoryInterface;
 
-trait isProfilable
+trait IsProfilable
 {
     public function profilable()
     {
         return resolve(ProfileRepositoryInterface::class);
     }
-
 }

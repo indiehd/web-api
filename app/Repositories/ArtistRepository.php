@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Artist;
 use App\Contracts\ArtistRepositoryInterface;
-use App\Traits\isProfilable;
+use App\Traits\IsProfilable;
 
 class ArtistRepository extends BaseRepository implements ArtistRepositoryInterface
 {
-    use isProfilable;
+    use IsProfilable;
 
     /**
      * @var string $class
