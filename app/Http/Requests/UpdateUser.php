@@ -24,7 +24,7 @@ class UpdateUser extends FormRequest
     public function rules(/*StoreAccount $account*/)
     {
         return [
-            'username' => 'required|string|min:6|max:64',
+            'username' => 'string|min:6|max:64',
             'password' => 'min:8|max:4096',
             'account.email' => 'email',
             'account.first_name' => 'max:64',
