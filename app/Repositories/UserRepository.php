@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
 use App\User;
+use Illuminate\Contracts\Hashing\Hasher;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -21,15 +22,30 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * @var \App\Account
      */
-    public $account;
+    private $account;
 
+    /**
+     * @var Hasher
+     */
+    private $hasher;
+
+    /**
+     * UserRepository constructor.
+     *
+     * @param User $user
+     * @param AccountRepositoryInterface $account
+     * @param Hasher $hasher
+     */
     public function __construct(
         User $user,
-        AccountRepositoryInterface $account
+        AccountRepositoryInterface $account,
+        Hasher $hasher
     ) {
         $this->user = $user;
 
         $this->account = $account;
+
+        $this->hasher = $hasher;
     }
 
     public function class()
@@ -66,7 +82,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $user = $this->user->create([
             'username' => $data['username'],
-            'password' => $data['password'],
+            'password' => $this->hasher->make($data['password']),
         ]);
 
         $this->account->create(
@@ -74,6 +90,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         );
 
         return $user;
+    }
+
+    public function update($id, array $data)
+    {
+        $model = $this->findById($id);
+
+        if (!empty($data['password'])) {
+            $data['password'] = $this->hasher->make($data['password']);
+        }
+
+        $model->update($data);
+
+        return $model;
     }
 
     public function delete($id)
