@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a057567d756e2663543df660cac11534",
+    "content-hash": "9dee512ea8bf0d253b72a7c20c85f9a4",
     "packages": [
         {
             "name": "cartalyst/sentinel",
@@ -3571,16 +3571,16 @@
         },
         {
             "name": "phpro/grumphp",
-            "version": "dev-feat-git-1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/poppabear8883/grumphp.git",
-                "reference": "fe14db328cb21f8452ded992a829ea80a5e2a8a3"
+                "reference": "bb4f387e09439653f7aaabdc2b49d659b49104cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/poppabear8883/grumphp/zipball/fe14db328cb21f8452ded992a829ea80a5e2a8a3",
-                "reference": "fe14db328cb21f8452ded992a829ea80a5e2a8a3",
+                "url": "https://api.github.com/repos/poppabear8883/grumphp/zipball/bb4f387e09439653f7aaabdc2b49d659b49104cc",
+                "reference": "bb4f387e09439653f7aaabdc2b49d659b49104cc",
                 "shasum": ""
             },
             "require": {
@@ -3679,9 +3679,9 @@
             ],
             "description": "A composer plugin that enables source code quality checks.",
             "support": {
-                "source": "https://github.com/poppabear8883/grumphp/tree/feat-git-1"
+                "source": "https://github.com/poppabear8883/grumphp/tree/master"
             },
-            "time": "2018-09-13T02:23:54+00:00"
+            "time": "2018-09-13T21:48:18+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -3811,20 +3811,23 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "cecbc684605bb0cc288828eb5d65d93d5c676d3c"
+                "reference": "050bedf145a257b1ff02746c31894800e5122946"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/cecbc684605bb0cc288828eb5d65d93d5c676d3c",
-                "reference": "cecbc684605bb0cc288828eb5d65d93d5c676d3c",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/050bedf145a257b1ff02746c31894800e5122946",
+                "reference": "050bedf145a257b1ff02746c31894800e5122946",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.1"
             },
             "type": "library",
             "extra": {
@@ -3854,7 +3857,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2018-06-11T11:44:00+00:00"
+            "time": "2018-09-13T20:33:42+00:00"
         },
         {
             "name": "phpunit/php-text-template",
