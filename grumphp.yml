@@ -1,4 +1,5 @@
 parameters:
+  additional_info: "\nTo get full documentation for the project\nVisit https://docs.indiehd.com\n"
   tasks:
     git_commit_message:
       allow_empty_message: false
