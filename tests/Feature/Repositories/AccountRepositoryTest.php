@@ -5,6 +5,7 @@ namespace Tests\Feature\Repositories;
 use CountriesSeeder;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Contracts\CountryRepositoryInterface;
 
 class AccountRepositoryTest extends RepositoryCrudTestCase
 {
@@ -20,6 +21,8 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
         $this->seed(CountriesSeeder::class);
 
         $this->user = resolve(UserRepositoryInterface::class);
+
+        $this->country = resolve(CountryRepositoryInterface::class);
     }
 
     /**
@@ -91,5 +94,34 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
         $account->delete();
 
         $this->assertNull($this->repo->findById($account->id));
+    }
+
+    /**
+     * Ensure that a newly-created Account belongs to a User.
+     *
+     * @return void
+     */
+    public function test_user_accountBelongsToUser()
+    {
+        $account = factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id
+        ]);
+
+        $this->assertInstanceOf($this->user->class(), $account->user);
+    }
+
+    /**
+     * Ensure that an Account with a Country specified at creation belongs to a Country.
+     *
+     * @return void
+     */
+    public function test_country_accountBelongsToCountry()
+    {
+        $account = factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'country_code' => 'US',
+        ]);
+
+        $this->assertInstanceOf($this->country->class(), $account->country);
     }
 }
