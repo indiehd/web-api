@@ -14,6 +14,11 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     protected $user;
 
+    /**
+     * @var $country CountryRepositoryInterface
+     */
+    protected $country;
+
     public function setUp()
     {
         parent::setUp();

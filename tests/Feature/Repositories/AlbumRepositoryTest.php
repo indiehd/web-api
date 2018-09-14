@@ -24,6 +24,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     protected $song;
 
+    /**
+     * @var $genre GenreRepositoryInterface
+     */
+    protected $genre;
+
     public function setUp()
     {
         parent::setUp();

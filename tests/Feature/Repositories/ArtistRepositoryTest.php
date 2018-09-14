@@ -13,9 +13,34 @@ use App\Contracts\UserRepositoryInterface;
 class ArtistRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var  $profile  ProfileRepositoryInterface
+     * @var $profile ProfileRepositoryInterface
      */
     protected $profile;
+
+    /**
+     * @var $album AlbumRepositoryInterface
+     */
+    protected $album;
+
+    /**
+     * @var $label LabelRepositoryInterface
+     */
+    protected $label;
+
+    /**
+     * @var $user UserRepositoryInterface
+     */
+    protected $user;
+
+    /**
+     * @var $catalogEntity CatalogEntityRepositoryInterface
+     */
+    protected $catalogEntity;
+
+    /**
+     * @var $song SongRepositoryInterface
+     */
+    protected $song;
 
     public function setUp()
     {
