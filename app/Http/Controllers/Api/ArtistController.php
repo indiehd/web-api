@@ -70,8 +70,6 @@ class ArtistController extends Controller
     {
         $this->artist->update($id, $request->all());
 
-        // Re-fetch the model so that it reflects the updates.
-
         return new ArtistResource($this->artist->findById($id));
     }
 
