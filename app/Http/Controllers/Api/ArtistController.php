@@ -30,7 +30,7 @@ class ArtistController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function all()
     {
         return ArtistResource::collection(
             $this->artist->model()->get()
