@@ -8,9 +8,9 @@ parameters:
       max_body_width: 72
       max_subject_width: 72
       matchers:
-          https://github.com/indiehd/docs/blob/master/CONTRIBUTING.md#styleguides: >
-            /^(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(\([a-zA-Z.\s]+\))?:\s[A-Za-z0-9,;'\"\\ ]{1,72}?$/
-      case_insensitive: true
+        http://docs.indiehd.com/#/CONTRIBUTING?id=git-commit-messages: >
+          /^(?!.+[.!?])(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(:\s|(\(.+\)?:\s))([a-zA-Z0-9-_ #@,'\/\\"]+)|^(Merge branch '.+'\s.+|Merge remote-tracking branch '.+'|Merge pull request #\d+\s.+)/
+      case_insensitive: false
       multiline: true
       additional_modifiers: ''
     phpcs:
@@ -51,3 +51,6 @@ parameters:
         - /^tests\/(.*)/
       triggered_by: ['php']
       regexp_type: G
+  ascii:
+    failed: ~
+    succeeded: ~

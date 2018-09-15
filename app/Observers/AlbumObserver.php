@@ -56,7 +56,6 @@ class AlbumObserver
      */
     public function deleted(Album $album)
     {
-
     }
 
     /**
