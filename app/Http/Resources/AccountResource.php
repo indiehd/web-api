@@ -27,7 +27,7 @@ class AccountResource extends JsonResource
             'postal_code' => $this->postal_code,
             'phone' => $this->phone,
             'alt_phone' => $this->alt_phone,
-            'user' => new UserResource($this->user),
+            'user' => new UserResource($this->whenLoaded('user')),
         ];
     }
 }
