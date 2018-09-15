@@ -8,11 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Validation\Factory as ValidatorInterface;
 
 class UserController extends Controller
 {
+
     /**
      * @var UserRepositoryInterface
      */
@@ -46,7 +45,7 @@ class UserController extends Controller
     public function all()
     {
         return UserResource::collection(
-            $this->user->model()->get()
+            $this->user->all()
         );
     }
 
@@ -75,15 +74,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StoreUser $request
+     * @param UpdateUser $request
      * @param  int $id
      * @return UserResource
      */
     public function update(UpdateUser $request, $id)
     {
         $this->user->update($id, $request->all());
-
-        // Re-fetch the model so that it reflects the updates.
 
         return new UserResource($this->user->findById($id));
     }
@@ -96,9 +93,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = $this->user->findById($id);
-        $user->delete();
+        $this->user->delete($id);
 
-        return response(['success' => true]);
+        return response(['success' => true], 200);
     }
 }

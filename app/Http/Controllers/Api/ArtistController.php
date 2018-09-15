@@ -33,7 +33,7 @@ class ArtistController extends Controller
     public function all()
     {
         return ArtistResource::collection(
-            $this->artist->model()->get()
+            $this->artist->all()
         );
     }
 
@@ -83,9 +83,8 @@ class ArtistController extends Controller
      */
     public function destroy($id)
     {
-        $artist = $this->artist->findById($id);
-        $artist->delete();
+        $this->artist->delete($id);
 
-        return response(['success' => true]);
+        return response(['success' => true], 200);
     }
 }
