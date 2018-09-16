@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface UserRepositoryInterface
+interface UserRepositoryInterface extends RepositoryShouldCrud
 {
     public function songs();
 
