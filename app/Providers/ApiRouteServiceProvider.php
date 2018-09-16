@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
+use App\Services\ApiRoute;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class ApiRouteServiceProvider extends ServiceProvider
 {
-    protected $namespace = 'App\Http\Controllers\Api';
 
     /**
      * Bootstrap services.
@@ -46,23 +45,10 @@ class ApiRouteServiceProvider extends ServiceProvider
         // ...
     }
 
-    private function mapRoutes($prefix, $controller, \Closure $closure = null)
+    private function mapRoutes($prefix, $controller)
     {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(function () use ($controller, $prefix, $closure) {
-                Route::prefix($prefix)->group(function () use ($controller, $prefix, $closure) {
-                    Route::get('/', "$controller@all")->name("$prefix.index");
-                    Route::get('/{id}', "$controller@show")->name("$prefix.show");
-                    Route::post('/create', "$controller@store")->name("$prefix.store");
-                    Route::put('/{id}', "$controller@update")->name("$prefix.update");
-                    Route::delete('/{id}', "$controller@destroy")->name("$prefix.destroy");
-
-                    if ($closure !== null) {
-                        $closure();
-                    }
-                });
-            });
+        $dto = new ApiRoute($prefix, $controller);
+        $dto->mapDefaultRoutes();
+        return $dto;
     }
 }
