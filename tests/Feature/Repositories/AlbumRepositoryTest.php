@@ -35,8 +35,6 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $this->seed('CountriesSeeder');
 
-        $this->seed('GenresSeeder');
-
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->song = resolve(SongRepositoryInterface::class);
@@ -175,7 +173,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
             'artist_id' => factory($this->artist->class())->create()->id
         ]);
 
-        $album->genres()->attach(1);
+        $album->genres()->attach(factory($this->genre->class())->create()->id);
 
         $this->assertInstanceOf($this->genre->class(), $album->genres->first());
     }
