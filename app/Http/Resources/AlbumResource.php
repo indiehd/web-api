@@ -16,7 +16,7 @@ class AlbumResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'artist' => $this->whenLoaded('artist'),
+            'artist' => new ArtistResource($this->whenLoaded('artist')),
             'title' => $this->title,
             'alt_title' => $this->alt_title,
             'year' => $this->year,
