@@ -30,10 +30,10 @@ class ArtistController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function all()
     {
         return ArtistResource::collection(
-            $this->artist->model()->get()
+            $this->artist->all()
         );
     }
 
@@ -70,8 +70,6 @@ class ArtistController extends Controller
     {
         $this->artist->update($id, $request->all());
 
-        // Re-fetch the model so that it reflects the updates.
-
         return new ArtistResource($this->artist->findById($id));
     }
 
@@ -83,9 +81,8 @@ class ArtistController extends Controller
      */
     public function destroy($id)
     {
-        $artist = $this->artist->findById($id);
-        $artist->delete();
+        $this->artist->delete($id);
 
-        return response(['success' => true]);
+        return response(['success' => true], 200);
     }
 }

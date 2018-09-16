@@ -37,7 +37,7 @@ Route::namespace('Api')->group(function () {
      * Artists
      */
     Route::prefix('artists')->group(function () {
-        Route::get('/', 'ArtistController@index')->name('artist.index');
+        Route::get('/', 'ArtistController@all')->name('artist.index');
         Route::get('/{id}', 'ArtistController@show')->name('artist.show');
         Route::post('/create', 'ArtistController@store')->name('artist.store');
         Route::put('/{id}', 'ArtistController@update')->name('artist.update');
