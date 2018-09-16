@@ -3,86 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\ArtistRepositoryInterface;
-use App\Http\Requests\StoreArtist;
 use App\Http\Resources\ArtistResource;
-use App\Http\Controllers\Controller;
 
-class ArtistController extends Controller
+class ArtistController extends ApiController
 {
 
     /**
-     * @var ArtistRepositoryInterface
+     * @var array $sharedRules
      */
-    protected $artist;
+    protected $sharedRules = [
+        'moniker' => 'max:255',
+        'alt_moniker' => 'max:255',
+        'email' => 'email',
+        'city' => 'max:255',
+        'territory' => 'max:255',
+        'country_code' => 'exists:countries,code',
+        'official_url' => 'url',
+        'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc..
+    ];
 
     /**
-     * ArtistController constructor.
-     *
-     * @param ArtistRepositoryInterface $artist
+     * @var array $storeRules
      */
-    public function __construct(ArtistRepositoryInterface $artist)
+    protected $storeRules = [
+        'moniker' => 'required|max:255',
+    ];
+
+    /**
+     * @var array $updateRules
+     */
+    protected $updateRules = [
+        'moniker' => 'required|max:255', // TODO: should this really be required ? Per the tests it fails otherwise ...
+    ];
+
+    /**
+     * Sets the RepositoryInterface to resolve
+     *
+     * @return string
+     */
+    public function repository()
     {
-        $this->artist = $artist;
+        return ArtistRepositoryInterface::class;
     }
 
     /**
-     * Display a listing of the resource.
+     * Sets the ModelResource to resolve
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return string
      */
-    public function all()
+    public function resource()
     {
-        return ArtistResource::collection(
-            $this->artist->all()
-        );
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreArtist $request
-     * @return ArtistResource
-     */
-    public function store(StoreArtist $request)
-    {
-        return new ArtistResource($this->artist->create($request->all()));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return ArtistResource
-     */
-    public function show($id)
-    {
-        return new ArtistResource($this->artist->findById($id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreArtist $request
-     * @param  int $id
-     * @return ArtistResource
-     */
-    public function update(StoreArtist $request, $id)
-    {
-        $this->artist->update($id, $request->all());
-
-        return new ArtistResource($this->artist->findById($id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->artist->delete($id);
-
-        return response(['success' => true], 200);
+        return ArtistResource::class;
     }
 }
