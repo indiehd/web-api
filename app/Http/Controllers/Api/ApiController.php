@@ -8,10 +8,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class ApiController extends Controller
 {
+
     /**
-     * @var $repository
+     * @var string $repository
      */
-    protected $repository;
+    private $repository;
 
     /**
      * Should return the <RepositoryInterface>::class
@@ -21,9 +22,9 @@ abstract class ApiController extends Controller
     abstract public function repository();
 
     /**
-     * @var $resource
+     * @var string $resource
      */
-    protected $resource;
+    private $resource;
 
     /**
      * Should return the <Resource>::class
@@ -33,29 +34,18 @@ abstract class ApiController extends Controller
     abstract public function resource();
 
     /**
-     * These rules are shared between both store and update
+     * Should return <StoreRequest>::class
      *
-     * @var array $sharedRules
+     * @return string
      */
-    protected $sharedRules = [];
+    abstract public function storeRequest();
 
     /**
-     * Rules that are specific to the store request
+     * Should return <UpdateRequest>::class
      *
-     * They will overwrite the rule set in $sharedRules
-     *
-     * @var array $storeRules
+     * @return string
      */
-    protected $storeRules = [];
-
-    /**
-     * Rules that are specific to the update request
-     *
-     * They will overwrite the rule set in $sharedRules
-     *
-     * @var array $updateRules
-     */
-    protected $updateRules = [];
+    abstract public function updateRequest();
 
     /**
      * ApiController constructor.
@@ -81,17 +71,12 @@ abstract class ApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param $request
+     * @param Request $request
      * @return JsonResource
      */
     public function store(Request $request)
     {
-        $request->validate(
-            array_merge(
-                $this->sharedRules,
-                $this->storeRules
-            )
-        );
+        resolve($this->storeRequest());
 
         return new $this->resource($this->repository->create($request->all()));
     }
@@ -110,18 +95,13 @@ abstract class ApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  $request
+     * @param  Request $request
      * @param  int $id
      * @return JsonResource
      */
     public function update(Request $request, $id)
     {
-        $request->validate(
-            array_merge(
-                $this->sharedRules,
-                $this->updateRules
-            )
-        );
+        resolve($this->updateRequest());
 
         $this->repository->update($id, $request->all());
 

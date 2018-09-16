@@ -3,38 +3,32 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\ArtistRepositoryInterface;
+use App\Http\Requests\StoreArtist;
+use App\Http\Requests\UpdateArtist;
 use App\Http\Resources\ArtistResource;
 
 class ArtistController extends ApiController
 {
 
     /**
-     * @var array $sharedRules
+     * Sets the StoreRequest to resolve for validation during a store request
+     *
+     * @return string
      */
-    protected $sharedRules = [
-        'moniker' => 'max:255',
-        'alt_moniker' => 'max:255',
-        'email' => 'email',
-        'city' => 'max:255',
-        'territory' => 'max:255',
-        'country_code' => 'exists:countries,code',
-        'official_url' => 'url',
-        'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc..
-    ];
+    public function storeRequest()
+    {
+        return StoreArtist::class;
+    }
 
     /**
-     * @var array $storeRules
+     * Sets the UpdateRequest to resolve for validation during a update request
+     *
+     * @return string
      */
-    protected $storeRules = [
-        'moniker' => 'required|max:255',
-    ];
-
-    /**
-     * @var array $updateRules
-     */
-    protected $updateRules = [
-        'moniker' => 'required|max:255', // TODO: should this really be required ? Per the tests it fails otherwise ...
-    ];
+    public function updateRequest()
+    {
+        return UpdateArtist::class;
+    }
 
     /**
      * Sets the RepositoryInterface to resolve
