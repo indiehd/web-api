@@ -46,18 +46,22 @@ class ApiRouteServiceProvider extends ServiceProvider
         // ...
     }
 
-    private function mapRoutes($prefix, $controller)
+    private function mapRoutes($prefix, $controller, \Closure $closure = null)
     {
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->namespace)
-            ->group(function () use ($controller, $prefix) {
-                Route::prefix($prefix)->group(function () use ($controller, $prefix) {
+            ->group(function () use ($controller, $prefix, $closure) {
+                Route::prefix($prefix)->group(function () use ($controller, $prefix, $closure) {
                     Route::get('/', "$controller@all")->name("$prefix.index");
                     Route::get('/{id}', "$controller@show")->name("$prefix.show");
                     Route::post('/create', "$controller@store")->name("$prefix.store");
                     Route::put('/{id}', "$controller@update")->name("$prefix.update");
                     Route::delete('/{id}', "$controller@destroy")->name("$prefix.destroy");
+
+                    if ($closure !== null) {
+                        $closure();
+                    }
                 });
             });
     }
