@@ -34,7 +34,7 @@ class ApiRoute
         $prefix = $this->prefix;
 
         Route::prefix('api')
-            ->middleware('-')
+            ->middleware('api')
             ->namespace($this->namespace)
             ->group(function () use ($controller, $prefix) {
                 Route::prefix($this->prefix)->group(function () use ($controller, $prefix) {
