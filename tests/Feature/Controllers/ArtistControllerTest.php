@@ -75,7 +75,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         $this->spawnArtist();
 
-        $this->json('GET', route('artist.index'))
+        $this->json('GET', route('artists.index'))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -86,7 +86,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withValidInputs_returnsOneJsonObject()
     {
-        $this->json('POST', route('artist.store'), $this->getAllInputsInValidState())
+        $this->json('POST', route('artists.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -95,7 +95,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withInvalidInputs_returnsErrorMessage()
     {
-        $this->json('POST', route('artist.store'), $this->getInputsInInvalidState())
+        $this->json('POST', route('artists.store'), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -107,7 +107,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         $artist = $this->spawnArtist();
 
-        $this->json('GET', route('artist.show', ['id' => $artist->id]))
+        $this->json('GET', route('artists.show', ['id' => $artist->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -122,7 +122,7 @@ class ArtistControllerTest extends ControllerTestCase
 
         $inputs['alt_moniker'] = 'Back in the Garage';
 
-        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $inputs)
+        $this->json('PUT', route('artists.update', ['id' => $artist->id]), $inputs)
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -139,7 +139,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         $artist = $this->spawnArtist();
 
-        $this->json('PUT', route('artist.update', ['id' => $artist->id]), $this->getInputsInInvalidState())
+        $this->json('PUT', route('artists.update', ['id' => $artist->id]), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',

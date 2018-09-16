@@ -111,7 +111,7 @@ class UserControllerTest extends ControllerTestCase
     {
         $this->spawnUser();
 
-        $this->json('GET', route('user.index'))
+        $this->json('GET', route('users.index'))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -122,7 +122,7 @@ class UserControllerTest extends ControllerTestCase
 
     public function test_store_withValidInputs_returnsOneJsonObject()
     {
-        $this->json('POST', route('user.store'), $this->getAllInputsInValidState())
+        $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -131,7 +131,7 @@ class UserControllerTest extends ControllerTestCase
 
     public function test_store_withInvalidInputs_returnsErrorMessage()
     {
-        $this->json('POST', route('user.store'), $this->getInputsInInvalidState())
+        $this->json('POST', route('users.store'), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -143,7 +143,7 @@ class UserControllerTest extends ControllerTestCase
     {
         $user = $this->spawnUser();
 
-        $this->json('GET', route('user.show', ['id' => $user->id]))
+        $this->json('GET', route('users.show', ['id' => $user->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -158,7 +158,7 @@ class UserControllerTest extends ControllerTestCase
 
         $inputs['username'] = 'FoobiusBazius';
 
-        $this->json('PUT', route('user.update', ['id' => $user->id]), $inputs)
+        $this->json('PUT', route('users.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -175,7 +175,7 @@ class UserControllerTest extends ControllerTestCase
     {
         $user = $this->spawnUser();
 
-        $this->json('PUT', route('user.update', ['id' => $user->id]), $this->getInputsInInvalidState())
+        $this->json('PUT', route('users.update', ['id' => $user->id]), $this->getInputsInInvalidState())
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -187,7 +187,7 @@ class UserControllerTest extends ControllerTestCase
     {
         $inputs = $this->getAllInputsInValidState();
 
-        $this->json('POST', route('user.store'), $inputs)
+        $this->json('POST', route('users.store'), $inputs)
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -204,7 +204,7 @@ class UserControllerTest extends ControllerTestCase
 
         $inputs = ['password' => 'secretsauce'];
 
-        $this->json('PUT', route('user.update', ['id' => $user->id]), $inputs)
+        $this->json('PUT', route('users.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
