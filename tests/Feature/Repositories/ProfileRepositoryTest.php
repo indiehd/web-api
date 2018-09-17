@@ -2,25 +2,57 @@
 
 namespace Tests\Feature\Repositories;
 
-use DB;
-
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
 
 class ProfileRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var  $artist  ArtistRepositoryInterface
+     * @var $profile ProfileRepositoryInterface
+     */
+    protected $profile;
+
+    /**
+     * @var $artist ArtistRepositoryInterface
      */
     protected $artist;
 
+    /**
+     * @var $label LabelRepositoryInterface
+     */
+    protected $label;
+
+    /**
+     * @var $user UserRepositoryInterface
+     */
+    protected $user;
+
+    /**
+     * @var $catalogEntity CatalogEntityRepositoryInterface
+     */
+    protected $catalogEntity;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->seed('CountriesSeeder');
 
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->label = resolve(LabelRepositoryInterface::class);
+
+        $this->user = resolve(UserRepositoryInterface::class);
+
+        $this->catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
     }
 
     /**
@@ -103,10 +135,47 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
             'profilable_type' => $this->repo->class(),
         ]);
 
-        DB::transaction(function () use ($profile) {
-            $profile->delete();
-        });
+        $profile->delete();
 
         $this->assertNull($this->repo->findById($profile->id));
+    }
+
+    /**
+     * Ensure that models of every Profilable type in the database morph
+     * to a Profile.
+     *
+     * @return void
+     */
+    public function test_profilable_allDistinctTypes_morphToProfile()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        factory($this->catalogEntity->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->artist->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $artist->id,
+            'profilable_type' => $this->artist->class()
+        ]);
+
+        $this->assertInstanceOf($this->profile->class(), $artist->profile);
+
+        $label = factory($this->label->class())->create();
+
+        factory($this->catalogEntity->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $label->id,
+            'catalogable_type' => $this->label->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $label->id,
+            'profilable_type' => $this->label->class()
+        ]);
+
+        $this->assertInstanceOf($this->profile->class(), $label->profile);
     }
 }
