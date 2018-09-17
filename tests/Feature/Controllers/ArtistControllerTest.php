@@ -82,6 +82,7 @@ class ArtistControllerTest extends ControllerTestCase
     public function getInputsInInvalidState()
     {
         return [
+            'moniker' => str_random(256),
             'alt_moniker' => str_random(256),
             'email' => 'foo@',
             'city' => str_random(256),

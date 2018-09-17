@@ -24,6 +24,7 @@ class UpdateArtist extends FormRequest
     public function rules()
     {
         return [
+            'moniker' => 'max:255',
             'alt_moniker' => 'max:255',
             'email' => 'email',
             'city' => 'max:255',
