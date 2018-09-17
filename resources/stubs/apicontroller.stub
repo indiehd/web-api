@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+class DummyClass extends ApiController
+{
+
+    /**
+     * Sets the StoreRequest to resolve for validation during a store request
+     *
+     * @return string
+     */
+    public function storeRequest()
+    {
+        // return StoreRequest::class;
+    }
+
+    /**
+     * Sets the UpdateRequest to resolve for validation during a update request
+     *
+     * @return string
+     */
+    public function updateRequest()
+    {
+        // return UpdateRequest::class;
+    }
+
+    /**
+     * Sets the RepositoryInterface to resolve
+     *
+     * @return string
+     */
+    public function repository()
+    {
+        // return ModelRepositoryInterface::class;
+    }
+
+    /**
+     * Sets the ModelResource to resolve
+     *
+     * @return string
+     */
+    public function resource()
+    {
+        // return ModelResource::class;
+    }
+}
