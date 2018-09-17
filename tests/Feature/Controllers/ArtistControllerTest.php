@@ -7,9 +7,21 @@ use CountriesSeeder;
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
+use App\Http\Requests\StoreArtist;
+use App\Http\Requests\UpdateArtist;
 
 class ArtistControllerTest extends ControllerTestCase
 {
+    /**
+     * @var StoreArtist
+     */
+    protected $storeArtist;
+
+    /**
+     * @var UpdateArtist
+     */
+    protected $updateArtist;
+
     public function setUp()
     {
         parent::setUp();
@@ -19,6 +31,13 @@ class ArtistControllerTest extends ControllerTestCase
         $this->country = resolve(CountryRepositoryInterface::class);
         $this->artist = resolve(ArtistRepositoryInterface::class);
         $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        // New-up the Form Request classes directly, only so we can get the
+        // validation rules from them dynamically.
+
+        $this->storeArtist = new StoreArtist();
+
+        $this->updateArtist = new UpdateArtist();
     }
 
     public function spawnArtist()
@@ -51,6 +70,7 @@ class ArtistControllerTest extends ControllerTestCase
         return [
             'moniker' => 'Joey\'s Basement Band',
             'alt_moniker' => 'No Longer in the Garage',
+            'email' => 'foo@bar.com',
             'city' => 'New York City',
             'territory' => 'New York',
             'country_code' => 'US',
@@ -63,6 +83,7 @@ class ArtistControllerTest extends ControllerTestCase
     {
         return [
             'alt_moniker' => str_random(256),
+            'email' => 'foo@',
             'city' => str_random(256),
             'territory' => str_random(256),
             'country_code' => 'United States',
@@ -99,7 +120,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->getAllInputsInValidState())
+                'errors' => array_keys($this->storeArtist->rules())
             ]);
     }
 
@@ -143,7 +164,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->getAllInputsInValidState())
+                'errors' => array_keys($this->updateArtist->rules())
             ]);
     }
 }
