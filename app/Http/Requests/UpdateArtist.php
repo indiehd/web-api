@@ -24,7 +24,6 @@ class UpdateArtist extends FormRequest
     public function rules()
     {
         return [
-            'moniker' => 'required|max:255', // TODO: removing `required` from this causes tests to fail ?
             'alt_moniker' => 'max:255',
             'email' => 'email',
             'city' => 'max:255',
