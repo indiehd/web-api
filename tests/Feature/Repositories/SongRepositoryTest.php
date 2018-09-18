@@ -4,9 +4,29 @@ namespace Tests\Feature\Repositories;
 
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\SkuRepositoryInterface;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var AlbumRepositoryInterface $album
+     */
+    protected $album;
+
+    /**
+     * @var FlacFileRepositoryInterface $flacFile
+     */
+    protected $flacFile;
+
+    /**
+     * @var SkuRepositoryInterface $sku
+     */
+    protected $sku;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
@@ -14,6 +34,10 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->seed('CountriesSeeder');
 
         $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->flacFile = resolve(FlacFileRepositoryInterface::class);
+
+        $this->sku = resolve(SkuRepositoryInterface::class);
     }
 
     /**
@@ -22,6 +46,14 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(SongRepositoryInterface::class);
+    }
+
+    public function spawnSong()
+    {
+        return factory($this->repo->class())->create([
+            'album_id' => factory($this->album->class())->create()->id,
+            'track_number' => 1,
+        ]);
     }
 
     /**
@@ -47,12 +79,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $album = factory($this->album->class())->create();
-
-        $song = factory($this->repo->class())->create([
-            'album_id' => $album->id,
-            'track_number' => 1,
-        ]);
+        $song = $this->spawnSong();
 
         $newValue = 'Foo Bar';
 
@@ -72,12 +99,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $album = factory($this->album->class())->create();
-
-        $song = factory($this->repo->class())->create([
-            'album_id' => $album->id,
-            'track_number' => 1,
-        ]);
+        $song = $this->spawnSong();
 
         $updated = $this->repo->update($song->id, []);
 
@@ -89,15 +111,47 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $album = factory($this->album->class())->create();
-
-        $song = factory($this->repo->class())->create([
-            'album_id' => $album->id,
-            'track_number' => 1,
-        ]);
+        $song = $this->spawnSong();
 
         $song->delete();
 
         $this->assertNull($this->repo->findById($song->id));
+    }
+
+    /**
+     * Ensure that when a Song is associated with an Album, the Song belongs to
+     * an Album.
+     *
+     * @return void
+     */
+    public function test_albums_song_belongsToAlbum()
+    {
+        $this->assertInstanceOf($this->album->class(), $this->spawnSong()->album);
+    }
+
+    /**
+     * Ensure that when a Song is associated with a FlacFile, the Song belongs
+     * to a FlacFile.
+     *
+     * @return void
+     */
+    public function test_flacFile_song_belongsToFlacFile()
+    {
+        $song = factory($this->repo->class())->create([
+            'album_id' => factory($this->album->class())->create()->id,
+            'track_number' => 1,
+        ]);
+
+        $this->assertInstanceOf($this->flacFile->class(), $this->spawnSong()->flacFile);
+    }
+
+    /**
+     * Ensure that a newly-created Song belongs to a Sku.
+     *
+     * @return void
+     */
+    public function test_sku_song_belongsToSku()
+    {
+        $this->assertInstanceOf($this->sku->class(), $this->spawnSong()->sku);
     }
 }
