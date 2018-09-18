@@ -1,15 +1,32 @@
 parameters:
+  additional_info: "\nTo get full documentation for the project\nVisit https://docs.indiehd.com\n"
   tasks:
     git_commit_message:
       allow_empty_message: false
       enforce_capitalized_subject: false
       enforce_no_subject_trailing_period: true
+      enforce_no_subject_punctuations: true
       enforce_single_lined_subject: true
+      enforce_type_scope_conventions: true
+      types:
+        - api
+        - build
+        - chore
+        - refact
+        - revert
+        - feat
+        - tests
+        - docs
+        - style
+        - ci
+        - ui
+        - scaff
+        - perf
+        - fix
+        - wip
+      scopes: []
       max_body_width: 72
       max_subject_width: 72
-      matchers:
-        http://docs.indiehd.com/#/CONTRIBUTING?id=git-commit-messages: >
-          /^(?!.+[.!?])(api|build|chore|refact|revert|feat|tests|docs|style|ci|ui|scaff|perf|fix|wip)(:\s|(\(.+\)?:\s))([a-zA-Z0-9-_ #@,'\/\\"]+)|^(Merge branch '.+'\s.+|Merge remote-tracking branch '.+'|Merge pull request #\d+\s.+)/
       case_insensitive: false
       multiline: true
       additional_modifiers: ''
