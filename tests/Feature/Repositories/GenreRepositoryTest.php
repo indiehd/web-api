@@ -6,6 +6,7 @@ use CountriesSeeder;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
@@ -95,7 +96,11 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
 
         $genre->delete();
 
-        $this->assertNull($this->repo->findById($genre->id));
+        try {
+            $this->repo->findById($genre->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\SkuRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
 {
@@ -115,7 +116,11 @@ class SongRepositoryTest extends RepositoryCrudTestCase
 
         $song->delete();
 
-        $this->assertNull($this->repo->findById($song->id));
+        try {
+            $this->repo->findById($song->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**
