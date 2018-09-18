@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\FlacFileRepositoryInterface;
+use App\Http\Requests\StoreFlacFile;
+use App\Http\Requests\UpdateFlacFile;
 use App\Http\Resources\FlacFileResource;
 
 class FlacFileController extends ApiController
@@ -35,7 +37,7 @@ class FlacFileController extends ApiController
      */
     public function storeRequest()
     {
-        // TODO: Implement storeRequest() method.
+        return StoreFlacFile::class;
     }
 
     /**
@@ -45,6 +47,6 @@ class FlacFileController extends ApiController
      */
     public function updateRequest()
     {
-        // TODO: Implement updateRequest() method.
+        return UpdateFlacFile::class;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\SkuRepositoryInterface;
+use App\Http\Requests\StoreSku;
+use App\Http\Requests\UpdateSku;
 use App\Http\Resources\SkuResource;
 
 class SkuController extends ApiController
@@ -35,7 +37,7 @@ class SkuController extends ApiController
      */
     public function storeRequest()
     {
-        // TODO: Implement storeRequest() method.
+        return StoreSku::class;
     }
 
     /**
@@ -45,6 +47,6 @@ class SkuController extends ApiController
      */
     public function updateRequest()
     {
-        // TODO: Implement updateRequest() method.
+        return UpdateSku::class;
     }
 }

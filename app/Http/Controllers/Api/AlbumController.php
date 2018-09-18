@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\AlbumRepositoryInterface;
+use App\Http\Requests\StoreAlbum;
+use App\Http\Requests\UpdateAlbum;
 use App\Http\Resources\AlbumResource;
 
 class AlbumController extends ApiController
@@ -35,7 +37,7 @@ class AlbumController extends ApiController
      */
     public function storeRequest()
     {
-        // TODO: Implement storeRequest() method.
+        return StoreAlbum::class;
     }
 
     /**
@@ -45,6 +47,6 @@ class AlbumController extends ApiController
      */
     public function updateRequest()
     {
-        // TODO: Implement updateRequest() method.
+        return UpdateAlbum::class;
     }
 }

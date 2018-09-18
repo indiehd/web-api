@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\SongRepositoryInterface;
+use App\Http\Requests\StoreSong;
+use App\Http\Requests\UpdateSong;
 use App\Http\Resources\SongResource;
 
 class SongController extends ApiController
@@ -35,7 +37,7 @@ class SongController extends ApiController
      */
     public function storeRequest()
     {
-        // TODO: Implement storeRequest() method.
+        return StoreSong::class;
     }
 
     /**
@@ -45,6 +47,6 @@ class SongController extends ApiController
      */
     public function updateRequest()
     {
-        // TODO: Implement updateRequest() method.
+        return UpdateSong::class;
     }
 }
