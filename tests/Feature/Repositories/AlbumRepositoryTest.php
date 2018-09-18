@@ -6,6 +6,7 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
@@ -130,7 +131,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $album->delete();
 
-        $this->assertNull($this->repo->findById($album->id));
+        try {
+            $this->repo->findById($album->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

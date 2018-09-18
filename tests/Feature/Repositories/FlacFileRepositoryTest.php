@@ -6,6 +6,7 @@ use CountriesSeeder;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
@@ -82,7 +83,11 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
 
         $flacFile->delete();
 
-        $this->assertNull($this->repo->findById($flacFile->id));
+        try {
+            $this->repo->findById($flacFile->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

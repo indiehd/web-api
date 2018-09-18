@@ -9,6 +9,7 @@ use App\Contracts\SkuRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SkuRepositoryTest extends RepositoryCrudTestCase
 {
@@ -105,7 +106,11 @@ class SkuRepositoryTest extends RepositoryCrudTestCase
 
         $sku->delete();
 
-        $this->assertNull($this->repo->findById($sku->id));
+        try {
+            $this->repo->findById($sku->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**
