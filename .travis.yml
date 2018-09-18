@@ -1,10 +1,6 @@
 env:
   - DISCORD_WEBHOOK="https://discordapp.com/api/webhooks/480159786286186546/AB1KcL2wz94yP3ZRVwVploKFk7ewaOn6evD6tVGQ8ywyWsMjVOXDfA0QZF2qaP7-ap9g"
 
-branches:
-  except:
-  - /^(?i:wip)-.*$/
-
 language: php
 
 php:
