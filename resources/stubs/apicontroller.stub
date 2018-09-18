@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\ArtistRepositoryInterface;
-use App\Http\Requests\StoreArtist;
-use App\Http\Requests\UpdateArtist;
-use App\Http\Resources\ArtistResource;
-
-class ArtistController extends ApiController
+class DummyClass extends ApiController
 {
 
     /**
@@ -17,7 +12,7 @@ class ArtistController extends ApiController
      */
     public function storeRequest()
     {
-        return StoreArtist::class;
+        // return StoreRequest::class;
     }
 
     /**
@@ -27,7 +22,7 @@ class ArtistController extends ApiController
      */
     public function updateRequest()
     {
-        return UpdateArtist::class;
+        // return UpdateRequest::class;
     }
 
     /**
@@ -37,7 +32,7 @@ class ArtistController extends ApiController
      */
     public function repository()
     {
-        return ArtistRepositoryInterface::class;
+        // return ModelRepositoryInterface::class;
     }
 
     /**
@@ -47,6 +42,6 @@ class ArtistController extends ApiController
      */
     public function resource()
     {
-        return ArtistResource::class;
+        // return ModelResource::class;
     }
 }

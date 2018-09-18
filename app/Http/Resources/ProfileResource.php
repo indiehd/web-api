@@ -17,6 +17,7 @@ class ProfileResource extends JsonResource
         return [
             'moniker' => $this->moniker,
             'alt_moniker' => $this->alt_moniker,
+            'email' => $this->email,
             'city' => $this->city,
             'territory' => $this->territory,
             'country_code' => $this->country_code,
