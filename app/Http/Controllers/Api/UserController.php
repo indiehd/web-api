@@ -2,99 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
+use App\Http\Resources\UserResource;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
 
     /**
-     * @var UserRepositoryInterface
-     */
-    protected $user;
-
-    /**
-     * @var AccountRepositoryInterface
-     */
-    protected $account;
-
-    /**
-     * AccountController constructor.
+     * Should return the <RepositoryInterface>::class
      *
-     * @param UserRepositoryInterface $user
-     * @param AccountRepositoryInterface $account
+     * @return string
      */
-    public function __construct(
-        UserRepositoryInterface $user,
-        AccountRepositoryInterface $account
-    ) {
-        $this->user = $user;
-
-        $this->account = $account;
+    public function repository()
+    {
+        return UserRepositoryInterface::class;
     }
 
     /**
-     * Display a listing of the resource.
+     * Should return the <Resource>::class
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return string
      */
-    public function all()
+    public function resource()
     {
-        return UserResource::collection(
-            $this->user->all()
-        );
+        return UserResource::class;
     }
 
     /**
-     * Display the specified resource.
+     * Should return <StoreRequest>::class
      *
-     * @param  int $id
-     * @return UserResource
+     * @return string
      */
-    public function show($id)
+    public function storeRequest()
     {
-        return new UserResource($this->user->findById($id));
+        return StoreUser::class;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Should return <UpdateRequest>::class
      *
-     * @param  \App\Http\Requests\StoreUser $request
-     * @return UserResource
+     * @return string
      */
-    public function store(StoreUser $request)
+    public function updateRequest()
     {
-        return new UserResource($this->user->create($request->all()));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateUser $request
-     * @param  int $id
-     * @return UserResource
-     */
-    public function update(UpdateUser $request, $id)
-    {
-        $this->user->update($id, $request->all());
-
-        return new UserResource($this->user->findById($id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->user->delete($id);
-
-        return response(['success' => true], 200);
+        return UpdateUser::class;
     }
 }

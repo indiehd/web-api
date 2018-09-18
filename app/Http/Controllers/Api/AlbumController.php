@@ -3,88 +3,48 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\AlbumRepositoryInterface;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\AlbumResource;
-use Illuminate\Http\Request;
 
-class AlbumController extends Controller
+class AlbumController extends ApiController
 {
 
     /**
-     * @var AlbumRepositoryInterface
-     */
-    private $album;
-
-    /**
-     * AlbumController constructor.
+     * Should return the <RepositoryInterface>::class
      *
-     * @param AlbumRepositoryInterface $album
+     * @return string
      */
-    public function __construct(AlbumRepositoryInterface $album)
+    public function repository()
     {
-        $this->album = $album;
+        return AlbumRepositoryInterface::class;
     }
 
     /**
-     * Display a listing of the resource.
+     * Should return the <Resource>::class
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return string
      */
-    public function all()
+    public function resource()
     {
-        return AlbumResource::collection(
-            $this->album->all()
-        );
+        return AlbumResource::class;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Should return <StoreRequest>::class
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return AlbumResource
+     * @return string
      */
-    public function store(Request $request)
+    public function storeRequest()
     {
-        // TODO: Create StoreAlbum request
-        return new AlbumResource($this->album->create($request->all()));
+        // TODO: Implement storeRequest() method.
     }
 
     /**
-     * Display the specified resource.
+     * Should return <UpdateRequest>::class
      *
-     * @param  int $id
-     * @return AlbumResource
+     * @return string
      */
-    public function show($id)
+    public function updateRequest()
     {
-        return new AlbumResource($this->album->findById($id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return AlbumResource
-     */
-    public function update(Request $request, $id)
-    {
-        // TODO: Create UpdateAlbum request
-        $this->album->update($id, $request->all());
-
-        return new AlbumResource($this->album->findById($id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->album->delete($id);
-
-        return response(['success' => true], 200);
+        // TODO: Implement updateRequest() method.
     }
 }
