@@ -4,18 +4,30 @@ namespace Tests\Feature\Repositories;
 
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\GenreRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var  $album  AlbumRepositoryInterface
+     * @var $album AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var  $artist  ArtistRepositoryInterface
+     * @var $artist ArtistRepositoryInterface
      */
     protected $artist;
+
+    /**
+     * @var $song SongRepositoryInterface
+     */
+    protected $song;
+
+    /**
+     * @var $genre GenreRepositoryInterface
+     */
+    protected $genre;
 
     public function setUp()
     {
@@ -24,6 +36,10 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         $this->seed('CountriesSeeder');
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->song = resolve(SongRepositoryInterface::class);
+
+        $this->genre = resolve(GenreRepositoryInterface::class);
     }
 
     /**
@@ -32,6 +48,18 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(AlbumRepositoryInterface::class);
+    }
+
+    /**
+     * Creates a new Album.
+     *
+     * @return \App\Album
+     */
+    public function createAlbum()
+    {
+        return factory($this->repo->class())->create([
+            'artist_id' => factory($this->artist->class())->create()->id
+        ]);
     }
 
     /**
@@ -103,5 +131,50 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         $album->delete();
 
         $this->assertNull($this->repo->findById($album->id));
+    }
+
+    /**
+     * Ensure that a newly-created Album belongs to an Artist.
+     *
+     * @return void
+     */
+    public function test_artist_albumBelongsToArtist()
+    {
+        $this->assertInstanceOf($this->artist->class(), $this->createAlbum()->artist);
+    }
+
+    /**
+     * Ensure that a newly-created Album has one or more Songs.
+     *
+     * @return void
+     */
+    public function test_songs_albumHasManySongs()
+    {
+        $album = factory($this->repo->class())->create([
+            'artist_id' => factory($this->artist->class())->create()->id
+        ]);
+
+        factory($this->song->class())->create([
+            'track_number' => 1,
+            'album_id' => $album->id
+        ]);
+
+        $this->assertInstanceOf($this->song->class(), $album->songs->first());
+    }
+
+    /**
+     * Ensure that a newly-created Album belongs to one or more Genres.
+     *
+     * @return void
+     */
+    public function test_genres_albumBelongsToManyGenres()
+    {
+        $album = factory($this->repo->class())->create([
+            'artist_id' => factory($this->artist->class())->create()->id
+        ]);
+
+        $album->genres()->attach(factory($this->genre->class())->create()->id);
+
+        $this->assertInstanceOf($this->genre->class(), $album->genres->first());
     }
 }

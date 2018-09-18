@@ -2,17 +2,35 @@
 
 namespace Tests\Feature\Repositories;
 
-use DB;
-
+use CountriesSeeder;
 use App\Contracts\GenreRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var ArtistRepositoryInterface $artist
+     */
+    protected $artist;
+
+    /**
+     * @var AlbumRepositoryInterface $album
+     */
+    protected $album;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
 
-        $this->seed('StaticDataSeeder');
+        $this->seed(CountriesSeeder::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->artist = resolve(ArtistRepositoryInterface::class);
     }
 
     /**
@@ -28,11 +46,11 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $genre = $this->repo->model()->inRandomOrder()->first();
+        $genre = factory($this->repo->class())->make();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $genre
+            $this->repo->create($genre->toArray())
         );
     }
 
@@ -41,7 +59,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $genre = $this->repo->model()->inRandomOrder()->first();
+        $genre = factory($this->repo->class())->create();
 
         $newValue = 'Some New Genre';
 
@@ -73,12 +91,29 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $genre = $this->repo->model()->inRandomOrder()->first();
+        $genre = factory($this->repo->class())->create();
 
-        DB::transaction(function () use ($genre) {
-            $genre->delete();
-        });
+        $genre->delete();
 
         $this->assertNull($this->repo->findById($genre->id));
+    }
+
+    /**
+     * Ensure that when a Genre is associated with an Album, the Genre has
+     * one or more Albums.
+     *
+     * @return void
+     */
+    public function test_albums_randomAlbum_belongsToManyGenres()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        $album = factory($this->album->class())->create(['artist_id' => $artist->id]);
+
+        $genre = factory($this->repo->class())->create();
+
+        $album->genres()->attach($genre->id);
+
+        $this->assertInstanceOf($this->album->class(), $genre->albums->first());
     }
 }

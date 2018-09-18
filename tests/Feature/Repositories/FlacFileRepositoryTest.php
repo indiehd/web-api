@@ -2,12 +2,24 @@
 
 namespace Tests\Feature\Repositories;
 
-use DB;
-
+use CountriesSeeder;
 use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->seed(CountriesSeeder::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->song = resolve(SongRepositoryInterface::class);
+    }
+
     /**
      * @inheritdoc
      */
@@ -68,10 +80,31 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     {
         $flacFile = factory($this->repo->class())->create();
 
-        DB::transaction(function () use ($flacFile) {
-            $flacFile->delete();
-        });
+        $flacFile->delete();
 
         $this->assertNull($this->repo->findById($flacFile->id));
+    }
+
+    /**
+     * Ensure that when a FlacFile is associated with a Song, the FlacFile has
+     * one or more Songs.
+     *
+     * @return void
+     */
+    public function test_song_flacFile_hasManySongs()
+    {
+        $flacFile = factory($this->repo->class())->create();
+
+        $song = factory($this->song->class())->create([
+            'album_id' => factory($this->album->class())->create()->id,
+            'track_number' => 1,
+        ]);
+
+        $song->flacFile()->associate($flacFile)->save();
+
+        $this->assertInstanceOf(
+            $this->song->class(),
+            $this->repo->findById($flacFile->id)->songs->first()
+        );
     }
 }

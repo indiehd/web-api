@@ -7,6 +7,8 @@ use DB;
 use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
 
 class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
 {
@@ -20,6 +22,16 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
      */
     protected $artist;
 
+    /**
+     * @var $profile ProfileEntityRepositoryInterface
+     */
+    protected $profile;
+
+    /**
+     * @var $label LabelRepositoryInterface
+     */
+    protected $label;
+
     public function setUp()
     {
         parent::setUp();
@@ -29,6 +41,10 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
         $this->user = resolve(UserRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $this->label = resolve(LabelRepositoryInterface::class);
     }
 
     /**
@@ -120,5 +136,92 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
         });
 
         $this->assertNull($this->repo->findById($catalogEntity->id));
+    }
+
+    /**
+     * Ensure that models of every CatalogableEntity type morph to a CatalogEntity.
+     *
+     * @return void
+     */
+    public function test_catalogable_allTypes_morphToCatalogEntity()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->artist->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $artist->id,
+            'profilable_type' => $this->artist->class()
+        ]);
+
+        $this->assertInstanceOf($this->repo->class(), $artist->catalogable);
+
+        $label = factory($this->label->class())->create();
+
+        factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $label->id,
+            'catalogable_type' => $this->label->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $label->id,
+            'profilable_type' => $this->label->class()
+        ]);
+
+        $this->assertInstanceOf($this->repo->class(), $label->catalogable);
+    }
+
+    /**
+     * Ensure that a new CatalogEntity belongs to a User.
+     *
+     * @return void
+     */
+    public function test_user_newCatalogEntity_belongsToUser()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        factory($this->repo->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->artist->class()
+        ]);
+
+        factory($this->profile->class())->create([
+            'profilable_id' => $artist->id,
+            'profilable_type' => $this->artist->class()
+        ]);
+
+        $this->assertInstanceOf($this->user->class(), $artist->catalogable->user);
+    }
+
+    /**
+     * Ensure that when a CatalogEntity is approved, the CatalogEntity
+     * belongs to an approver who is a User.
+     */
+    public function test_approver_aNewCatalogEntityOfRandomTypeIsApproved_belongsToApprover()
+    {
+        $catalogEntity = factory($this->repo->class())->make([
+            'approver_id' => factory($this->user->class())->create()->id
+        ]);
+
+        $this->assertInstanceOf($this->user->class(), $catalogEntity->approver);
+    }
+
+    /**
+     * Ensure that when a CatalogEntity is deleted, the CatalogEntity
+     * belongs to a deleter who is a User.
+     */
+    public function test_deleter_aNewCatalogEntityOfRandomTypeIsDeleted_belongsToDeleter()
+    {
+        $catalogEntity = factory($this->repo->class())->make([
+            'deleter_id' => factory($this->user->class())->create()->id
+        ]);
+
+        $this->assertInstanceOf($this->user->class(), $catalogEntity->deleter);
     }
 }

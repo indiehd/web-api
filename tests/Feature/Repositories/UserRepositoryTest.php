@@ -2,16 +2,49 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Contracts\AccountRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
 
 class UserRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var AccountRepositoryInterface $account
+     */
+    protected $account;
+
+    /**
+     * @var UserRepositoryInterface $user
+     */
+    protected $user;
+
+    /**
+     * @var ArtistRepositoryInterface $artist
+     */
+    protected $artist;
+
+    /**
+     * @var CatalogEntityRepositoryInterface $catalogEntity
+     */
+    protected $catalogEntity;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->seed('CountriesSeeder');
+
+        $this->account = resolve(AccountRepositoryInterface::class);
+
+        $this->user = resolve(UserRepositoryInterface::class);
+
+        $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
     }
 
     /**
@@ -20,8 +53,6 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(UserRepositoryInterface::class);
-
-        $this->account = resolve(AccountRepositoryInterface::class);
     }
 
     /**
@@ -85,5 +116,36 @@ class UserRepositoryTest extends RepositoryCrudTestCase
         $user->delete();
 
         $this->assertNull($this->repo->findById($user->id));
+    }
+
+    /**
+     * Verify that when a User is associated with a new CatalogEntity, the User has
+     * one or more CatalogEntities.
+     *
+     * @return void
+     */
+    public function test_entities_whenUserAssociatedWithCatalogEntity_userHasManyCatalogEntities()
+    {
+        $artist = factory($this->artist->class())->create();
+
+        $catalogEntity = factory($this->catalogEntity->class())->create([
+            'user_id' => factory($this->user->class())->create()->id,
+            'catalogable_id' => $artist->id,
+            'catalogable_type' => $this->artist->class(),
+        ]);
+
+        $this->assertInstanceOf($this->catalogEntity->class(), $catalogEntity->user->entities->first());
+    }
+
+    /**
+     * Verify that when a User is associated with Account, the User has one Account.
+     *
+     * @return void
+     */
+    public function test_account_whenUserAssociatedWithAccount_userHasOneAccount()
+    {
+        $user = factory($this->user->class())/*->states('withAccount')*/->create();
+
+        $this->assertInstanceOf($this->account->class(), $user->account);
     }
 }
