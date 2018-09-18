@@ -2,89 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Contracts\FlacFileRepositoryInterface;
+use App\Http\Requests\StoreFlacFile;
+use App\Http\Requests\UpdateFlacFile;
 use App\Http\Resources\FlacFileResource;
-use App\Repositories\FlacFileRepository;
-use Illuminate\Http\Request;
 
-class FlacFileController extends Controller
+class FlacFileController extends ApiController
 {
 
     /**
-     * @var FlacFileRepository
-     */
-    private $flacFile;
-
-    /**
-     * FlacFileController constructor.
+     * Should return the <RepositoryInterface>::class
      *
-     * @param FlacFileRepository $flacFile
+     * @return string
      */
-    public function __construct(FlacFileRepository $flacFile)
+    public function repository()
     {
-        $this->flacFile = $flacFile;
+        return FlacFileRepositoryInterface::class;
     }
 
     /**
-     * Display a listing of the resource.
+     * Should return the <Resource>::class
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return string
      */
-    public function all()
+    public function resource()
     {
-        return FlacFileResource::collection(
-            $this->flacFile->all()
-        );
+        return FlacFileResource::class;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Should return <StoreRequest>::class
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return FlacFileResource
+     * @return string
      */
-    public function store(Request $request)
+    public function storeRequest()
     {
-        // TODO: Create StoreFlacFile request
-        return new FlacFileResource($this->flacFile->create($request->all()));
+        return StoreFlacFile::class;
     }
 
     /**
-     * Display the specified resource.
+     * Should return <UpdateRequest>::class
      *
-     * @param  int $id
-     * @return FlacFileResource
+     * @return string
      */
-    public function show($id)
+    public function updateRequest()
     {
-        return new FlacFileResource($this->flacFile->findById($id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return FlacFileResource
-     */
-    public function update(Request $request, $id)
-    {
-        // TODO: Create UpdateFlacFile request
-        $this->flacFile->update($id, $request->all());
-
-        return new FlacFileResource($this->flacFile->findById($id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->flacFile->delete($id);
-
-        return response(['success' => true], 200);
+        return UpdateFlacFile::class;
     }
 }

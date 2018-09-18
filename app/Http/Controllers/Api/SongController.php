@@ -3,88 +3,50 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\SongRepositoryInterface;
-use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSong;
+use App\Http\Requests\UpdateSong;
 use App\Http\Resources\SongResource;
-use Illuminate\Http\Request;
 
-class SongController extends Controller
+class SongController extends ApiController
 {
 
     /**
-     * @var SongRepositoryInterface
-     */
-    private $song;
-
-    /**
-     * SongController constructor.
+     * Should return the <RepositoryInterface>::class
      *
-     * @param SongRepositoryInterface $song
+     * @return string
      */
-    public function __construct(SongRepositoryInterface $song)
+    public function repository()
     {
-        $this->song = $song;
+        return SongRepositoryInterface::class;
     }
 
     /**
-     * Display a listing of the resource.
+     * Should return the <Resource>::class
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return string
      */
-    public function all()
+    public function resource()
     {
-        return SongResource::collection(
-            $this->song->all()
-        );
+        return SongResource::class;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Should return <StoreRequest>::class
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return SongResource
+     * @return string
      */
-    public function store(Request $request)
+    public function storeRequest()
     {
-        // TODO: Create StoreSong request
-        return new SongResource($this->song->create($request->all()));
+        return StoreSong::class;
     }
 
     /**
-     * Display the specified resource.
+     * Should return <UpdateRequest>::class
      *
-     * @param  int $id
-     * @return SongResource
+     * @return string
      */
-    public function show($id)
+    public function updateRequest()
     {
-        return new SongResource($this->song->findById($id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return SongResource
-     */
-    public function update(Request $request, $id)
-    {
-        // TODO: Create UpdateSong request
-        $this->song->update($id, $request->all());
-
-        return new SongResource($this->song->findById($id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->song->delete($id);
-
-        return response(['success' => true], 200);
+        return UpdateSong::class;
     }
 }
