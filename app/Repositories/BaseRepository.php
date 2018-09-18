@@ -21,7 +21,7 @@ abstract class BaseRepository implements RepositoryShouldRead
 
     public function findById($id)
     {
-        return $this->model()->find($id);
+        return $this->model()->findOrFail($id);
     }
 
     public function delete($id)
