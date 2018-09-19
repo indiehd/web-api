@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Song;
 use App\Contracts\SongRepositoryInterface;
 
-class SongRepository extends BaseRepository implements SongRepositoryInterface
+class SongRepository extends CrudRepository implements SongRepositoryInterface
 {
     /**
      * @var string $class
@@ -30,10 +30,5 @@ class SongRepository extends BaseRepository implements SongRepositoryInterface
     public function model()
     {
         return $this->song;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
     }
 }

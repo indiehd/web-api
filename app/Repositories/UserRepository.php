@@ -7,7 +7,7 @@ use App\Contracts\AccountRepositoryInterface;
 use App\User;
 use Illuminate\Contracts\Hashing\Hasher;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class UserRepository extends CrudRepository implements UserRepositoryInterface
 {
     /**
      * @var string $class
@@ -58,16 +58,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->user;
     }
 
-    public function all()
-    {
-        return $this->user->all();
-    }
-
-    public function findById($id)
-    {
-        return $this->user->find($id);
-    }
-
     public function songs()
     {
         return $this->catalogable() ? $this->catalogable()->songs : $this->purchasedSongs();
@@ -104,16 +94,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return $model;
     }
-
-    public function delete($id)
-    {
-        return $this->findById($id)->delete();
-    }
-
-    /*
-     * Protected Methods
-     * -----------------
-     */
 
     protected function catalogable()
     {

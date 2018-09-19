@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Sku;
 use App\Contracts\SkuRepositoryInterface;
 
-class SkuRepository extends BaseRepository implements SkuRepositoryInterface
+class SkuRepository extends CrudRepository implements SkuRepositoryInterface
 {
     /**
      * @var string $class
@@ -30,10 +30,5 @@ class SkuRepository extends BaseRepository implements SkuRepositoryInterface
     public function model()
     {
         return $this->sku;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
     }
 }

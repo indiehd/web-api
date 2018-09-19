@@ -6,6 +6,7 @@ use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepositoryTest extends RepositoryCrudTestCase
 {
@@ -115,7 +116,11 @@ class UserRepositoryTest extends RepositoryCrudTestCase
 
         $user->delete();
 
-        $this->assertNull($this->repo->findById($user->id));
+        try {
+            $this->repo->findById($user->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**
