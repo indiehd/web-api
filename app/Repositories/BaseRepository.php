@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use DB;
-
 abstract class BaseRepository
 {
+    abstract public function model();
+
     public function all()
     {
         return $this->model()->all();
