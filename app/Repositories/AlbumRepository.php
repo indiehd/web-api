@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Album;
 use App\Contracts\AlbumRepositoryInterface;
 
-class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
+class AlbumRepository extends CrudRepository implements AlbumRepositoryInterface
 {
     /**
      * @var string $class
@@ -30,10 +30,5 @@ class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
     public function model()
     {
         return $this->album;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
     }
 }

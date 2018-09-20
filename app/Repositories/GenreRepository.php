@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Genre;
 use App\Contracts\GenreRepositoryInterface;
 
-class GenreRepository extends BaseRepository implements GenreRepositoryInterface
+class GenreRepository extends CrudRepository implements GenreRepositoryInterface
 {
     /**
      * @var string $class
@@ -30,10 +30,5 @@ class GenreRepository extends BaseRepository implements GenreRepositoryInterface
     public function model()
     {
         return $this->genre;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
     }
 }

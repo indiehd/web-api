@@ -6,6 +6,7 @@ use CountriesSeeder;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AccountRepositoryTest extends RepositoryCrudTestCase
 {
@@ -98,7 +99,11 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
 
         $account->delete();
 
-        $this->assertNull($this->repo->findById($account->id));
+        try {
+            $this->repo->findById($account->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

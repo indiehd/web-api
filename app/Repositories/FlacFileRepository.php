@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\FlacFile;
 use App\Contracts\FlacFileRepositoryInterface;
 
-class FlacFileRepository extends BaseRepository implements FlacFileRepositoryInterface
+class FlacFileRepository extends CrudRepository implements FlacFileRepositoryInterface
 {
     /**
      * @var string $class
@@ -30,10 +30,5 @@ class FlacFileRepository extends BaseRepository implements FlacFileRepositoryInt
     public function model()
     {
         return $this->flacFile;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
     }
 }

@@ -7,6 +7,7 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProfileRepositoryTest extends RepositoryCrudTestCase
 {
@@ -137,7 +138,11 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
 
         $profile->delete();
 
-        $this->assertNull($this->repo->findById($profile->id));
+        try {
+            $this->repo->findById($profile->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

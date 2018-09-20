@@ -6,7 +6,7 @@ use App\Label;
 use App\Contracts\LabelRepositoryInterface;
 use App\Traits\IsProfilable;
 
-class LabelRepository extends BaseRepository implements LabelRepositoryInterface
+class LabelRepository extends CrudRepository implements LabelRepositoryInterface
 {
     use IsProfilable;
 
@@ -33,16 +33,6 @@ class LabelRepository extends BaseRepository implements LabelRepositoryInterface
     public function model()
     {
         return $this->label;
-    }
-
-    public function all()
-    {
-        return $this->model()->all();
-    }
-
-    public function findById($id)
-    {
-        return $this->model()->find($id);
     }
 
     public function create(array $data)
@@ -73,6 +63,6 @@ class LabelRepository extends BaseRepository implements LabelRepositoryInterface
 
     public function profile()
     {
-        $this->artist->profile();
+        $this->label->profile();
     }
 }
