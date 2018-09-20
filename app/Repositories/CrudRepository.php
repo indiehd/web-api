@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use DB;
+
 abstract class CrudRepository extends BaseRepository
 {
     public function create(array $data)
