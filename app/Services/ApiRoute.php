@@ -26,6 +26,8 @@ class ApiRoute
     {
         $this->prefix = $prefix;
         $this->controller = $controller;
+
+        $this->mapDefaultRoutes();
     }
 
     public function mapDefaultRoutes()
@@ -51,13 +53,31 @@ class ApiRoute
 
     public function mapAdditionalRoute($uri, $controllerMethod, $httpMethod = 'get')
     {
+        $controller = $this->controller;
+        $prefix = $this->prefix;
         $httpMethod = strtolower($httpMethod);
         $controllerMethod = snake_case($controllerMethod);
 
-        $controller = $this->controller;
-        $prefix = $this->prefix;
-
-        Route::$httpMethod($uri, "$controller@$controllerMethod")->name("$prefix.$controllerMethod");
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(function () use (
+                $controller,
+                $prefix,
+                $uri,
+                $controllerMethod,
+                $httpMethod
+            ) {
+                Route::prefix($this->prefix)->group(function () use (
+                    $controller,
+                    $prefix,
+                    $uri,
+                    $controllerMethod,
+                    $httpMethod
+                ) {
+                    Route::$httpMethod($uri, "$controller@$controllerMethod")->name("$prefix.$controllerMethod");
+                });
+            });
 
         return $this;
     }
