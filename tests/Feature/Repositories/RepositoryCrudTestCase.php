@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Repositories;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 abstract class RepositoryCrudTestCase extends RepositoryReadOnlyTestCase
 {
     /**
@@ -36,6 +38,10 @@ abstract class RepositoryCrudTestCase extends RepositoryReadOnlyTestCase
 
         $model->delete();
 
-        $this->assertNull($this->repo->findById($model->id));
+        try {
+            $this->repo->findById($model->id);
+        } catch(ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 }
