@@ -30,8 +30,6 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
      */
     abstract public function setRepository();
 
-    abstract public function make();
-
     /**
      * Ensure the property $repo is instantiable.
      *

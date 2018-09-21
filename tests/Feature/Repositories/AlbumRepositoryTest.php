@@ -5,17 +5,11 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
-    /**
-     * @var $profile ProfileRepositoryInterface
-     */
-    protected $profile;
-
     /**
      * @var $album AlbumRepositoryInterface
      */
@@ -36,16 +30,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     protected $genre;
 
-    /**
-     * @inheritdoc
-     */
     public function setUp()
     {
         parent::setUp();
 
         $this->seed('CountriesSeeder');
-
-        $this->profile = resolve(ProfileRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
@@ -63,15 +52,15 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make a new Album object.
+     * Creates a new Album.
      *
-     * @param array $properties
      * @return \App\Album
-     *
      */
-    public function make(array $properties = [])
+    public function createAlbum()
     {
-        return factory($this->repo->class())->make($properties);
+        return factory($this->repo->class())->create([
+            'artist_id' => factory($this->artist->class())->create()->id
+        ]);
     }
 
     /**
@@ -79,17 +68,15 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $artist = $this->artist->testClass()->make(
-            $this->profile->testClass()->make()->toArray()
-        );
+        $artist = factory($this->artist->class())->create();
 
-        $artist = $this->artist->create($artist->toArray());
-
-        $album = $this->make(['artist_id' => $artist->id]);
+        $album = factory($this->repo->class())->make([
+            'artist_id' => $artist->id
+        ])->toArray();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($album->toArray())
+            $this->repo->create($album)
         );
     }
 
@@ -158,7 +145,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_artist_albumBelongsToArtist()
     {
-        $this->assertInstanceOf($this->artist->class(), $this->make()->artist);
+        $this->assertInstanceOf($this->artist->class(), $this->createAlbum()->artist);
     }
 
     /**

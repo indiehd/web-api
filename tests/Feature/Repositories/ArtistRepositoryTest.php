@@ -71,20 +71,6 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make a new Artist object.
-     *
-     * @param array $properties
-     * @return \App\Artist
-     *
-     */
-    public function make(array $properties = [])
-    {
-        $this->setRepository();
-
-        return factory($this->repo->class())->make($properties);
-    }
-
-    /**
      * Ensure the method create() creates a new record in the database and creates a profile for
      * said Artist.
      *

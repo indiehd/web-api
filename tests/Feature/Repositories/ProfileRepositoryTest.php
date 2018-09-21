@@ -65,20 +65,6 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make a new Profile object.
-     *
-     * @param array $properties
-     * @return \App\Profile
-     *
-     */
-    public function make(array $properties = [])
-    {
-        $this->setRepository();
-
-        return factory($this->repo->class())->make($properties);
-    }
-
-    /**
      * @inheritdoc
      */
     public function test_method_create_storesNewResource()

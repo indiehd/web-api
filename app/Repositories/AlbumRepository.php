@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Album;
 use App\Contracts\AlbumRepositoryInterface;
-use Tests\Feature\Repositories\AlbumRepositoryTest;
 
 class AlbumRepository extends CrudRepository implements AlbumRepositoryInterface
 {
@@ -31,10 +30,5 @@ class AlbumRepository extends CrudRepository implements AlbumRepositoryInterface
     public function model()
     {
         return $this->album;
-    }
-
-    public function testClass()
-    {
-        return resolve(AlbumRepositoryTest::class);
     }
 }

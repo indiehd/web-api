@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Genre;
 use App\Contracts\GenreRepositoryInterface;
-use Tests\Feature\Repositories\GenreRepositoryTest;
 
 class GenreRepository extends CrudRepository implements GenreRepositoryInterface
 {
@@ -31,10 +30,5 @@ class GenreRepository extends CrudRepository implements GenreRepositoryInterface
     public function model()
     {
         return $this->genre;
-    }
-
-    public function testClass()
-    {
-        return resolve(GenreRepositoryTest::class);
     }
 }
