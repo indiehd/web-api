@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\ProfileRepositoryInterface;
 use App\Profile;
+use Tests\Feature\Repositories\ProfileRepositoryTest;
 
 class ProfileRepository extends CrudRepository implements ProfileRepositoryInterface
 {
@@ -40,5 +41,10 @@ class ProfileRepository extends CrudRepository implements ProfileRepositoryInter
     public function model()
     {
         return $this->profile;
+    }
+
+    public function testClass()
+    {
+        return resolve(ProfileRepositoryTest::class);
     }
 }

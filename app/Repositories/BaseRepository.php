@@ -6,6 +6,8 @@ abstract class BaseRepository
 {
     abstract public function model();
 
+    abstract public function testClass();
+
     public function all()
     {
         return $this->model()->all();

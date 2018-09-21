@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Artist;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Traits\IsProfilable;
+use Tests\Feature\Repositories\ArtistRepositoryTest;
 
 class ArtistRepository extends CrudRepository implements ArtistRepositoryInterface
 {
@@ -33,6 +34,11 @@ class ArtistRepository extends CrudRepository implements ArtistRepositoryInterfa
     public function model()
     {
         return $this->artist;
+    }
+
+    public function testClass()
+    {
+        return resolve(ArtistRepositoryTest::class);
     }
 
     public function create(array $data)

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Song;
 use App\Contracts\SongRepositoryInterface;
+use Tests\Feature\Repositories\SongRepositoryTest;
 
 class SongRepository extends CrudRepository implements SongRepositoryInterface
 {
@@ -30,5 +31,10 @@ class SongRepository extends CrudRepository implements SongRepositoryInterface
     public function model()
     {
         return $this->song;
+    }
+
+    public function testClass()
+    {
+        return resolve(SongRepositoryTest::class);
     }
 }
