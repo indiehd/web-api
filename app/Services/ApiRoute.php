@@ -30,7 +30,7 @@ class ApiRoute
         $this->mapDefaultRoutes();
     }
 
-    public function mapDefaultRoutes()
+    protected function mapDefaultRoutes()
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
