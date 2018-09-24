@@ -45,10 +45,8 @@ class ApiRouteServiceProvider extends ServiceProvider
         // ...
     }
 
-    private function mapRoutes($prefix, $controller)
+    protected function mapRoutes($prefix, $controller)
     {
-        $dto = new ApiRoute($prefix, $controller);
-        $dto->mapDefaultRoutes();
-        return $dto;
+        return new ApiRoute($prefix, $controller);
     }
 }
