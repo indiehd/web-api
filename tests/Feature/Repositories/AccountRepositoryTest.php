@@ -69,13 +69,19 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $account = factory($this->repo->class())->make([
-            'user_id' => factory($this->user->class())->create()->id
-        ])->toArray();
+        $user = $this->makeUser();
+
+        // Normally, the User Repository injects this repository and creates
+        // the Account. So, to test this repository independently, we'll simply
+        // delete the previously-associated account and store a new one.
+
+        $account = factory($this->repo->class())->make(['user_id' => $user->id]);
+
+        $user->account->delete();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($account)
+            $this->repo->create(['user_id' => $user->id] + $account->toArray())
         );
     }
 
