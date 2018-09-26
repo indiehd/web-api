@@ -2,19 +2,48 @@
 
 namespace Tests\Feature\Repositories;
 
+use App\Contracts\ProfileRepositoryInterface;
 use CountriesSeeder;
 use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var $profile ProfileRepositoryInterface
+     */
+    protected $profile;
+
+    /**
+     * @var $artist ArtistRepositoryInterface
+     */
+    protected $artist;
+
+    /**
+     * @var $album AlbumRepositoryInterface
+     */
+    protected $album;
+
+    /**
+     * @var $song SongRepositoryInterface
+     */
+    protected $song;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
 
         $this->seed(CountriesSeeder::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
 
@@ -34,11 +63,11 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $flacFile = factory($this->repo->class())->make()->toArray();
+        $flacFile = factory($this->repo->class())->make();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($flacFile)
+            $this->repo->create($flacFile->toArray())
         );
     }
 
@@ -47,7 +76,9 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $flacFile = factory($this->repo->class())->create();
+        $flacFile = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $newValue = str_random(32);
 
@@ -67,7 +98,9 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $flacFile = factory($this->repo->class())->create();
+        $flacFile = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $updated = $this->repo->update($flacFile->id, []);
 
@@ -79,7 +112,9 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $flacFile = factory($this->repo->class())->create();
+        $flacFile = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $flacFile->delete();
 
@@ -98,12 +133,31 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_song_flacFile_hasManySongs()
     {
-        $flacFile = factory($this->repo->class())->create();
+        // TODO This is identical to the AlbumRepositoryTest::makeAlbum() method.
+        // Is there any compelling reason to make this more DRY?
+
+        $artist = $this->artist->create(
+            factory($this->artist->class())->make(
+                factory($this->profile->class())->make()->toArray()
+            )->toArray()
+        );
+
+        // This is the one property that can't passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        $album = $this->album->create(
+            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+        );
 
         $song = factory($this->song->class())->create([
-            'album_id' => factory($this->album->class())->create()->id,
+            'album_id' => $album->id,
             'track_number' => 1,
         ]);
+
+        $flacFile = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $song->flacFile()->associate($flacFile)->save();
 
