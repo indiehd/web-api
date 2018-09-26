@@ -5,7 +5,6 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
-use App\Contracts\SkuRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
@@ -21,11 +20,6 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     protected $flacFile;
 
     /**
-     * @var SkuRepositoryInterface $sku
-     */
-    protected $sku;
-
-    /**
      * @inheritdoc
      */
     public function setUp()
@@ -37,8 +31,6 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->flacFile = resolve(FlacFileRepositoryInterface::class);
-
-        $this->sku = resolve(SkuRepositoryInterface::class);
     }
 
     /**
@@ -148,15 +140,5 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         ]);
 
         $this->assertInstanceOf($this->flacFile->class(), $this->spawnSong()->flacFile);
-    }
-
-    /**
-     * Ensure that a newly-created Song belongs to a Sku.
-     *
-     * @return void
-     */
-    public function test_sku_song_belongsToSku()
-    {
-        $this->assertInstanceOf($this->sku->class(), $this->spawnSong()->sku);
     }
 }

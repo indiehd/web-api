@@ -20,11 +20,14 @@ class CreateSongsTable extends Migration
             $table->unsignedInteger('flac_file_id');
             $table->unsignedTinyInteger('track_number')->default(1);
             $table->unsignedDecimal('preview_start', 7, 3)->default(0.000);
+            $table->unsignedDecimal('price', 8, 4);
+            $table->boolean('is_digital')->default(true);
+            $table->boolean('is_taxable')->default(false);
+            $table->boolean('requires_shipping')->default(false);
             $table->boolean('is_active')->default(true);
             // TODO Uncomment these once the back-catalog is implemented.
             #$table->boolean('is_in_back_catalog')->default(false);
             #$table->unsignedInteger('catalog_id');
-            $table->unsignedInteger('sku_id');
             $table->unsignedInteger('album_id');
             $table->unique(['album_id', 'track_number'], 'unique_track_per_album');
             $table->softDeletes();
