@@ -39,15 +39,14 @@ class LabelRepository extends CrudRepository implements LabelRepositoryInterface
     {
         $model = $this->model()->create([]);
 
-        $this->profilable()->create([
-            'moniker' => $data['moniker'],
-            'city' => $data['city'],
-            'territory' => $data['territory'],
-            'country_code' => $data['country_code'],
-            'profile_url' => $data['profile_url'],
-            'profilable_id' => $model->id,
-            'profilable_type' => $this->class
-        ]);
+        $this->createProfile(
+            $model,
+            $data['moniker'],
+            $data['city'],
+            $data['territory'],
+            $data['country_code'],
+            $data['profile_url']
+        );
 
         return $model;
     }
@@ -56,7 +55,7 @@ class LabelRepository extends CrudRepository implements LabelRepositoryInterface
     {
         $model = $this->findById($id);
 
-        $this->profilable()->update($model->profile->id, $data);
+        $this->updateProfile($model->profile->id, $data);
 
         return $model;
     }
