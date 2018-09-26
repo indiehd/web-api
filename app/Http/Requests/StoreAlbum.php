@@ -24,14 +24,13 @@ class StoreAlbum extends FormRequest
     public function rules()
     {
         return [
-            'artists_id' => 'required|integer|exists:artists,id',
+            'artist_id' => 'required|integer|exists:artists,id',
             'title' => 'required|string|max:255',
             'alt_title' => 'string|max:255',
-            'year' => 'required|integer',
+            'year' => 'required|integer|min:1900|max:' . (string)(date('Y') + 1),
             'description' => 'max:255',
             'has_explicit_lyrics' => 'required|boolean',
             'full_album_price' => 'between:0.00,999.99',
-            'rank' => 'integer|between:1,20',
             'is_active' => 'boolean',
             'deleter_id' => 'integer|exists:users,id'
         ];
