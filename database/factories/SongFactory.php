@@ -26,10 +26,11 @@ $factory->define(Song::class, function (Faker $faker) {
         },
         'track_number' => null, // passed during creation
         'preview_start' => $faker->numberBetween(0, 60),
+        'price' => (float)(rand(0, 10).'.'.rand(0, 9).rand(0, 9)),
+        'is_digital' => 1,
+        'is_taxable' => 0,
+        'requires_shipping' => false,
         'is_active' => $faker->boolean(85),
-        'sku_id' => function() {
-            return factory(Sku::class)->create()->id;
-        },
         'album_id' => null, // passed during creation
         #'is_in_back_catalog' => $faker->boolean(95),
     ];
