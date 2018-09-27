@@ -139,7 +139,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $profile = factory($this->profile->class())->make(['country_code' => 'US']);
+        $profile = factory($this->profile->class())->make();
 
         $artist = $this->repo->create($profile->toArray());
 
@@ -153,7 +153,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $profile = factory($this->profile->class())->make(['country_code' => 'US']);
+        $profile = factory($this->profile->class())->make();
 
         $artist = $this->repo->create($profile->toArray());
 
