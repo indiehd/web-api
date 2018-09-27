@@ -12,6 +12,17 @@ use App\Http\Requests\UpdateArtist;
 
 class ArtistControllerTest extends ControllerTestCase
 {
+
+    /**
+     * @var ArtistRepositoryInterface $artist
+     */
+    protected $artist;
+
+    /**
+     * @var ProfileRepositoryInterface $profile
+     */
+    protected $profile;
+
     /**
      * @var StoreArtist
      */
@@ -28,15 +39,10 @@ class ArtistControllerTest extends ControllerTestCase
 
         $this->seed(CountriesSeeder::class);
 
-        $this->country = resolve(CountryRepositoryInterface::class);
         $this->artist = resolve(ArtistRepositoryInterface::class);
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
-        // New-up the Form Request classes directly, only so we can get the
-        // validation rules from them dynamically.
-
         $this->storeArtist = new StoreArtist();
-
         $this->updateArtist = new UpdateArtist();
     }
 
