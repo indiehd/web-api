@@ -6,11 +6,21 @@ abstract class BaseRepository
 {
     abstract public function model();
 
-    public function all()
+    /**
+     * @param int|null $paginate
+     * @return mixed
+     */
+    public function all(int $paginate = null)
     {
-        return $this->model()->all();
+        return is_null($paginate)
+            ? $this->model()->all()
+            : $this->model()->paginate($paginate);
     }
 
+    /**
+     * @return object
+     * @throws \ReflectionException
+     */
     public function new()
     {
         $class = new \ReflectionClass($this->class());
@@ -18,6 +28,10 @@ abstract class BaseRepository
         return $class->newInstance();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findById($id)
     {
         return $this->model()->findOrFail($id);
