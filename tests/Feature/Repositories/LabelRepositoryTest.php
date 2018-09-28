@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
+use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
@@ -13,22 +14,27 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class LabelRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var  $profile  ProfileRepositoryInterface
+     * @var AccountRepositoryInterface $account
+     */
+    protected $account;
+
+    /**
+     * @var ProfileRepositoryInterface $profile
      */
     protected $profile;
 
     /**
-     * @var $catalogEntity CatalogEntityRepositoryInterface
+     * @var CatalogEntityRepositoryInterface $catalogEntity
      */
     protected $catalogEntity;
 
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface $user
      */
     protected $user;
 
     /**
-     * @var $album AlbumRepositoryInterface
+     * @var AlbumRepositoryInterface $album
      */
     protected $album;
 
@@ -40,6 +46,8 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
         parent::setUp();
 
         $this->seed('CountriesSeeder');
+
+        $this->account = resolve(AccountRepositoryInterface::class);
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
@@ -58,6 +66,28 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(LabelRepositoryInterface::class);
+    }
+
+    /**
+     * Make a new User object.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    public function makeUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->account->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'username' => $user->username,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
     }
 
     /**
@@ -99,9 +129,9 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $profile = factory($this->profile->class())->make()->toArray();
+        $profile = factory($this->profile->class())->make();
 
-        $label = $this->repo->create($profile);
+        $label = $this->repo->create($profile->toArray());
 
         $updated = $this->repo->update($label->id, []);
 
@@ -113,9 +143,9 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $profile = factory($this->profile->class())->make()->toArray();
+        $profile = factory($this->profile->class())->make();
 
-        $label = $this->repo->create($profile);
+        $label = $this->repo->create($profile->toArray());
 
         factory($this->artist->class())->create([
             'label_id' => $label->id
@@ -137,18 +167,31 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_catalogable_withNewLabel_morphsToCatalogableEntity()
     {
-        $label = factory($this->repo->class())->create();
+        $label = $this->repo->create(
+            factory($this->profile->class())->make()->toArray()
+        );
 
-        factory($this->catalogEntity->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
+        $user = $this->makeUser();
+
+        $catalogEntity = factory($this->catalogEntity->class())->make([
+            'user_id' => $user->id,
             'catalogable_id' => $label->id,
             'catalogable_type' => $this->repo->class()
         ]);
 
-        factory($this->profile->class())->create([
+        $this->catalogEntity->create($catalogEntity->toArray());
+
+        $profile = factory($this->profile->class())->make([
             'profilable_id' => $label->id,
             'profilable_type' => $this->repo->class()
         ]);
+
+        $this->profile->create($profile->toArray());
+
+        $this->assertInstanceOf(
+            $this->catalogEntity->class(),
+            $label->catalogable
+        );
 
         $this->assertInstanceOf($this->catalogEntity->class(), $label->catalogable);
     }
@@ -160,18 +203,13 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_profile_withNewLabel_morphsToProfile()
     {
-        $label = factory($this->repo->class())->create();
+        $profile = factory($this->profile->class())->make();
 
-        factory($this->catalogEntity->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
-            'catalogable_id' => $label->id,
-            'catalogable_type' => $this->repo->class()
-        ]);
+        $label = factory($this->repo->class())->make(
+            $profile->toArray()
+        );
 
-        factory($this->profile->class())->create([
-            'profilable_id' => $label->id,
-            'profilable_type' => $this->repo->class()
-        ]);
+        $label = $this->repo->create($label->toArray());
 
         $this->assertInstanceOf($this->profile->class(), $label->profile);
     }
@@ -184,7 +222,13 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_artists_whenAssociatedWithLabel_labelHasManyArtists()
     {
-        $artist = factory($this->artist->class())->state('onLabel')->create();
+        $label = $this->repo->create(
+            factory($this->profile->class())->make()->toArray()
+        );
+
+        $artist = $this->artist->create(
+            factory($this->profile->class())->make(['label_id' => $label->id])->toArray()
+        );
 
         $this->assertInstanceOf($this->artist->class(), $artist->label->artists->first());
     }
@@ -197,9 +241,17 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_albums_whenAssociatedWithLabelThroughArtist_labelHasManyAlbums()
     {
-        $artist = factory($this->artist->class())->state('onLabel')->create();
+        $label = $this->repo->create(
+            factory($this->profile->class())->make()->toArray()
+        );
 
-        factory($this->album->class())->create(['artist_id' => $artist->id]);
+        $artist = $this->artist->create(
+            factory($this->profile->class())->make(['label_id' => $label->id])->toArray()
+        );
+
+        $this->album->create(
+            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+        );
 
         $this->assertInstanceOf($this->album->class(), $artist->label->albums->first());
     }
