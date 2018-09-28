@@ -68,12 +68,12 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $profile = factory($this->profile->class())->make()->toArray();
+        $profile = factory($this->profile->class())->make();
 
-        $artist = $this->repo->create($profile);
+        $label = $this->repo->create($profile->toArray());
 
-        $this->assertInstanceOf($this->repo->class(), $artist);
-        $this->assertInstanceOf($this->profile->class(), $artist->profile);
+        $this->assertInstanceOf($this->repo->class(), $label);
+        $this->assertInstanceOf($this->profile->class(), $label->profile);
     }
 
     /**
