@@ -3,6 +3,7 @@
 namespace Tests\Feature\Repositories;
 
 use App\Contracts\UserRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
@@ -19,6 +20,11 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      * @var UserRepositoryInterface $user
      */
     protected $user;
+
+    /**
+     * @var ProfileRepositoryInterface $profile
+     */
+    protected $profile;
 
     /**
      * @var ArtistRepositoryInterface $artist
@@ -43,6 +49,8 @@ class UserRepositoryTest extends RepositoryCrudTestCase
 
         $this->user = resolve(UserRepositoryInterface::class);
 
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
@@ -57,21 +65,46 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Create a new User object.
+     *
+     * @return \App\User
+     */
+    public function createUser()
+    {
+        $user = factory($this->user->class())->make();
+
+        $user = $this->user->create([
+            'username' => $user->username,
+            'password' => $user->password,
+            'account' => factory($this->account->class())->make()->toArray()
+        ]);
+
+        return $user;
+    }
+
+    public function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])
+    {
+        $user = $this->createUser();
+
+        $profile = factory($this->profile->class())->make();
+
+        $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
+
+        return factory($this->catalogEntity->class())->make(array_merge([
+            'catalogable_id' => $entity->id,
+            'catalogable_type' => $type->class(),
+            'user_id' => $user->id
+        ], $catalogableProperties));
+    }
+
+    /**
      * @inheritdoc
      */
     public function test_method_create_storesNewResource()
     {
-        $user = factory($this->repo->class())->make();
-
-        $account = factory($this->account->class())->make()->toArray();
-
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create([
-                'username' => $user->username,
-                'password' => $user->password,
-                'account' => $account,
-            ])
+            $this->createUser()
         );
     }
 
@@ -80,7 +113,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $user = factory($this->repo->class())->create();
+        $user = $this->createUser();
 
         $newValue = str_random(32);
 
@@ -100,7 +133,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $user = factory($this->repo->class())->create();
+        $user = $this->createUser();
 
         $updated = $this->repo->update($user->id, []);
 
@@ -112,7 +145,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $user = factory($this->repo->class())->create();
+        $user = $this->createUser();
 
         $user->delete();
 
@@ -131,13 +164,9 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_entities_whenUserAssociatedWithCatalogEntity_userHasManyCatalogEntities()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $catalogEntity = factory($this->catalogEntity->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
-            'catalogable_id' => $artist->id,
-            'catalogable_type' => $this->artist->class(),
-        ]);
+        $catalogEntity = $this->catalogEntity->create(
+            $this->makeCatalogEntity($this->artist)->toArray()
+        );
 
         $this->assertInstanceOf($this->catalogEntity->class(), $catalogEntity->user->entities->first());
     }
@@ -149,7 +178,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_account_whenUserAssociatedWithAccount_userHasOneAccount()
     {
-        $user = factory($this->user->class())/*->states('withAccount')*/->create();
+        $user = $this->createUser();
 
         $this->assertInstanceOf($this->account->class(), $user->account);
     }
