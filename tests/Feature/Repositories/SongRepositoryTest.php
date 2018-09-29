@@ -41,6 +41,9 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->repo = resolve(SongRepositoryInterface::class);
     }
 
+    /**
+     * @return \App\Song
+     */
     public function createSong()
     {
         $album = $this->album->create(
