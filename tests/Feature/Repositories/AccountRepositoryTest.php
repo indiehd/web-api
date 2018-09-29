@@ -20,6 +20,9 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     protected $country;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
@@ -40,17 +43,45 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Make a new User object.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    public function makeUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->repo->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'username' => $user->username,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
+    }
+
+    /**
      * @inheritdoc
      */
     public function test_method_create_storesNewResource()
     {
-        $account = factory($this->repo->class())->make([
-            'user_id' => factory($this->user->class())->create()->id
-        ])->toArray();
+        $user = $this->makeUser();
+
+        // Normally, the User Repository injects this repository and creates
+        // the Account. So, to test this repository independently, we'll simply
+        // delete the previously-associated account and store a new one.
+
+        $account = factory($this->repo->class())->make(['user_id' => $user->id]);
+
+        $user->account->delete();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($account)
+            $this->repo->create(['user_id' => $user->id] + $account->toArray())
         );
     }
 
@@ -59,18 +90,16 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $account = factory($this->repo->class())->create([
-            'user_id' => factory($this->user->class())->create()->id
-        ]);
+        $user = $this->makeUser();
 
         $newValue = 'Foobius Barius';
 
-        $this->repo->update($account->id, [
+        $this->repo->update($user->account->id, [
             'first_name' => $newValue,
         ]);
 
         $this->assertTrue(
-            $this->repo->findById($account->id)->first_name === $newValue
+            $this->repo->findById($user->account->id)->first_name === $newValue
         );
     }
 
@@ -79,11 +108,9 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $account = factory($this->repo->class())->create([
-            'user_id' => factory($this->user->class())->create()->id
-        ]);
+        $user = $this->makeUser();
 
-        $updated = $this->repo->update($account->id, []);
+        $updated = $this->repo->update($user->account->id, []);
 
         $this->assertInstanceOf($this->repo->class(), $updated);
     }
@@ -93,14 +120,12 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $account = factory($this->repo->class())->make([
-            'user_id' => factory($this->user->class())->create()->id
-        ]);
+        $user = $this->makeUser();
 
-        $account->delete();
+        $user->account->delete();
 
         try {
-            $this->repo->findById($account->id);
+            $this->repo->findById($user->account->id);
         } catch(ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
@@ -113,11 +138,9 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_user_accountBelongsToUser()
     {
-        $account = factory($this->repo->class())->create([
-            'user_id' => factory($this->user->class())->create()->id
-        ]);
+        $user = $this->makeUser();
 
-        $this->assertInstanceOf($this->user->class(), $account->user);
+        $this->assertInstanceOf($this->user->class(), $user->account->user);
     }
 
     /**
@@ -127,11 +150,8 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_country_accountBelongsToCountry()
     {
-        $account = factory($this->repo->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
-            'country_code' => 'US',
-        ]);
+        $user = $this->makeUser([], ['country_code' => 'US']);
 
-        $this->assertInstanceOf($this->country->class(), $account->country);
+        $this->assertInstanceOf($this->country->class(), $user->account->country);
     }
 }

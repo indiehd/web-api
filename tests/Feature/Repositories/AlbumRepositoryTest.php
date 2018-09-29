@@ -5,6 +5,7 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -21,6 +22,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected $artist;
 
     /**
+     * @var $profile ProfileRepositoryInterface
+     */
+    protected $profile;
+
+    /**
      * @var $song SongRepositoryInterface
      */
     protected $song;
@@ -30,6 +36,9 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     protected $genre;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
@@ -37,6 +46,8 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         $this->seed('CountriesSeeder');
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
 
         $this->song = resolve(SongRepositoryInterface::class);
 
@@ -54,13 +65,22 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * Creates a new Album.
      *
+     * @param array $properties
      * @return \App\Album
      */
-    public function createAlbum()
+    public function makeAlbum(array $properties = [])
     {
-        return factory($this->repo->class())->create([
-            'artist_id' => factory($this->artist->class())->create()->id
-        ]);
+        $artist = $this->artist->create(
+            factory($this->artist->class())->make(
+                factory($this->profile->class())->make()->toArray()
+            )->toArray()
+        );
+
+        // This is the one property that can't passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->repo->class())->make($properties);
     }
 
     /**
@@ -68,15 +88,9 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $album = factory($this->repo->class())->make([
-            'artist_id' => $artist->id
-        ])->toArray();
-
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($album)
+            $this->repo->create($this->makeAlbum()->toArray())
         );
     }
 
@@ -85,11 +99,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $album = factory($this->repo->class())->create([
-            'artist_id' => $artist->id
-        ]);
+        $album = $this->repo->create($this->makeAlbum()->toArray());
 
         $newTitle = 'Foo Bar';
 
@@ -107,11 +117,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $album = factory($this->repo->class())->create([
-            'artist_id' => $artist->id
-        ]);
+        $album = $this->repo->create($this->makeAlbum()->toArray());
 
         $updated = $this->repo->update($album->id, []);
 
@@ -123,11 +129,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $album = factory($this->repo->class())->create([
-            'artist_id' => $artist->id
-        ]);
+        $album = $this->repo->create($this->makeAlbum()->toArray());
 
         $album->delete();
 
@@ -145,7 +147,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_artist_albumBelongsToArtist()
     {
-        $this->assertInstanceOf($this->artist->class(), $this->createAlbum()->artist);
+        $this->assertInstanceOf($this->artist->class(), $this->makeAlbum()->artist);
     }
 
     /**
@@ -155,9 +157,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_songs_albumHasManySongs()
     {
-        $album = factory($this->repo->class())->create([
-            'artist_id' => factory($this->artist->class())->create()->id
-        ]);
+        $album = $this->repo->create($this->makeAlbum()->toArray());
 
         factory($this->song->class())->create([
             'track_number' => 1,
@@ -174,11 +174,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_genres_albumBelongsToManyGenres()
     {
-        $album = factory($this->repo->class())->create([
-            'artist_id' => factory($this->artist->class())->create()->id
-        ]);
+        $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        $album->genres()->attach(factory($this->genre->class())->create()->id);
+        $genre = $this->genre->create(factory($this->genre->class())->make()->toArray());
+
+        $album->genres()->attach($genre->id);
 
         $this->assertInstanceOf($this->genre->class(), $album->genres->first());
     }

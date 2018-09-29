@@ -37,14 +37,16 @@ class ArtistRepository extends CrudRepository implements ArtistRepositoryInterfa
 
     public function create(array $data)
     {
-        $model = $this->model()->create([]);
+        $model = $this->model()->create([
+            'label_id' => $data['label_id'] ?? null
+        ]);
 
         $this->createProfile(
             $model,
             $data['moniker'],
-            $data['city'],
-            $data['territory'],
-            $data['country_code'],
+            $data['city'] ?? null,
+            $data['territory'] ?? null,
+            $data['country_code'] ?? null,
             $data['profile_url']
         );
 
