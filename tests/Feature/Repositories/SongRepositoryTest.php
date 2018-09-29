@@ -41,12 +41,18 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->repo = resolve(SongRepositoryInterface::class);
     }
 
-    public function spawnSong()
+    public function createSong()
     {
-        return factory($this->repo->class())->create([
-            'album_id' => factory($this->album->class())->create()->id,
-            'track_number' => 1,
-        ]);
+        $album = $this->album->create(
+            factory($this->album->class())->raw()
+        );
+
+        return $this->repo->create(
+            factory($this->repo->class())->raw([
+                'album_id' => $album->id,
+                'track_number' => 1,
+            ])
+        );
     }
 
     /**
@@ -54,16 +60,9 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_create_storesNewResource()
     {
-        $album = factory($this->album->class())->create();
-
-        $song = factory($this->repo->class())->make([
-            'album_id' => $album->id,
-            'track_number' => 1,
-        ])->toArray();
-
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($song)
+            $this->createSong()
         );
     }
 
@@ -72,7 +71,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $song = $this->spawnSong();
+        $song = $this->createSong();
 
         $newValue = 'Foo Bar';
 
@@ -92,7 +91,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $song = $this->spawnSong();
+        $song = $this->createSong();
 
         $updated = $this->repo->update($song->id, []);
 
@@ -104,7 +103,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $song = $this->spawnSong();
+        $song = $this->createSong();
 
         $song->delete();
 
@@ -123,7 +122,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_albums_song_belongsToAlbum()
     {
-        $this->assertInstanceOf($this->album->class(), $this->spawnSong()->album);
+        $this->assertInstanceOf($this->album->class(), $this->createSong()->album);
     }
 
     /**
@@ -134,11 +133,6 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_flacFile_song_belongsToFlacFile()
     {
-        $song = factory($this->repo->class())->create([
-            'album_id' => factory($this->album->class())->create()->id,
-            'track_number' => 1,
-        ]);
-
-        $this->assertInstanceOf($this->flacFile->class(), $this->spawnSong()->flacFile);
+        $this->assertInstanceOf($this->flacFile->class(), $this->createSong()->flacFile);
     }
 }
