@@ -73,7 +73,9 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * @return mixed
+     * Create a new User object.
+     *
+     * @return \App\User
      */
     public function createUser()
     {
@@ -89,7 +91,9 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * @return mixed
+     * Make a new Profile object.
+     *
+     * @return \App\Profile
      */
     public function makeProfile()
     {
