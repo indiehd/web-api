@@ -39,8 +39,6 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->mapRoutes('users', 'UserController');
         $this->mapRoutes('artists', 'ArtistController');
         $this->mapRoutes('albums', 'AlbumController');
-        $this->mapRoutes('flacfiles', 'FlacFileController');
-        $this->mapRoutes('skus', 'SkuController');
         $this->mapRoutes('songs', 'SongController');
         // ...
     }

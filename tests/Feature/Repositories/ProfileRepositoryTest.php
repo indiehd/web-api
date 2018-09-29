@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
+use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
@@ -12,27 +13,32 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ProfileRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var AccountRepositoryInterface $account
+     */
+    protected $account;
+
+    /**
+     * @var ProfileRepositoryInterface $profile
      */
     protected $profile;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface $artist
      */
     protected $artist;
 
     /**
-     * @var $label LabelRepositoryInterface
+     * @var LabelRepositoryInterface $label
      */
     protected $label;
 
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface $user
      */
     protected $user;
 
     /**
-     * @var $catalogEntity CatalogEntityRepositoryInterface
+     * @var CatalogEntityRepositoryInterface $catalogEntity
      */
     protected $catalogEntity;
 
@@ -44,6 +50,8 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         parent::setUp();
 
         $this->seed('CountriesSeeder');
+
+        $this->account = resolve(AccountRepositoryInterface::class);
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
@@ -65,20 +73,52 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * @inheritdoc
+     * Create a new User object.
+     *
+     * @return \App\User
      */
-    public function test_method_create_storesNewResource()
+    public function createUser()
     {
-        $artist = factory($this->artist->class())->create();
+        $user = factory($this->user->class())->make();
+
+        $user = $this->user->create([
+            'username' => $user->username,
+            'password' => $user->password,
+            'account' => factory($this->account->class())->make()->toArray()
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Make a new Profile object.
+     *
+     * @return \App\Profile
+     */
+    public function makeProfile()
+    {
+        $artist = $this->artist->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $profile = factory($this->repo->class())->make([
             'profilable_id' => $artist->id,
             'profilable_type' => $this->repo->class(),
-        ])->toArray();
+        ]);
+
+        return $profile;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_create_storesNewResource()
+    {
+        $profile = $this->makeProfile();
 
         $this->assertInstanceOf(
             $this->repo->class(),
-            $this->repo->create($profile)
+            $this->repo->create($profile->toArray())
         );
     }
 
@@ -87,12 +127,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $profile = factory($this->repo->class())->create([
-            'profilable_id' => $artist->id,
-            'profilable_type' => $this->repo->class(),
-        ]);
+        $profile = $this->repo->create($this->makeProfile()->toArray());
 
         $newValue = 'Foobius Barius';
 
@@ -112,12 +147,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $profile = factory($this->repo->class())->create([
-            'profilable_id' => $artist->id,
-            'profilable_type' => $this->repo->class(),
-        ]);
+        $profile = $this->repo->create($this->makeProfile()->toArray());
 
         $updated = $this->repo->update($profile->id, []);
 
@@ -129,12 +159,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $artist = factory($this->artist->class())->create();
-
-        $profile = factory($this->repo->class())->create([
-            'profilable_id' => $artist->id,
-            'profilable_type' => $this->repo->class(),
-        ]);
+        $profile = $this->repo->create($this->makeProfile()->toArray());
 
         $profile->delete();
 
@@ -153,10 +178,14 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_profilable_allDistinctTypes_morphToProfile()
     {
-        $artist = factory($this->artist->class())->create();
+        $user = $this->createUser();
+
+        $artist = $this->artist->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         factory($this->catalogEntity->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
+            'user_id' => $user->id,
             'catalogable_id' => $artist->id,
             'catalogable_type' => $this->artist->class()
         ]);
@@ -168,10 +197,14 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
 
         $this->assertInstanceOf($this->profile->class(), $artist->profile);
 
-        $label = factory($this->label->class())->create();
+        $user = $this->createUser();
+
+        $label = $this->label->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         factory($this->catalogEntity->class())->create([
-            'user_id' => factory($this->user->class())->create()->id,
+            'user_id' => $user->id,
             'catalogable_id' => $label->id,
             'catalogable_type' => $this->label->class()
         ]);

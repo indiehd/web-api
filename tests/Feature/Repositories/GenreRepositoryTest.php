@@ -4,12 +4,18 @@ namespace Tests\Feature\Repositories;
 
 use CountriesSeeder;
 use App\Contracts\GenreRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var ProfileRepositoryInterface $profile
+     */
+    protected $profile;
+
     /**
      * @var ArtistRepositoryInterface $artist
      */
@@ -29,6 +35,8 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
 
         $this->seed(CountriesSeeder::class);
 
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
@@ -40,6 +48,27 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(GenreRepositoryInterface::class);
+    }
+
+    /**
+     * Creates a new Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    public function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->make(
+                factory($this->profile->class())->make()->toArray()
+            )->toArray()
+        );
+
+        // This is the one property that can't passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->make($properties);
     }
 
     /**
@@ -60,7 +89,9 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $genre = factory($this->repo->class())->create();
+        $genre = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $newValue = 'Some New Genre';
 
@@ -80,7 +111,9 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $genre = factory($this->repo->class())->create();
+        $genre = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $updated = $this->repo->update($genre->id, []);
 
@@ -92,7 +125,9 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $genre = factory($this->repo->class())->create();
+        $genre = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $genre->delete();
 
@@ -111,11 +146,11 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_albums_randomAlbum_belongsToManyGenres()
     {
-        $artist = factory($this->artist->class())->create();
+        $album = $this->album->create($this->makeAlbum()->toArray());
 
-        $album = factory($this->album->class())->create(['artist_id' => $artist->id]);
-
-        $genre = factory($this->repo->class())->create();
+        $genre = $this->repo->create(
+            factory($this->repo->class())->make()->toArray()
+        );
 
         $album->genres()->attach($genre->id);
 
