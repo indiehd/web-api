@@ -23,8 +23,8 @@ class Song extends Model
         return $this->belongsTo(FlacFile::class);
     }
 
-    public function sku()
+    public function cartItems()
     {
-        return $this->belongsTo(Sku::class);
+        return $this->morphOne(Cart::class, 'cartable');
     }
 }

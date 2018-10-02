@@ -28,4 +28,9 @@ class Album extends Model
     {
         return $this->belongsTo(User::class, 'deleter_id');
     }
+
+    public function cartItems()
+    {
+        return $this->morphMany(Cart::class, 'cartable');
+    }
 }

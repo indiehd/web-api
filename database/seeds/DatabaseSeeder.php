@@ -14,5 +14,7 @@ class DatabaseSeeder extends BaseSeeder
         $this->call(AccountsSeeder::class);
 
         $this->call(AlbumsSeeder::class);
+
+        $this->call(CartSeeder::class);
     }
 }
