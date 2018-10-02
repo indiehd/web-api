@@ -13,22 +13,23 @@ class CartSeeder extends BaseSeeder
      */
     public function run()
     {
-        $seed_count = 10;
+        $cartSeedCount = 10;
 
-        $seed_item_count = 5;
+        $cartItemSeedCount = 10;
 
         $cartable = [
             App\Song::class,
             App\Album::class
         ];
 
-        for ($i = 1; $i <= $seed_count; $i++) {
+        for ($i = 1; $i <= $cartSeedCount; $i++) {
 
+            $this->log('Creating a Cart instance');
             $cart = factory(App\Cart::class)->create();
 
-            for ($j = 1; $j <= $seed_item_count; $j++) {
+            for ($j = 1; $j <= $cartItemSeedCount; $j++) {
                 $type = $cartable[rand(0, count($cartable) - 1)];
-                $this->log("Creating a Cart item for a(n) $type");
+                $this->log("Creating a Cart item for $type");
 
                 if ($type === 'App\Album') {
                     $entity = factory(Album::class)->create();
