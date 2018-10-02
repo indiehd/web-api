@@ -10,7 +10,7 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class GenreRepositoryTest extends RepositoryCrudTestCase
+class CartRepositoryTest extends RepositoryCrudTestCase
 {
     /**
      * @var ProfileRepositoryInterface $profile
