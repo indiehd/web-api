@@ -15,8 +15,8 @@ use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use App\Contracts\CartRepositoryInterface;
-use App\Contracts\CartItemRepositoryInterface;
+use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\OrderItemRepositoryInterface;
 
 use App\Repositories\AccountRepository;
 use App\Repositories\ArtistRepository;
@@ -29,8 +29,8 @@ use App\Repositories\CountryRepository;
 use App\Repositories\GenreRepository;
 use App\Repositories\LabelRepository;
 use App\Repositories\SongRepository;
-use App\Repositories\CartRepository;
-use App\Repositories\CartItemRepository;
+use App\Repositories\OrderRepository;
+use App\Repositories\OrderItemRepository;
 
 use App\Artist;
 use App\Album;
@@ -77,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GenreRepositoryInterface::class, GenreRepository::class);
         $this->app->bind(LabelRepositoryInterface::class, LabelRepository::class);
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
-        $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
-        $this->app->bind(CartItemRepositoryInterface::class, CartItemRepository::class);
+        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
     }
 }

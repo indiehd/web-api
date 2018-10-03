@@ -42,8 +42,8 @@ class AddAllForeignKeys extends Migration
             $table->foreign('country_code', 'profiles_country_code_fk')->references('code')->on('countries');
         });
 
-        Schema::table('cart_items', function (Blueprint $table) {
-            $table->foreign('cart_id', 'carts_cart_id_fk')->references('id')->on('carts');
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->foreign('order_id', 'orders_order_id_fk')->references('id')->on('orders');
         });
     }
 
