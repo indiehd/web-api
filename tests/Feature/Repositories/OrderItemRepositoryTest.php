@@ -80,9 +80,11 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * @inheritdoc
+     * Makes a new Order Item.
+     * 
+     * @return \App\OrderItem
      */
-    public function test_method_create_storesNewResource()
+    public function makeOrderItem()
     {
         $album = $this->album->create($this->makeAlbum()->toArray());
 
@@ -90,11 +92,19 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
             factory($this->order->class())->make()->toArray()
         );
 
-        $item = factory($this->repo->class())->make([
+        return factory($this->repo->class())->make([
             'order_id' => $order->id,
             'orderable_id' => $album->id,
             'orderable_type' => $this->album->class(),
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function test_method_create_storesNewResource()
+    {
+        $item = $this->makeOrderItem();
 
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -107,19 +117,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
-
-        $order = $this->order->create(
-            factory($this->order->class())->make()->toArray()
-        );
-
-        $item = $this->repo->create(
-            factory($this->repo->class())->make([
-                'order_id' => $order->id,
-                'orderable_id' => $album->id,
-                'orderable_type' => $this->album->class(),
-            ])->toArray()
-        );
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
 
         $album = $this->album->create($this->makeAlbum()->toArray());
 
@@ -141,19 +139,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_returnsModelInstance()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
-
-        $order = $this->order->create(
-            factory($this->order->class())->make()->toArray()
-        );
-
-        $item = $this->repo->create(
-            factory($this->repo->class())->make([
-                'order_id' => $order->id,
-                'orderable_id' => $album->id,
-                'orderable_type' => $this->album->class(),
-            ])->toArray()
-        );
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
 
         $updated = $this->repo->update($item->id, []);
 
@@ -165,24 +151,12 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_delete_deletesResource()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
-
-        $order = $this->order->create(
-            factory($this->order->class())->make()->toArray()
-        );
-
-        $item = $this->repo->create(
-            factory($this->repo->class())->make([
-                'order_id' => $order->id,
-                'orderable_id' => $album->id,
-                'orderable_type' => $this->album->class(),
-            ])->toArray()
-        );
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
 
         $item->delete();
 
         try {
-            $this->repo->findById($order->id);
+            $this->repo->findById($item->id);
         } catch(ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
