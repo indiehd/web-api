@@ -42,6 +42,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Creates a Song.
+     *
      * @return \App\Song
      */
     public function createSong()

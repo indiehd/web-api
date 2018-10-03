@@ -7,6 +7,7 @@ use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -21,6 +22,11 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      * @var ArtistRepositoryInterface $artist
      */
     protected $artist;
+
+    /**
+     * @var SongRepositoryInterface $song
+     */
+    protected $song;
 
     /**
      * @var AlbumRepositoryInterface $album
@@ -44,6 +50,8 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->song = resolve(SongRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
@@ -80,22 +88,39 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Makes a new Order Item.
-     * 
-     * @return \App\OrderItem
+     * Creates a Song.
+     *
+     * @return \App\Song
      */
-    public function makeOrderItem()
+    public function createSong()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
-
-        $order = $this->order->create(
-            factory($this->order->class())->make()->toArray()
+        $album = $this->album->create(
+            factory($this->album->class())->raw()
         );
 
+        return $this->song->create(
+            factory($this->song->class())->raw([
+                'album_id' => $album->id,
+                'track_number' => 1,
+            ])
+        );
+    }
+
+    /**
+     * Makes a new Order Item.
+     *
+     * @return \App\OrderItem
+     */
+    public function makeOrderItem($properties = [])
+    {
         return factory($this->repo->class())->make([
-            'order_id' => $order->id,
-            'orderable_id' => $album->id,
-            'orderable_type' => $this->album->class(),
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                factory($this->order->class())->make()->toArray()
+            )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+                $this->makeAlbum()->toArray()
+            )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
         ]);
     }
 
@@ -160,5 +185,40 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
         } catch(ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
+    }
+
+    /**
+     * Ensure that when an Order is associated with an Order Item, the Order
+     * Item belongs to an Order.
+     *
+     * @return void
+     */
+    public function test_whenAssociatedWithOrder_OrderItemBelongsToOrder()
+    {
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
+
+        $this->assertInstanceOf($this->order->class(), $item->order);
+    }
+
+    /**
+     * Ensure that models of every Orderable type in the database morph
+     * to an Order.
+     *
+     * @return void
+     */
+    public function test_orderable_allDistinctTypes_morphToOrderable()
+    {
+        $albumItem = $this->repo->create($this->makeOrderItem()->toArray());
+
+        $this->assertInstanceOf($this->album->class(), $albumItem->orderable);
+
+        $song = $this->createSong();
+
+        $songItem = $this->repo->create($this->makeOrderItem([
+            'orderable_id' => $song->id,
+            'orderable_type' => $this->song->class(),
+        ])->toArray());
+
+        $this->assertInstanceOf($this->song->class(), $songItem->orderable);
     }
 }
