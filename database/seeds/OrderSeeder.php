@@ -1,10 +1,10 @@
 <?php
 
-use App\CartItem;
+use App\OrderItem;
 use App\Album;
 use App\Song;
 
-class CartSeeder extends BaseSeeder
+class OrderSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -24,12 +24,12 @@ class CartSeeder extends BaseSeeder
 
         for ($i = 1; $i <= $cartSeedCount; $i++) {
 
-            $this->log('Creating a Cart instance');
-            $cart = factory(App\Cart::class)->create();
+            $this->log('Creating an Order');
+            $cart = factory(App\Order::class)->create();
 
             for ($j = 1; $j <= $cartItemSeedCount; $j++) {
                 $type = $cartable[rand(0, count($cartable) - 1)];
-                $this->log("Creating a Cart item for $type");
+                $this->log("Creating an Order item for $type");
 
                 if ($type === 'App\Album') {
                     $entity = factory(Album::class)->create();
@@ -44,10 +44,10 @@ class CartSeeder extends BaseSeeder
                     $entity = $song;
                 }
 
-                factory(App\CartItem::class)->create([
-                    'cart_id' => $cart->id,
-                    'cartable_id' => $entity->id,
-                    'cartable_type' => $type
+                factory(App\OrderItem::class)->create([
+                    'order_id' => $cart->id,
+                    'orderable_id' => $entity->id,
+                    'orderable_type' => $type
                 ]);
             }
         }

@@ -15,6 +15,6 @@ class DatabaseSeeder extends BaseSeeder
 
         $this->call(AlbumsSeeder::class);
 
-        $this->call(CartSeeder::class);
+        $this->call(OrderSeeder::class);
     }
 }
