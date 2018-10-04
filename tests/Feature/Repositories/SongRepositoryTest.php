@@ -5,6 +5,8 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\OrderItemRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
@@ -20,6 +22,16 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     protected $flacFile;
 
     /**
+     * @var OrderRepositoryInterface $order
+     */
+    protected $order;
+
+    /**
+     * @var OrderItemRepositoryInterface $orderItem
+     */
+    protected $orderItem;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
@@ -31,6 +43,10 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->flacFile = resolve(FlacFileRepositoryInterface::class);
+
+        $this->order = resolve(OrderRepositoryInterface::class);
+
+        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
     }
 
     /**
@@ -42,6 +58,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Creates a Song.
+     *
      * @return \App\Song
      */
     public function createSong()
@@ -56,6 +74,24 @@ class SongRepositoryTest extends RepositoryCrudTestCase
                 'track_number' => 1,
             ])
         );
+    }
+
+    /**
+     * Makes a new Order Item.
+     *
+     * @return \App\OrderItem
+     */
+    public function makeOrderItem($properties = [])
+    {
+        return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                    factory($this->order->class())->raw()
+                )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+                    $this->makeAlbum()->toArray()
+                )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+        ]);
     }
 
     /**
@@ -137,5 +173,23 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     public function test_flacFile_song_belongsToFlacFile()
     {
         $this->assertInstanceOf($this->flacFile->class(), $this->createSong()->flacFile);
+    }
+
+    /**
+     * Ensure that when a copy of a Song is sold, the Song morphs many Order
+     * Items.
+     *
+     * @return void
+     */
+    public function test_copiesSold_whenSongSold_morphsManyOrderItems()
+    {
+        $song = $this->createSong();
+
+        $this->orderItem->create($this->makeOrderItem([
+            'orderable_id' => $song->id,
+            'orderable_type' => $this->repo->class(),
+        ])->toArray());
+
+        $this->assertInstanceOf($this->orderItem->class(), $song->copiesSold->first());
     }
 }

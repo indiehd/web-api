@@ -7,6 +7,8 @@ use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\OrderItemRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
@@ -37,6 +39,16 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected $genre;
 
     /**
+     * @var OrderRepositoryInterface $order
+     */
+    protected $order;
+
+    /**
+     * @var OrderItemRepositoryInterface $orderItem
+     */
+    protected $orderItem;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
@@ -52,6 +64,10 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         $this->song = resolve(SongRepositoryInterface::class);
 
         $this->genre = resolve(GenreRepositoryInterface::class);
+
+        $this->order = resolve(OrderRepositoryInterface::class);
+
+        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
     }
 
     /**
@@ -81,6 +97,24 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         $properties['artist_id'] = $artist->id;
 
         return factory($this->repo->class())->make($properties);
+    }
+
+    /**
+     * Makes a new Order Item.
+     *
+     * @return \App\OrderItem
+     */
+    public function makeOrderItem($properties = [])
+    {
+        return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                    factory($this->order->class())->raw()
+                )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->repo->create(
+                    $this->makeAlbum()->toArray()
+                )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->repo->class(),
+        ]);
     }
 
     /**
@@ -176,10 +210,28 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        $genre = $this->genre->create(factory($this->genre->class())->make()->toArray());
+        $genre = $this->genre->create(factory($this->genre->class())->raw());
 
         $album->genres()->attach($genre->id);
 
         $this->assertInstanceOf($this->genre->class(), $album->genres->first());
+    }
+
+    /**
+     * Ensure that when a copy of an Album is sold, the Album morphs many Order
+     * Items.
+     *
+     * @return void
+     */
+    public function test_copiesSold_whenAlbumSold_morphsManyOrderItems()
+    {
+        $album = $this->repo->create($this->makeAlbum()->toArray());
+
+        $this->orderItem->create($this->makeOrderItem([
+            'orderable_id' => $album->id,
+            'orderable_type' => $this->repo->class(),
+        ])->toArray());
+
+        $this->assertInstanceOf($this->orderItem->class(), $album->copiesSold->first());
     }
 }
