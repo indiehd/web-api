@@ -31,6 +31,6 @@ class Album extends Model
 
     public function orderItems()
     {
-        return $this->morphMany(Order::class, 'orderable');
+        return $this->morphMany(OrderItem::class, 'orderable');
     }
 }

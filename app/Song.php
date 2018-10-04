@@ -25,6 +25,6 @@ class Song extends Model
 
     public function orderItems()
     {
-        return $this->morphOne(Order::class, 'orderable');
+        return $this->morphOne(OrderItem::class, 'orderable');
     }
 }
