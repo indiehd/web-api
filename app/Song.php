@@ -25,6 +25,6 @@ class Song extends Model
 
     public function copiesSold()
     {
-        return $this->morphOne(OrderItem::class, 'orderable');
+        return $this->morphMany(OrderItem::class, 'orderable');
     }
 }
