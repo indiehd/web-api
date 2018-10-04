@@ -76,7 +76,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     {
         $artist = $this->artist->create(
             factory($this->artist->class())->make(
-                factory($this->profile->class())->make()->toArray()
+                factory($this->profile->class())->raw()
             )->toArray()
         );
 
@@ -115,7 +115,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     {
         return factory($this->repo->class())->make([
             'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->make()->toArray()
+                factory($this->order->class())->raw()
             )->id,
             'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
                 $this->makeAlbum()->toArray()
