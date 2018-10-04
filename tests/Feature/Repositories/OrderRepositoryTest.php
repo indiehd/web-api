@@ -3,8 +3,9 @@
 namespace Tests\Feature\Repositories;
 
 use App\OrderItem;
-use Ramsey\Uuid\Uuid;
 use CountriesSeeder;
+use App\Contracts\AccountRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
@@ -14,6 +15,16 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderRepositoryTest extends RepositoryCrudTestCase
 {
+    /**
+     * @var UserRepositoryInterface $user
+     */
+    protected $user;
+
+    /**
+     * @var AccountRepositoryInterface $account
+     */
+    protected $account;
+
     /**
      * @var OrderItemRepositoryInterface $orderItem
      */
@@ -43,6 +54,10 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
 
         $this->seed(CountriesSeeder::class);
 
+        $this->user = resolve(UserRepositoryInterface::class);
+
+        $this->account = resolve(AccountRepositoryInterface::class);
+
         $this->orderItem = resolve(OrderItemRepositoryInterface::class);
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
@@ -58,6 +73,28 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function setRepository()
     {
         $this->repo = resolve(OrderRepositoryInterface::class);
+    }
+
+    /**
+     * Create a new User object.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    public function createUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->account->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'username' => $user->username,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
     }
 
     /**
@@ -123,9 +160,9 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
             factory($this->repo->class())->make()->toArray()
         );
 
-        $newValue = Uuid::uuid4()->toString();
+        $newValue = $this->createUser()->id;
 
-        $property = 'uuid';
+        $property = 'user_id';
 
         $this->repo->update($order->id, [
             $property => $newValue,
