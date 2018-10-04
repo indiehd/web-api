@@ -23,7 +23,7 @@ class Song extends Model
         return $this->belongsTo(FlacFile::class);
     }
 
-    public function orderItems()
+    public function copiesSold()
     {
         return $this->morphOne(OrderItem::class, 'orderable');
     }

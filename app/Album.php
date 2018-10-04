@@ -29,7 +29,7 @@ class Album extends Model
         return $this->belongsTo(User::class, 'deleter_id');
     }
 
-    public function orderItems()
+    public function copiesSold()
     {
         return $this->morphMany(OrderItem::class, 'orderable');
     }
