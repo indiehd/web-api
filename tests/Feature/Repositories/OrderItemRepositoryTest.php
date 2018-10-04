@@ -201,31 +201,31 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that an Album Order Item morphs to Orderable.
+     * Ensure that a sold copy of an Album morphs to Orderable.
      *
      * @return void
      */
-    public function test_orderable_albumOrderItem_morphsToOrderable()
+    public function test_orderable_soldAlbum_morphsToOrderable()
     {
-        $albumItem = $this->repo->create($this->makeOrderItem()->toArray());
+        $soldAlbum = $this->repo->create($this->makeOrderItem()->toArray());
 
-        $this->assertInstanceOf($this->album->class(), $albumItem->orderable);
+        $this->assertInstanceOf($this->album->class(), $soldAlbum->orderable);
     }
 
     /**
-     * Ensure that a Song Order Item morphs to Orderable.
+     * Ensure that a sold copy of a Song morphs to Orderable.
      *
      * @return void
      */
-    public function test_orderable_songOrderItem_morphsToOrderable()
+    public function test_orderable_soldSong_morphsToOrderable()
     {
         $song = $this->createSong();
 
-        $songItem = $this->repo->create($this->makeOrderItem([
+        $soldSong = $this->repo->create($this->makeOrderItem([
             'orderable_id' => $song->id,
             'orderable_type' => $this->song->class(),
         ])->toArray());
 
-        $this->assertInstanceOf($this->song->class(), $songItem->orderable);
+        $this->assertInstanceOf($this->song->class(), $soldSong->orderable);
     }
 }
