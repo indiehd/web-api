@@ -7,24 +7,24 @@ parameters:
       enforce_no_subject_trailing_period: true
       enforce_no_subject_punctuations: true
       enforce_single_lined_subject: true
-      enforce_type_scope_conventions: true
-      types:
-        - api
-        - build
-        - chore
-        - refact
-        - revert
-        - feat
-        - tests
-        - docs
-        - style
-        - ci
-        - ui
-        - scaff
-        - perf
-        - fix
-        - wip
-      scopes: []
+      type_scope_conventions:
+        - types:
+          - api
+          - build
+          - chore
+          - refact
+          - revert
+          - feat
+          - tests
+          - docs
+          - style
+          - ci
+          - ui
+          - scaff
+          - perf
+          - fix
+          - wip
+        - scopes: []
       max_body_width: 72
       max_subject_width: 72
       case_insensitive: false
@@ -68,6 +68,4 @@ parameters:
         - /^tests\/(.*)/
       triggered_by: ['php']
       regexp_type: G
-  ascii:
-    failed: ~
-    succeeded: ~
+  ascii: ~
