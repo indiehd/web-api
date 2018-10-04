@@ -201,17 +201,24 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that models of every Orderable type in the database morph
-     * to an Order.
+     * Ensure that an Album Order Item morphs to Orderable.
      *
      * @return void
      */
-    public function test_orderable_allDistinctTypes_morphToOrderable()
+    public function test_orderable_albumOrderItem_morphsToOrderable()
     {
         $albumItem = $this->repo->create($this->makeOrderItem()->toArray());
 
         $this->assertInstanceOf($this->album->class(), $albumItem->orderable);
+    }
 
+    /**
+     * Ensure that a Song Order Item morphs to Orderable.
+     *
+     * @return void
+     */
+    public function test_orderable_songOrderItem_morphsToOrderable()
+    {
         $song = $this->createSong();
 
         $songItem = $this->repo->create($this->makeOrderItem([
