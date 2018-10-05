@@ -111,7 +111,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
      */
     public function test_method_update_updatesResource()
     {
-        $profile = factory($this->profile->class())->make(['country_code' => 'US'])->toArray();
+        $profile = factory($this->profile->class())->raw(['country_code' => 'US']);
 
         $label = $this->repo->create($profile);
 
@@ -168,7 +168,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     public function test_catalogable_withNewLabel_morphsToCatalogableEntity()
     {
         $label = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $user = $this->makeUser();
@@ -223,11 +223,11 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     public function test_artists_whenAssociatedWithLabel_labelHasManyArtists()
     {
         $label = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $artist = $this->artist->create(
-            factory($this->profile->class())->make(['label_id' => $label->id])->toArray()
+            factory($this->profile->class())->raw(['label_id' => $label->id])
         );
 
         $this->assertInstanceOf($this->artist->class(), $artist->label->artists->first());
@@ -242,15 +242,15 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     public function test_albums_whenAssociatedWithLabelThroughArtist_labelHasManyAlbums()
     {
         $label = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $artist = $this->artist->create(
-            factory($this->profile->class())->make(['label_id' => $label->id])->toArray()
+            factory($this->profile->class())->raw(['label_id' => $label->id])
         );
 
         $this->album->create(
-            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+            factory($this->album->class())->raw(['artist_id' => $artist->id])
         );
 
         $this->assertInstanceOf($this->album->class(), $artist->label->albums->first());

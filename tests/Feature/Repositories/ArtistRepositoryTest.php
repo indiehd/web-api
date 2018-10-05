@@ -174,7 +174,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     public function test_catalogable_newArtist_morphsToCatalogableEntity()
     {
         $artist = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $user = $this->makeUser();
@@ -253,11 +253,11 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     public function test_albums_whenAssociatedWithArtist_artistHasManyAlbums()
     {
         $artist = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $this->album->create(
-            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+            factory($this->album->class())->raw(['artist_id' => $artist->id])
         );
 
         $this->assertInstanceOf($this->album->class(), $artist->albums()->first());
@@ -272,11 +272,11 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     public function test_songs_whenAlbumAssociatedWithArtist_artistHasManySongs()
     {
         $artist = $this->repo->create(
-            factory($this->profile->class())->make()->toArray()
+            factory($this->profile->class())->raw()
         );
 
         $album = $this->album->create(
-            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+            factory($this->album->class())->raw(['artist_id' => $artist->id])
         );
 
         $song = factory($this->song->class())->make([

@@ -106,9 +106,9 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->make()->toArray()
-            )->toArray()
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
         );
 
         // This is the one property that can't passed via the argument.
@@ -128,7 +128,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
         $album = $this->album->create($this->makeAlbum()->toArray());
 
         $order = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         return factory($this->orderItem->class())->make([
@@ -157,7 +157,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_updatesResource()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $newValue = $this->createUser()->id;
@@ -179,7 +179,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_returnsModelInstance()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $updated = $this->repo->update($order->id, []);
@@ -193,7 +193,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function test_method_delete_deletesResource()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $order->delete();

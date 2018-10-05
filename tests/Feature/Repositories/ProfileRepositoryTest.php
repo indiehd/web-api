@@ -84,7 +84,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = $this->user->create([
             'username' => $user->username,
             'password' => $user->password,
-            'account' => factory($this->account->class())->make()->toArray()
+            'account' => factory($this->account->class())->raw()
         ]);
 
         return $user;
@@ -98,7 +98,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     public function makeProfile()
     {
         $artist = $this->artist->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $profile = factory($this->repo->class())->make([
@@ -181,7 +181,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = $this->createUser();
 
         $artist = $this->artist->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         factory($this->catalogEntity->class())->create([
@@ -200,7 +200,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = $this->createUser();
 
         $label = $this->label->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         factory($this->catalogEntity->class())->create([

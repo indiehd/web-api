@@ -75,9 +75,9 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     public function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->make(
+            factory($this->artist->class())->raw(
                 factory($this->profile->class())->raw()
-            )->toArray()
+            )
         );
 
         // This is the one property that can't passed via the argument.
