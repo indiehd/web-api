@@ -60,7 +60,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     {
         $artist = $this->artist->create(
             factory($this->artist->class())->make(
-                factory($this->profile->class())->make()->toArray()
+                factory($this->profile->class())->raw()
             )->toArray()
         );
 
@@ -90,7 +90,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_updatesResource()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $newValue = 'Some New Genre';
@@ -112,7 +112,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_returnsModelInstance()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $updated = $this->repo->update($genre->id, []);
@@ -126,7 +126,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function test_method_delete_deletesResource()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $genre->delete();
@@ -149,7 +149,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
         $album = $this->album->create($this->makeAlbum()->toArray());
 
         $genre = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $album->genres()->attach($genre->id);

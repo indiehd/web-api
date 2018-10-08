@@ -77,7 +77,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_updatesResource()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $newValue = str_random(32);
@@ -99,7 +99,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function test_method_update_returnsModelInstance()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $updated = $this->repo->update($flacFile->id, []);
@@ -113,7 +113,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function test_method_delete_deletesResource()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $flacFile->delete();
@@ -137,9 +137,9 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
         // Is there any compelling reason to make this more DRY?
 
         $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->make()->toArray()
-            )->toArray()
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
         );
 
         // This is the one property that can't passed via the argument.
@@ -147,7 +147,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
         $properties['artist_id'] = $artist->id;
 
         $album = $this->album->create(
-            factory($this->album->class())->make(['artist_id' => $artist->id])->toArray()
+            factory($this->album->class())->raw(['artist_id' => $artist->id])
         );
 
         $song = factory($this->song->class())->create([
@@ -156,7 +156,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
         ]);
 
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->make()->toArray()
+            factory($this->repo->class())->raw()
         );
 
         $song->flacFile()->associate($flacFile)->save();

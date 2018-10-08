@@ -88,7 +88,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         $artist = $this->artist->create(
             factory($this->artist->class())->make(
-                factory($this->profile->class())->make()->toArray()
+                factory($this->profile->class())->raw()
             )->toArray()
         );
 
