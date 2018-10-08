@@ -71,7 +71,7 @@ class UserRepository extends CrudRepository implements UserRepositoryInterface
     public function create(array $data)
     {
         $user = $this->user->create([
-            'username' => $data['username'],
+            'email' => $data['email'],
             'password' => $this->hasher->make($data['password']),
         ]);
 

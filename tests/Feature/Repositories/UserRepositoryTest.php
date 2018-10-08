@@ -74,7 +74,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
         $user = factory($this->user->class())->make();
 
         $user = $this->user->create([
-            'username' => $user->username,
+            'email' => $user->email,
             'password' => $user->password,
             'account' => factory($this->account->class())->raw()
         ]);
@@ -115,9 +115,9 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = $this->createUser();
 
-        $newValue = str_random(32);
+        $newValue = 'foo@bar.com';
 
-        $property = 'username';
+        $property = 'email';
 
         $this->repo->update($user->id, [
             $property => $newValue,
