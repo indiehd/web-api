@@ -24,7 +24,7 @@ class UserControllerTest extends ControllerTestCase
         $this->hasher = resolve(Hasher::class);
     }
 
-    public function spawnUser()
+    public function createUser()
     {
         $user = $this->user->model()->create($this->getAllInputsInValidState());
 
@@ -70,46 +70,9 @@ class UserControllerTest extends ControllerTestCase
         ];
     }
 
-    public function getInputsInInvalidState()
+    public function test_all_returnsOkStatusAndExpectedJsonStructure()
     {
-        return [
-            'username' => 'short',
-            'password' => 'foo',
-            'account' => $this->getAllAccountInputsInInvalidState(),
-        ];
-    }
-
-    public function getAllAccountInputsInInvalidState()
-    {
-        return [
-            'email' => 'foo@',
-            'first_name' => str_random(65),
-            'last_name' => str_random(65),
-            'address_one' => str_random(256),
-            'address_two' => str_random(256),
-            'city' => str_random(65),
-            'territory' => str_random(65),
-            'country_code' => 'United States',
-            'postal_code' => str_random(65),
-            'phone' => str_random(65),
-            'alt_phone' => str_random(65),
-        ];
-    }
-
-    public function getErrorMessageKeys()
-    {
-        $errorMessageKeys = array_diff_key($this->getAllInputsInValidState(), array_flip(['account']));
-
-        foreach ($this->getAllAccountInputsInInvalidState() as $k => $v) {
-            $errorMessageKeys['account.' . $k] = null;
-        }
-
-        return $errorMessageKeys;
-    }
-
-    public function test_index_returnsMultipleJsonObjects()
-    {
-        $this->spawnUser();
+        $this->createUser();
 
         $this->json('GET', route('users.index'))
             ->assertStatus(200)
@@ -120,28 +83,9 @@ class UserControllerTest extends ControllerTestCase
             ]);
     }
 
-    public function test_store_withValidInputs_returnsOneJsonObject()
+    public function test_show_returnsOkStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
-            ]);
-    }
-
-    public function test_store_withInvalidInputs_returnsErrorMessage()
-    {
-        $this->json('POST', route('users.store'), $this->getInputsInInvalidState())
-            ->assertStatus(422)
-            ->assertJsonStructure([
-                'message',
-                'errors' => array_keys($this->getErrorMessageKeys())
-            ]);
-    }
-
-    public function test_show_returnsOneJsonObject()
-    {
-        $user = $this->spawnUser();
+        $user = $this->createUser();
 
         $this->json('GET', route('users.show', ['id' => $user->id]))
             ->assertStatus(200)
@@ -150,9 +94,28 @@ class UserControllerTest extends ControllerTestCase
             ]);
     }
 
-    public function test_update_withValidInputs_returnsJsonObjectMatchingInputs()
+    public function test_store_withValidInput_returnsOkStatusAndExpectedJsonStructure()
     {
-        $user = $this->spawnUser();
+        $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    public function test_store_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
+    {
+        $this->json('POST', route('users.store'), [])
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+                'errors'
+            ]);
+    }
+
+    public function test_update_withValidInput_returnsOkStatusAndExpectedJsonStructure()
+    {
+        $user = $this->createUser();
 
         $inputs = $this->getAllInputsInValidState();
 
@@ -160,27 +123,42 @@ class UserControllerTest extends ControllerTestCase
 
         $this->json('PUT', route('users.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    'id' => $user->id,
-                    'username' => $inputs['username'],
-                    'account' => $this->getAllAccountInputsInValidState(),
-                    'permissions' => [],
-                    'last_login' => null,
-                ]
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
             ]);
     }
 
-    public function test_update_withInvalidInputs_returnsErrorMessage()
+    public function test_update_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $user = $this->spawnUser();
+        $user = $this->createUser();
 
-        $this->json('PUT', route('users.update', ['id' => $user->id]), $this->getInputsInInvalidState())
+        $this->json('PUT', route('users.update', ['id' => $user->id]), ['username' => ''])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->getErrorMessageKeys())
+                'errors'
             ]);
+    }
+
+    public function test_destroy_withValidInput_returnsOkStatusAndExpectedJsonStructure()
+    {
+        $user = $this->createUser();
+
+        $this->json('DELETE', route('users.destroy', ['id' => $user->id]))
+            ->assertStatus(200)
+            ->assertJsonStructure([]);
+    }
+
+    public function test_destroy_withInvalidInput_returnsUnprocessableEntityStatus()
+    {
+        $this->json('DELETE', route('users.destroy', ['id' => 'foo']))
+            ->assertStatus(404);
+    }
+
+    public function test_destroy_withMissingInput_returnsMethodNotAllowedStatus()
+    {
+        $this->json('DELETE', route('users.destroy', ['id' => null]))
+            ->assertStatus(405);
     }
 
     public function test_storePassword_withValidInput_authenticationWorksForPassword()
@@ -200,7 +178,7 @@ class UserControllerTest extends ControllerTestCase
 
     public function test_updatePassword_withValidInput_authenticationWorksForPassword()
     {
-        $user = $this->spawnUser();
+        $user = $this->createUser();
 
         $inputs = ['password' => 'secretsauce'];
 
