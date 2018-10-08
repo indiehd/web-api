@@ -39,7 +39,7 @@ class UserControllerTest extends ControllerTestCase
     {
         return [
             'id',
-            'username',
+            'email',
             'account',
         ];
     }
@@ -64,7 +64,7 @@ class UserControllerTest extends ControllerTestCase
     public function getAllInputsInValidState()
     {
         return [
-            'username' => 'FoobiusBarius',
+            'email' => 'foo@bar.com',
             'password' => 'secretsauce',
             'account' => $this->getAllAccountInputsInValidState()
         ];
@@ -96,7 +96,7 @@ class UserControllerTest extends ControllerTestCase
 
     public function test_store_withValidInput_returnsOkStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
+        $r = $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -132,7 +132,7 @@ class UserControllerTest extends ControllerTestCase
     {
         $user = $this->createUser();
 
-        $this->json('PUT', route('users.update', ['id' => $user->id]), ['username' => ''])
+        $this->json('PUT', route('users.update', ['id' => $user->id]), ['email' => ''])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -171,7 +171,7 @@ class UserControllerTest extends ControllerTestCase
                 'data' => $this->getJsonStructure()
             ]);
 
-        $user = $this->user->model()->where('username', $inputs['username'])->first();
+        $user = $this->user->model()->where('email', $inputs['email'])->first();
 
         $this->assertTrue($this->hasher->check($inputs['password'], $user->password));
     }

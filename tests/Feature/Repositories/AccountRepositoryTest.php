@@ -56,7 +56,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
         $account = factory($this->repo->class())->make($accountProperties);
 
         $user = $this->user->create([
-            'username' => $user->username,
+            'email' => $user->email,
             'password' => $user->password,
             'account' => $account->toArray(),
         ]);

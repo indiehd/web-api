@@ -82,7 +82,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = factory($this->user->class())->make();
 
         $user = $this->user->create([
-            'username' => $user->username,
+            'email' => $user->email,
             'password' => $user->password,
             'account' => factory($this->account->class())->raw()
         ]);

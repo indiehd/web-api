@@ -24,7 +24,7 @@ class StoreUser extends FormRequest
     public function rules(/*StoreAccount $account*/)
     {
         return [
-            'username' => 'required|string|min:6|max:64',
+            'email' => 'required|email',
             'password' => 'required|min:8|max:4096',
             'account.email' => 'required|email',
             'account.first_name' => 'max:64',

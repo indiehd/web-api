@@ -161,8 +161,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ApiRouteServiceProvider::class,
 
-        Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-
     ],
 
     /*

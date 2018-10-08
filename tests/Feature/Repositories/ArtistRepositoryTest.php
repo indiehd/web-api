@@ -92,7 +92,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
         $account = factory($this->account->class())->make($accountProperties);
 
         $user = $this->user->create([
-            'username' => $user->username,
+            'email' => $user->email,
             'password' => $user->password,
             'account' => $account->toArray(),
         ]);
