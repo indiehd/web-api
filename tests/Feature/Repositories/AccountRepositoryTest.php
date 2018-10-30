@@ -43,31 +43,9 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make a new User object.
-     *
-     * @param array $userProperties
-     * @param array $accountProperties
-     * @return \App\User
-     */
-    public function makeUser(array $userProperties = [], array $accountProperties = [])
-    {
-        $user = factory($this->user->class())->make($userProperties);
-
-        $account = factory($this->repo->class())->make($accountProperties);
-
-        $user = $this->user->create([
-            'email' => $user->email,
-            'password' => $user->password,
-            'account' => $account->toArray(),
-        ]);
-
-        return $user;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $user = $this->makeUser();
 
@@ -88,7 +66,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $user = $this->makeUser();
 
@@ -106,7 +84,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $user = $this->makeUser();
 
@@ -118,7 +96,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $user = $this->makeUser();
 
@@ -126,17 +104,17 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($user->account->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that a newly-created Account belongs to a User.
+     * Ensure that an Account belongs to a User.
      *
      * @return void
      */
-    public function test_user_accountBelongsToUser()
+    public function testAccountBelongsToUser()
     {
         $user = $this->makeUser();
 
@@ -144,14 +122,37 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that an Account with a Country specified at creation belongs to a Country.
+     * Ensure that when a Country is related to an Account, the Account
+     * belongs to a Country.
      *
      * @return void
      */
-    public function test_country_accountBelongsToCountry()
+    public function testWhenAccountRelatedToCountryItBelongsToCountry()
     {
         $user = $this->makeUser([], ['country_code' => 'US']);
 
         $this->assertInstanceOf($this->country->class(), $user->account->country);
+    }
+
+    /**
+     * Make a new User object.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    protected function makeUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->repo->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'email' => $user->email,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
     }
 }

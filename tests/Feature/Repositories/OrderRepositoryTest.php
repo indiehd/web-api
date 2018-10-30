@@ -62,9 +62,9 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
-        $this->album = resolve(AlbumRepositoryInterface::class);
-
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
     }
 
     /**
@@ -76,72 +76,9 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Create a new User object.
-     *
-     * @param array $userProperties
-     * @param array $accountProperties
-     * @return \App\User
-     */
-    public function createUser(array $userProperties = [], array $accountProperties = [])
-    {
-        $user = factory($this->user->class())->make($userProperties);
-
-        $account = factory($this->account->class())->make($accountProperties);
-
-        $user = $this->user->create([
-            'email' => $user->email,
-            'password' => $user->password,
-            'account' => $account->toArray(),
-        ]);
-
-        return $user;
-    }
-
-    /**
-     * Makes a new Album.
-     *
-     * @param array $properties
-     * @return \App\Album
-     */
-    public function makeAlbum(array $properties = [])
-    {
-        $artist = $this->artist->create(
-            factory($this->artist->class())->raw(
-                factory($this->profile->class())->raw()
-            )
-        );
-
-        // This is the one property that can't passed via the argument.
-
-        $properties['artist_id'] = $artist->id;
-
-        return factory($this->album->class())->make($properties);
-    }
-
-    /**
-     * Makes a new Order Item.
-     *
-     * @return \App\OrderItem
-     */
-    public function makeOrderItem()
-    {
-        $album = $this->album->create($this->makeAlbum()->toArray());
-
-        $order = $this->repo->create(
-            factory($this->repo->class())->raw()
-        );
-
-        return factory($this->orderItem->class())->make([
-            'order_id' => $order->id,
-            'orderable_id' => $album->id,
-            'orderable_type' => $this->album->class(),
-        ]);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $order = factory($this->repo->class())->make();
 
@@ -154,7 +91,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $order = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -176,7 +113,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $order = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -190,7 +127,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $order = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -200,21 +137,84 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($order->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that when an Order Item is associated with an Order, the Order has
+     * Ensure that when an Order Item is related to an Order, the Order has
      * one or more Order Items.
      *
      * @return void
      */
-    public function test_items_whenItemsAssociatedWithOrder_orderHasManyItems()
+    public function testWhenOrderRelatedToOrderItemsItHasManyItems()
     {
         $item = $this->orderItem->create($this->makeOrderItem()->toArray());
 
         $this->assertInstanceOf($this->orderItem->class(), $item->order->items()->first());
+    }
+
+    /**
+     * Create a User.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    protected function createUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->account->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'email' => $user->email,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Make an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->make($properties);
+    }
+
+    /**
+     * Makes an Order Item.
+     *
+     * @return \App\OrderItem
+     */
+    protected function makeOrderItem()
+    {
+        $album = $this->album->create($this->makeAlbum()->toArray());
+
+        $order = $this->repo->create(
+            factory($this->repo->class())->raw()
+        );
+
+        return factory($this->orderItem->class())->make([
+            'order_id' => $order->id,
+            'orderable_id' => $album->id,
+            'orderable_type' => $this->album->class(),
+        ]);
     }
 }
