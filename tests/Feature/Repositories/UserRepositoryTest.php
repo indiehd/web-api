@@ -65,42 +65,9 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Create a new User object.
-     *
-     * @return \App\User
-     */
-    public function createUser()
-    {
-        $user = factory($this->user->class())->make();
-
-        $user = $this->user->create([
-            'email' => $user->email,
-            'password' => $user->password,
-            'account' => factory($this->account->class())->raw()
-        ]);
-
-        return $user;
-    }
-
-    public function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])
-    {
-        $user = $this->createUser();
-
-        $profile = factory($this->profile->class())->make();
-
-        $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
-
-        return factory($this->catalogEntity->class())->make(array_merge([
-            'catalogable_id' => $entity->id,
-            'catalogable_type' => $type->class(),
-            'user_id' => $user->id
-        ], $catalogableProperties));
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -111,7 +78,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $user = $this->createUser();
 
@@ -131,7 +98,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $user = $this->createUser();
 
@@ -143,7 +110,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $user = $this->createUser();
 
@@ -151,18 +118,18 @@ class UserRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($user->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Verify that when a User is associated with a new CatalogEntity, the User has
+     * Verify that when a User is related to a CatalogEntity, the User has
      * one or more CatalogEntities.
      *
      * @return void
      */
-    public function test_entities_whenUserAssociatedWithCatalogEntity_userHasManyCatalogEntities()
+    public function testWhenUserRelatedToCatalogEntityItHasManyCatalogEntities()
     {
         $catalogEntity = $this->catalogEntity->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -172,14 +139,55 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Verify that when a User is associated with Account, the User has one Account.
+     * Verify that when a User is related to an Account, the User has one Account.
      *
      * @return void
      */
-    public function test_account_whenUserAssociatedWithAccount_userHasOneAccount()
+    public function testWhenUserRelatedToAccountItHasOneAccount()
     {
         $user = $this->createUser();
 
         $this->assertInstanceOf($this->account->class(), $user->account);
+    }
+
+    /**
+     * Create a User.
+     *
+     * @return \App\User
+     */
+    protected function createUser()
+    {
+        $user = factory($this->user->class())->make();
+
+        $user = $this->user->create([
+            'email' => $user->email,
+            'password' => $user->password,
+            'account' => factory($this->account->class())->raw()
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Make a CatalogEntity.
+     *
+     * @param $type
+     * @param array $entityProperties
+     * @param array $catalogableProperties
+     * @return mixed
+     */
+    protected function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])
+    {
+        $user = $this->createUser();
+
+        $profile = factory($this->profile->class())->make();
+
+        $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
+
+        return factory($this->catalogEntity->class())->make(array_merge([
+            'catalogable_id' => $entity->id,
+            'catalogable_type' => $type->class(),
+            'user_id' => $user->id
+        ], $catalogableProperties));
     }
 }
