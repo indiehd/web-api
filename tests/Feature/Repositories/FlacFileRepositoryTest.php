@@ -61,7 +61,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $flacFile = factory($this->repo->class())->make();
 
@@ -74,7 +74,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $flacFile = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -96,7 +96,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $flacFile = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -110,7 +110,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $flacFile = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -120,18 +120,18 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($flacFile->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that when a FlacFile is associated with a Song, the FlacFile has
+     * Ensure that when a FlacFile is related to a Song, the FlacFile has
      * one or more Songs.
      *
      * @return void
      */
-    public function test_song_flacFile_hasManySongs()
+    public function testWhenFlacFileRelatedToSongItHasManySongs()
     {
         // TODO This is identical to the AlbumRepositoryTest::makeAlbum() method.
         // Is there any compelling reason to make this more DRY?
@@ -142,7 +142,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
             )
         );
 
-        // This is the one property that can't passed via the argument.
+        // This is the one property that can't be passed via the argument.
 
         $properties['artist_id'] = $artist->id;
 

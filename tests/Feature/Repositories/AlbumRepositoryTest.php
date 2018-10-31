@@ -14,11 +14,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $album AlbumRepositoryInterface
-     */
-    protected $album;
-
-    /**
      * @var $artist ArtistRepositoryInterface
      */
     protected $artist;
@@ -79,48 +74,9 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Creates a new Album.
-     *
-     * @param array $properties
-     * @return \App\Album
-     */
-    public function makeAlbum(array $properties = [])
-    {
-        $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
-            )->toArray()
-        );
-
-        // This is the one property that can't passed via the argument.
-
-        $properties['artist_id'] = $artist->id;
-
-        return factory($this->repo->class())->make($properties);
-    }
-
-    /**
-     * Makes a new Order Item.
-     *
-     * @return \App\OrderItem
-     */
-    public function makeOrderItem($properties = [])
-    {
-        return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                    factory($this->order->class())->raw()
-                )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->repo->create(
-                    $this->makeAlbum()->toArray()
-                )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->repo->class(),
-        ]);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -131,7 +87,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -149,7 +105,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -161,7 +117,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -169,27 +125,27 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($album->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that a newly-created Album belongs to an Artist.
+     * Ensure that an Album belongs to an Artist.
      *
      * @return void
      */
-    public function test_artist_albumBelongsToArtist()
+    public function testAlbumBelongsToArtist()
     {
         $this->assertInstanceOf($this->artist->class(), $this->makeAlbum()->artist);
     }
 
     /**
-     * Ensure that a newly-created Album has one or more Songs.
+     * Ensure that an Album has one or more Songs.
      *
      * @return void
      */
-    public function test_songs_albumHasManySongs()
+    public function testAlbumHasManySongs()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -202,11 +158,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that a newly-created Album belongs to one or more Genres.
+     * Ensure that an Album belongs to one or more Genres.
      *
      * @return void
      */
-    public function test_genres_albumBelongsToManyGenres()
+    public function testAlbumBelongsToManyGenres()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -223,7 +179,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      *
      * @return void
      */
-    public function test_copiesSold_whenAlbumSold_morphsManyOrderItems()
+    public function testWhenAlbumSoldItMorphsManyOrderItem()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
@@ -233,5 +189,45 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
         ])->toArray());
 
         $this->assertInstanceOf($this->orderItem->class(), $album->copiesSold->first());
+    }
+
+    /**
+     * Create an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->make(
+                factory($this->profile->class())->raw()
+            )->toArray()
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->repo->class())->make($properties);
+    }
+
+    /**
+     * Make an Order Item.
+     *
+     * @param array $properties
+     * @return \App\OrderItem
+     */
+    protected function makeOrderItem($properties = [])
+    {
+        return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                factory($this->order->class())->raw()
+            )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->repo->create(
+                $this->makeAlbum()->toArray()
+            )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->repo->class(),
+        ]);
     }
 }

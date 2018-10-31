@@ -37,9 +37,9 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
-        $this->album = resolve(AlbumRepositoryInterface::class);
-
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
     }
 
     /**
@@ -51,30 +51,9 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Creates a new Album.
-     *
-     * @param array $properties
-     * @return \App\Album
-     */
-    public function makeAlbum(array $properties = [])
-    {
-        $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
-            )->toArray()
-        );
-
-        // This is the one property that can't passed via the argument.
-
-        $properties['artist_id'] = $artist->id;
-
-        return factory($this->album->class())->make($properties);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $genre = factory($this->repo->class())->make();
 
@@ -87,7 +66,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $genre = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -109,7 +88,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $genre = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -123,7 +102,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $genre = $this->repo->create(
             factory($this->repo->class())->raw()
@@ -133,18 +112,18 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($genre->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that when a Genre is associated with an Album, the Genre has
+     * Ensure that when a Genre is related to an Album, the Genre has
      * one or more Albums.
      *
      * @return void
      */
-    public function test_albums_randomAlbum_belongsToManyGenres()
+    public function testWhenGenreAssociatedWithAlbumItHasManyAlbums()
     {
         $album = $this->album->create($this->makeAlbum()->toArray());
 
@@ -155,5 +134,26 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
         $album->genres()->attach($genre->id);
 
         $this->assertInstanceOf($this->album->class(), $genre->albums->first());
+    }
+
+    /**
+     * Make an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->make(
+                factory($this->profile->class())->raw()
+            )->toArray()
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->make($properties);
     }
 }

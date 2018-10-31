@@ -79,34 +79,12 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make a new User object.
-     *
-     * @param array $userProperties
-     * @param array $accountProperties
-     * @return \App\User
-     */
-    public function makeUser(array $userProperties = [], array $accountProperties = [])
-    {
-        $user = factory($this->user->class())->make($userProperties);
-
-        $account = factory($this->account->class())->make($accountProperties);
-
-        $user = $this->user->create([
-            'email' => $user->email,
-            'password' => $user->password,
-            'account' => $account->toArray(),
-        ]);
-
-        return $user;
-    }
-
-    /**
      * Ensure the method create() creates a new record in the database and creates a profile for
      * said Artist.
      *
      * @return void
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $profile = factory($this->profile->class())->make();
 
@@ -119,7 +97,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $profile = factory($this->profile->class())->make(['country_code' => 'US']);
 
@@ -137,7 +115,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $profile = factory($this->profile->class())->make();
 
@@ -151,7 +129,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $profile = factory($this->profile->class())->make();
 
@@ -161,7 +139,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($artist->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
@@ -171,13 +149,13 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      *
      * @return void
      */
-    public function test_catalogable_newArtist_morphsToCatalogableEntity()
+    public function testArtistMorphsToCatalogableEntity()
     {
         $artist = $this->repo->create(
             factory($this->profile->class())->raw()
         );
 
-        $user = $this->makeUser();
+        $user = $this->createUser();
 
         $catalogEntity = factory($this->catalogEntity->class())->make([
             'user_id' => $user->id,
@@ -201,11 +179,11 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that a new Artist morphs to a Profile.
+     * Ensure that an Artist morphs to a Profile.
      *
      * @return void
      */
-    public function test_profile_newArtist_morphsToProfile()
+    public function testArtistMorphsToProfile()
     {
         $profile = factory($this->profile->class())->make();
 
@@ -222,12 +200,12 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Verify that when an Artist is associated with a Label, the Artist belongs
+     * Verify that when an Artist is related to a Label, the Artist belongs
      * to the Label.
      *
      * @return void
      */
-    public function test_label_whenAssociatedWithArtist_artistBelongsToLabel()
+    public function testWhenArtistRelatedToLabelItBelongsToLabel()
     {
         $labelProfile = factory($this->profile->class())->make();
 
@@ -245,12 +223,12 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Verify that when an Album is associated with a new Artist, the Artist has
+     * Verify that when an Album is related to an Artist, the Artist has
      * at least one Album.
      *
      * @return void
      */
-    public function test_albums_whenAssociatedWithArtist_artistHasManyAlbums()
+    public function testWhenArtistRelatedToAlbumItHasManyAlbums()
     {
         $artist = $this->repo->create(
             factory($this->profile->class())->raw()
@@ -264,12 +242,12 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Verify that when an Album is associated with a new Artist, the Artist has
+     * Verify that when an Album is related to an Artist, the Artist has
      * at least one Song (through an Album).
      *
      * @return void
      */
-    public function test_songs_whenAlbumAssociatedWithArtist_artistHasManySongs()
+    public function testWhenArtistRelatedToAlbumItHasManySongs()
     {
         $artist = $this->repo->create(
             factory($this->profile->class())->raw()
@@ -287,5 +265,27 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
         $this->song->create($song->toArray());
 
         $this->assertInstanceOf($this->song->class(), $artist->albums()->first()->songs->first());
+    }
+
+    /**
+     * Create a new User.
+     *
+     * @param array $userProperties
+     * @param array $accountProperties
+     * @return \App\User
+     */
+    protected function createUser(array $userProperties = [], array $accountProperties = [])
+    {
+        $user = factory($this->user->class())->make($userProperties);
+
+        $account = factory($this->account->class())->make($accountProperties);
+
+        $user = $this->user->create([
+            'email' => $user->email,
+            'password' => $user->password,
+            'account' => $account->toArray(),
+        ]);
+
+        return $user;
     }
 }
