@@ -46,7 +46,7 @@ class ArtistControllerTest extends ControllerTestCase
         $this->updateArtist = new UpdateArtist();
     }
 
-    public function spawnArtist()
+    public function createArtist()
     {
         $artist = $this->artist->model()->create();
 
@@ -85,23 +85,9 @@ class ArtistControllerTest extends ControllerTestCase
         ];
     }
 
-    public function getInputsInInvalidState()
+    public function test_all_returnsOkStatusAndExpectedJsonStructure()
     {
-        return [
-            'moniker' => str_random(256),
-            'alt_moniker' => str_random(256),
-            'email' => 'foo@',
-            'city' => str_random(256),
-            'territory' => str_random(256),
-            'country_code' => 'United States',
-            'official_url' => 'joeysbasementband.com',
-            'profile_url' => str_random(65),
-        ];
-    }
-
-    public function test_index_returnsMultipleJsonObjects()
-    {
-        $this->spawnArtist();
+        $this->createArtist();
 
         $this->json('GET', route('artists.index'))
             ->assertStatus(200)
@@ -112,28 +98,9 @@ class ArtistControllerTest extends ControllerTestCase
             ]);
     }
 
-    public function test_store_withValidInputs_returnsOneJsonObject()
+    public function test_show_returnsOkStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('artists.store'), $this->getAllInputsInValidState())
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
-            ]);
-    }
-
-    public function test_store_withInvalidInputs_returnsErrorMessage()
-    {
-        $this->json('POST', route('artists.store'), $this->getInputsInInvalidState())
-            ->assertStatus(422)
-            ->assertJsonStructure([
-                'message',
-                'errors' => array_keys($this->storeArtist->rules())
-            ]);
-    }
-
-    public function test_show_returnsOneJsonObject()
-    {
-        $artist = $this->spawnArtist();
+        $artist = $this->createArtist();
 
         $this->json('GET', route('artists.show', ['id' => $artist->id]))
             ->assertStatus(200)
@@ -142,9 +109,28 @@ class ArtistControllerTest extends ControllerTestCase
             ]);
     }
 
-    public function test_update_withValidInputs_returnsJsonObjectMatchingInputs()
+    public function test_store_withValidInput_returnsOkStatusAndExpectedJsonStructure()
     {
-        $artist = $this->spawnArtist();
+        $this->json('POST', route('artists.store'), $this->getAllInputsInValidState())
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    public function test_store_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
+    {
+        $this->json('POST', route('artists.store'), [])
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+                'errors'
+            ]);
+    }
+
+    public function test_update_withValidInput_returnsOkStatusAndExpectedJsonStructure()
+    {
+        $artist = $this->createArtist();
 
         $inputs = $this->getAllInputsInValidState();
 
@@ -152,26 +138,41 @@ class ArtistControllerTest extends ControllerTestCase
 
         $this->json('PUT', route('artists.update', ['id' => $artist->id]), $inputs)
             ->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    'id' => $artist->id,
-                    'label' => null,
-                    'profile' => $inputs,
-                    'songs' => [],
-                    'albums' => [],
-                ]
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
             ]);
     }
 
-    public function test_update_withInvalidInputs_returnsErrorMessage()
+    public function test_update_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $artist = $this->spawnArtist();
+        $artist = $this->createArtist();
 
-        $this->json('PUT', route('artists.update', ['id' => $artist->id]), $this->getInputsInInvalidState())
+        $this->json('PUT', route('artists.update', ['id' => $artist->id]), ['email' => 'foo@'])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => array_keys($this->updateArtist->rules())
+                'errors'
             ]);
+    }
+
+    public function test_destroy_withValidInput_returnsOkStatusAndExpectedJsonStructure()
+    {
+        $artist = $this->createArtist();
+
+        $this->json('DELETE', route('artists.destroy', ['id' => $artist->id]))
+            ->assertStatus(200)
+            ->assertJsonStructure([]);
+    }
+
+    public function test_destroy_withInvalidInput_returnsUnprocessableEntityStatus()
+    {
+        $this->json('DELETE', route('artists.destroy', ['id' => 'foo']))
+            ->assertStatus(404);
+    }
+
+    public function test_destroy_withMissingInput_returnsMethodNotAllowedStatus()
+    {
+        $this->json('DELETE', route('artists.destroy', ['id' => null]))
+            ->assertStatus(405);
     }
 }

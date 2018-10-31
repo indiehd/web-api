@@ -58,46 +58,9 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Creates a Song.
-     *
-     * @return \App\Song
-     */
-    public function createSong()
-    {
-        $album = $this->album->create(
-            factory($this->album->class())->raw()
-        );
-
-        return $this->repo->create(
-            factory($this->repo->class())->raw([
-                'album_id' => $album->id,
-                'track_number' => 1,
-            ])
-        );
-    }
-
-    /**
-     * Makes a new Order Item.
-     *
-     * @return \App\OrderItem
-     */
-    public function makeOrderItem($properties = [])
-    {
-        return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                    factory($this->order->class())->raw()
-                )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
-                    $this->makeAlbum()->toArray()
-                )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
-        ]);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -108,7 +71,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $song = $this->createSong();
 
@@ -128,7 +91,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $song = $this->createSong();
 
@@ -140,7 +103,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $song = $this->createSong();
 
@@ -148,40 +111,39 @@ class SongRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($song->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that when a Song is associated with an Album, the Song belongs to
+     * Ensure that when a Song is related to an Album, the Song belongs to
      * an Album.
      *
      * @return void
      */
-    public function test_albums_song_belongsToAlbum()
+    public function testSongBelongsToAlbum()
     {
         $this->assertInstanceOf($this->album->class(), $this->createSong()->album);
     }
 
     /**
-     * Ensure that when a Song is associated with a FlacFile, the Song belongs
+     * Ensure that when a Song is related to a FlacFile, the Song belongs
      * to a FlacFile.
      *
      * @return void
      */
-    public function test_flacFile_song_belongsToFlacFile()
+    public function testSongBelongsToFlacFile()
     {
         $this->assertInstanceOf($this->flacFile->class(), $this->createSong()->flacFile);
     }
 
     /**
-     * Ensure that when a copy of a Song is sold, the Song morphs many Order
-     * Items.
+     * Ensure that when a Song is sold, the Song morphs many Order Items.
      *
      * @return void
      */
-    public function test_copiesSold_whenSongSold_morphsManyOrderItems()
+    public function testWhenSongSoldItMorphsManyOrderItems()
     {
         $song = $this->createSong();
 
@@ -191,5 +153,44 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         ])->toArray());
 
         $this->assertInstanceOf($this->orderItem->class(), $song->copiesSold->first());
+    }
+
+    /**
+     * Create a Song.
+     *
+     * @return \App\Song
+     */
+    protected function createSong()
+    {
+        $album = $this->album->create(
+            factory($this->album->class())->raw()
+        );
+
+        return $this->repo->create(
+            factory($this->repo->class())->raw([
+                'album_id' => $album->id,
+                'track_number' => 1,
+            ])
+        );
+    }
+
+    /**
+     * Make an Order Item.
+     *
+     * @param array $properties
+     * @return \App\OrderItem
+     */
+    protected function makeOrderItem($properties = [])
+    {
+        return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                factory($this->order->class())->raw()
+            )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+                // TODO This method doesn't exist here; add it.
+                $this->makeAlbum()->toArray()
+            )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+        ]);
     }
 }

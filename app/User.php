@@ -3,33 +3,30 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Cartalyst\Sentinel\Users\EloquentUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends EloquentUser
+class User extends Authenticatable
 {
     use Notifiable;
 
     /**
-     * {@inheritDoc}
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
     protected $fillable = [
-        'email',
-        'username',
-        'password',
-        'permissions',
+        'name', 'email', 'password',
     ];
 
     /**
-     * {@inheritDoc}
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'remember_token',
     ];
-
-    /**
-     * {@inheritDoc}
-     */
-    protected $loginNames = ['email'];
 
     public function entities()
     {

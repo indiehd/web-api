@@ -30,7 +30,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     protected $artist;
 
     /**
-     * @var $profile ProfileEntityRepositoryInterface
+     * @var $profile ProfileRepositoryInterface
      */
     protected $profile;
 
@@ -67,38 +67,10 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
         $this->repo = resolve(CatalogEntityRepositoryInterface::class);
     }
 
-    public function createUser()
-    {
-        $user = factory($this->user->class())->make();
-
-        $user = $this->user->create([
-            'username' => $user->username,
-            'password' => $user->password,
-            'account' => factory($this->account->class())->make()->toArray()
-        ]);
-
-        return $user;
-    }
-
-    public function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])
-    {
-        $user = $this->createUser();
-
-        $profile = factory($this->profile->class())->make();
-
-        $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
-
-        return factory($this->repo->class())->make(array_merge([
-            'catalogable_id' => $entity->id,
-            'catalogable_type' => $type->class(),
-            'user_id' => $user->id
-        ], $catalogableProperties));
-    }
-
     /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $catalogEntity = $this->makeCatalogEntity($this->artist);
 
@@ -111,7 +83,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $catalogEntity = $this->repo->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -133,7 +105,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $catalogEntity = $this->repo->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -147,7 +119,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $catalogEntity = $this->repo->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -157,7 +129,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($catalogEntity->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
@@ -167,7 +139,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
      *
      * @return void
      */
-    public function test_catalogable_allTypes_morphToCatalogEntity()
+    public function testAllTypesMorphToCatalogEntity()
     {
         $artistEntity = $this->repo->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -183,11 +155,11 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that a new CatalogEntity belongs to a User.
+     * Ensure that a CatalogEntity belongs to a User.
      *
      * @return void
      */
-    public function test_user_newCatalogEntity_belongsToUser()
+    public function testCatalogEntityBelongsToUser()
     {
         $artistEntity = $this->repo->create(
             $this->makeCatalogEntity($this->artist)->toArray()
@@ -200,15 +172,15 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
      * Ensure that when a CatalogEntity is approved, the CatalogEntity
      * belongs to an approver who is a User.
      */
-    public function test_approver_aNewCatalogEntityOfRandomTypeIsApproved_belongsToApprover()
+    public function testWhenCatalogEntityIsApprovedItBelongsToApprover()
     {
         $user = $this->createUser();
 
         $catalogEntity = $this->makeCatalogEntity(
-                $this->artist,
-                [],
-                ['approver_id' => $user->id]
-            )->toArray();
+            $this->artist,
+            [],
+            ['approver_id' => $user->id]
+        )->toArray();
 
         $artistEntity = $this->repo->create($catalogEntity);
 
@@ -219,18 +191,59 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
      * Ensure that when a CatalogEntity is deleted, the CatalogEntity
      * belongs to a deleter who is a User.
      */
-    public function test_deleter_aNewCatalogEntityOfRandomTypeIsDeleted_belongsToDeleter()
+    public function testWhenCatalogEntityIsDeletedItBelongsToDeleter()
     {
         $user = $this->createUser();
 
         $catalogEntity = $this->makeCatalogEntity(
-                $this->artist,
-                [],
-                ['deleter_id' => $user->id]
-            )->toArray();
+            $this->artist,
+            [],
+            ['deleter_id' => $user->id]
+        )->toArray();
 
         $artistEntity = $this->repo->create($catalogEntity);
 
         $this->assertInstanceOf($this->user->class(), $artistEntity->deleter);
+    }
+
+    /**
+     * Create a User.
+     *
+     * @return \App\User
+     */
+    protected function createUser()
+    {
+        $user = factory($this->user->class())->make();
+
+        $user = $this->user->create([
+            'email' => $user->email,
+            'password' => $user->password,
+            'account' => factory($this->account->class())->raw()
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Make a CatalogEntity.
+     *
+     * @param $type
+     * @param array $entityProperties
+     * @param array $catalogableProperties
+     * @return mixed
+     */
+    protected function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])
+    {
+        $user = $this->createUser();
+
+        $profile = factory($this->profile->class())->make();
+
+        $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
+
+        return factory($this->repo->class())->make(array_merge([
+            'catalogable_id' => $entity->id,
+            'catalogable_type' => $type->class(),
+            'user_id' => $user->id
+        ], $catalogableProperties));
     }
 }

@@ -31,51 +31,51 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
     abstract public function setRepository();
 
     /**
-     * Ensure the property $repo is instantiable.
+     * Ensure that the $repo property is instantiable.
      *
      * @return void
      */
-    public function test_property_repo_isInstantiable()
+    public function testRepoIsInstantiable()
     {
         $this->assertTrue($this->isInstantiable($this->repo));
     }
 
     /**
-     * Ensure the method class() returns a string.
+     * Ensure that the class() method returns a string.
      *
      * @return void
      */
-    public function test_method_class_returnsString()
+    public function testClassReturnsString()
     {
         $this->assertTrue(is_string($this->repo->class()));
     }
 
     /**
-     * Ensure the method class() can be instantiated.
+     * Ensure that the class() method return value can be instantiated.
      *
      * @return void
      */
-    public function test_method_class_isInstantiable()
+    public function testClassIsInstantiable()
     {
         $this->assertTrue($this->isInstantiable($this->repo->class()));
     }
 
     /**
-     * Ensure the method model() is an instance of Model.
+     * Ensure that the model() method returns an instance of the Model class.
      *
      * @return void
      */
-    public function test_method_model_isInstanceOfModel()
+    public function testModelIsInstanceOfModel()
     {
         $this->assertInstanceOf($this->repo->class(), $this->repo->model());
     }
 
     /**
-     * Ensure the method all() returns a Collection containing instances ONLY of Model.
+     * Ensure that the all() method returns a Collection containing instances ONLY of Model.
      *
      * @return void
      */
-    public function test_method_all_returnsOnlyCollectionOfModels()
+    public function testAllReturnsOnlyCollectionOfModels()
     {
         $models = $this->repo->all();
         $this->assertInstanceOf(Collection::class, $models);

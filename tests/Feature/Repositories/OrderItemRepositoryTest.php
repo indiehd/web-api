@@ -24,14 +24,14 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     protected $artist;
 
     /**
-     * @var SongRepositoryInterface $song
-     */
-    protected $song;
-
-    /**
      * @var AlbumRepositoryInterface $album
      */
     protected $album;
+
+    /**
+     * @var SongRepositoryInterface $song
+     */
+    protected $song;
 
     /**
      * @var OrderRepositoryInterface $order
@@ -49,11 +49,11 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
+        $this->artist = resolve(ArtistRepositoryInterface::class);
+
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->song = resolve(SongRepositoryInterface::class);
-
-        $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->order = resolve(OrderRepositoryInterface::class);
     }
@@ -67,67 +67,9 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Makes a new Album.
-     *
-     * @param array $properties
-     * @return \App\Album
-     */
-    public function makeAlbum(array $properties = [])
-    {
-        $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
-            )->toArray()
-        );
-
-        // This is the one property that can't passed via the argument.
-
-        $properties['artist_id'] = $artist->id;
-
-        return factory($this->album->class())->make($properties);
-    }
-
-    /**
-     * Creates a Song.
-     *
-     * @return \App\Song
-     */
-    public function createSong()
-    {
-        $album = $this->album->create(
-            factory($this->album->class())->raw()
-        );
-
-        return $this->song->create(
-            factory($this->song->class())->raw([
-                'album_id' => $album->id,
-                'track_number' => 1,
-            ])
-        );
-    }
-
-    /**
-     * Makes a new Order Item.
-     *
-     * @return \App\OrderItem
-     */
-    public function makeOrderItem($properties = [])
-    {
-        return factory($this->repo->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->raw()
-            )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
-                $this->makeAlbum()->toArray()
-            )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
-        ]);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function test_method_create_storesNewResource()
+    public function testCreateStoresNewResource()
     {
         $item = $this->makeOrderItem();
 
@@ -140,7 +82,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_updatesResource()
+    public function testUpdateUpdatesResource()
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
@@ -162,7 +104,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_update_returnsModelInstance()
+    public function testUpdateReturnsModelInstance()
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
@@ -174,7 +116,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function test_method_delete_deletesResource()
+    public function testDeleteDeletesResource()
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
@@ -182,18 +124,18 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($item->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }
     }
 
     /**
-     * Ensure that when an Order is associated with an Order Item, the Order
+     * Ensure that when an Order is related to an Order Item, the Order
      * Item belongs to an Order.
      *
      * @return void
      */
-    public function test_whenAssociatedWithOrder_OrderItemBelongsToOrder()
+    public function testWhenOrderItemRelatedToOrderItBelongsToOrder()
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
@@ -201,11 +143,11 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that a sold copy of an Album morphs to Orderable.
+     * Ensure that a sold Album morphs to Orderable.
      *
      * @return void
      */
-    public function test_orderable_soldAlbum_morphsToOrderable()
+    public function testWhenAlbumSoldItMorphsToOrderable()
     {
         $soldAlbum = $this->repo->create($this->makeOrderItem()->toArray());
 
@@ -213,11 +155,11 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that a sold copy of a Song morphs to Orderable.
+     * Ensure that a sold Song morphs to Orderable.
      *
      * @return void
      */
-    public function test_orderable_soldSong_morphsToOrderable()
+    public function testWhenSongSoldItMorphsToOrderable()
     {
         $song = $this->createSong();
 
@@ -227,5 +169,64 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
         ])->toArray());
 
         $this->assertInstanceOf($this->song->class(), $soldSong->orderable);
+    }
+
+    /**
+     * Make an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->make($properties);
+    }
+
+    /**
+     * Create a Song.
+     *
+     * @return \App\Song
+     */
+    protected function createSong()
+    {
+        $album = $this->album->create(
+            factory($this->album->class())->raw()
+        );
+
+        return $this->song->create(
+            factory($this->song->class())->raw([
+                'album_id' => $album->id,
+                'track_number' => 1,
+            ])
+        );
+    }
+
+    /**
+     * Make an Order Item.
+     *
+     * @param array $properties
+     * @return \App\OrderItem
+     */
+    protected function makeOrderItem($properties = [])
+    {
+        return factory($this->repo->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                factory($this->order->class())->raw()
+            )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+                $this->makeAlbum()->toArray()
+            )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+        ]);
     }
 }
