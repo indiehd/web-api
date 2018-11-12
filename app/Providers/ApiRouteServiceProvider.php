@@ -31,7 +31,7 @@ class ApiRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Map all Api Routes here
+     * Map all Api Routes here.
      *
      */
     public function map()
@@ -40,7 +40,7 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->mapRoutes('artists', 'ArtistController');
         $this->mapRoutes('albums', 'AlbumController');
         $this->mapRoutes('songs', 'SongController');
-        // ...
+        $this->mapRoutes('orders', 'OrderController');
     }
 
     protected function mapRoutes($prefix, $controller)
