@@ -13,22 +13,22 @@ class OrderSeeder extends BaseSeeder
      */
     public function run()
     {
-        $cartSeedCount = 10;
+        $orderSeedCount = 10;
 
-        $cartItemSeedCount = 10;
+        $orderItemSeedCount = 10;
 
-        $cartable = [
+        $orderable = [
             App\Song::class,
             App\Album::class
         ];
 
-        for ($i = 1; $i <= $cartSeedCount; $i++) {
+        for ($i = 1; $i <= $orderSeedCount; $i++) {
 
             $this->log('Creating an Order');
             $cart = factory(App\Order::class)->create();
 
-            for ($j = 1; $j <= $cartItemSeedCount; $j++) {
-                $type = $cartable[rand(0, count($cartable) - 1)];
+            for ($j = 1; $j <= $orderItemSeedCount; $j++) {
+                $type = $orderable[rand(0, count($orderable) - 1)];
                 $this->log("Creating an Order item for $type");
 
                 if ($type === 'App\Album') {
