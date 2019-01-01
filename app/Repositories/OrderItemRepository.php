@@ -13,13 +13,13 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
     protected $class = OrderItem::class;
 
     /**
-     * @var OrderItem $cartItem
+     * @var OrderItem $orderItem
      */
-    protected $cartItem;
+    protected $orderItem;
 
     public function __construct(OrderItem $cartItem)
     {
-        $this->cartItem = $cartItem;
+        $this->orderItem = $cartItem;
     }
 
     /**
@@ -39,6 +39,6 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
      */
     public function model()
     {
-        return $this->cartItem;
+        return $this->orderItem;
     }
 }
