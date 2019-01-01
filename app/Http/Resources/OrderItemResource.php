@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\OrderItem;
 
 class OrderItemResource extends JsonResource
 {
@@ -16,7 +17,6 @@ class OrderItemResource extends JsonResource
     {
         return [
             'id'=> $this->id,
-            'orderable_type' => new OrderItem($this->whenLoaded('orderItems')),
         ];
     }
 }

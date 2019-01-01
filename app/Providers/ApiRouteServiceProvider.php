@@ -41,6 +41,7 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->mapRoutes('albums', 'AlbumController');
         $this->mapRoutes('songs', 'SongController');
         $this->mapRoutes('orders', 'OrderController');
+        $this->mapRoutes('order-items', 'OrderItemController');
     }
 
     protected function mapRoutes($prefix, $controller)
