@@ -9,7 +9,6 @@ use App\Http\Resources\OrderResource;
 
 class OrderController extends ApiController
 {
-
     /**
      * Should return the <RepositoryInterface>::class
      *

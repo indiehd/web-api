@@ -4,7 +4,6 @@ namespace Tests\Feature\Controllers;
 
 use CountriesSeeder;
 
-use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Http\Requests\StoreArtist;
