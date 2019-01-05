@@ -42,6 +42,14 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->mapRoutes('songs', 'SongController');
         $this->mapRoutes('orders', 'OrderController');
         $this->mapRoutes('order-items', 'OrderItemController');
+
+        // TODO There's probably a better means by which to add these, syntactically.
+
+        (new ApiRoute('orders', 'OrderController'))
+            ->mapAdditionalRoute('/storeOrder', 'storeOrder', 'post');
+
+        (new ApiRoute('orders', 'OrderController'))
+            ->mapAdditionalRoute('/updateOrder/{orderId}', 'updateOrder', 'post');
     }
 
     protected function mapRoutes($prefix, $controller)
