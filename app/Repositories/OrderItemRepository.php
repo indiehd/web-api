@@ -17,9 +17,9 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
      */
     protected $orderItem;
 
-    public function __construct(OrderItem $cartItem)
+    public function __construct(OrderItem $orderItem)
     {
-        $this->orderItem = $cartItem;
+        $this->orderItem = $orderItem;
     }
 
     /**
