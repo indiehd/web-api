@@ -4,8 +4,12 @@ namespace Tests\Feature\Controllers;
 
 use CountriesSeeder;
 use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 
 class OrderControllerTest extends ControllerTestCase
 {
@@ -13,6 +17,11 @@ class OrderControllerTest extends ControllerTestCase
      * @var $order OrderRepositoryInterface
      */
     protected $order;
+
+    /**
+     * @var $order OrderItemRepositoryInterface
+     */
+    protected $orderItem;
 
     /**
      * @var $user UserRepositoryInterface
@@ -25,6 +34,16 @@ class OrderControllerTest extends ControllerTestCase
     protected $account;
 
     /**
+     * @var $album AlbumRepositoryInterface
+     */
+    protected $album;
+
+    /**
+     * @var $profile ProfileRepositoryInterface
+     */
+    protected $profile;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
@@ -35,9 +54,17 @@ class OrderControllerTest extends ControllerTestCase
 
         $this->order = resolve(OrderRepositoryInterface::class);
 
+        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
+
         $this->user = resolve(UserRepositoryInterface::class);
 
         $this->account = resolve(AccountRepositoryInterface::class);
+
+        $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
     }
 
     /**
@@ -96,43 +123,68 @@ class OrderControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that requests with valid input result in OK HTTP status and the
-     * expected JSON structure.
+     * Ensure that Create requests with one or more Order Items result in OK HTTP
+     * status and the expected JSON structure.
      */
-    public function testStoreWithValidInputReturnsOkStatusAndExpectedJsonStructure()
-    {
-        $this->json('POST', route('orders.store'), $this->getAllInputsInValidState())
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
-            ]);
-    }
-
-    /**
-     * Ensure that any invalid input is ignored and a success response returned
-     * in such cases.
-     */
-    public function testStoreWithInvalidInputReturnsOkStatusAndExpectedJsonStructure()
-    {
-        $this->json('POST', route('orders.store'), [
-            'unexpected' => 'junk',
-        ])
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
-            ]);
-    }
-
-    /**
-     * Ensure that any attempt to update an Order fails with an Unauthorized
-     * response, as Orders should be immutable once created.
-     */
-    public function testUpdateReturnsUnauthorizedStatus()
+    public function testStoreWithOrderItemsReturnsOkStatusAndExpectedJsonStructure()
     {
         $order = $this->order->create([]);
 
-        $this->json('PUT', route('orders.update', ['id' => $order->id]))
-            ->assertStatus(403);
+        $orderItem = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $this->json('POST', route('orders.store_order'), ['items' => $orderItem])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    /**
+     * Ensure that Update requests with exactly one Order Items result in OK HTTP
+     * status and the expected JSON structure.
+     */
+    public function testUpdateWithOneOrderItemReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $this->json('POST', route('orders.update_order', ['orderId' => $order->id]), ['items' => $orderItem])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    /**
+     * Ensure that Update requests with one or more Order Items result in OK HTTP
+     * status and the expected JSON structure.
+     */
+    public function testUpdateWithMultipleOrderItemsReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem1 = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $orderItem2 = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $this->json('POST', route(
+                'orders.update_order',
+                ['orderId' => $order->id]),
+                ['items' => [$orderItem1, $orderItem2]]
+            )
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
     }
 
     /**
@@ -184,5 +236,64 @@ class OrderControllerTest extends ControllerTestCase
         ]);
 
         return $user;
+    }
+
+    /**
+     * Make an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->make($properties);
+    }
+
+    /**
+     * Create a Song.
+     *
+     * @return \App\Song
+     */
+    protected function createSong()
+    {
+        $album = $this->album->create(
+            factory($this->album->class())->raw()
+        );
+
+        return $this->song->create(
+            factory($this->song->class())->raw([
+                'album_id' => $album->id,
+                'track_number' => 1,
+            ])
+        );
+    }
+
+    /**
+     * Make an Order Item.
+     *
+     * @param array $properties
+     * @return \App\OrderItem
+     */
+    protected function makeOrderItem($properties = [])
+    {
+        return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                    factory($this->order->class())->raw()
+                )->id,
+            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+                    $this->makeAlbum()->toArray()
+                )->id,
+            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+        ]);
     }
 }
