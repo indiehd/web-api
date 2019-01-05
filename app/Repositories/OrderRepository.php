@@ -47,9 +47,6 @@ class OrderRepository extends CrudRepository implements OrderRepositoryInterface
      */
     public function create(array $data)
     {
-        // Don't pass $data along to create(). In this particular instance, no
-        // input is required (nor should it be considered).
-
-        return $this->model()->create();
+        return $this->model()->create($data);
     }
 }
