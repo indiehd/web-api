@@ -123,10 +123,20 @@ class OrderControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that Create requests with one or more Order Items result in OK HTTP
+     * Ensure that Create requests with invalid input result in validation
+     * failure HTTP status.
+     */
+    public function testStoreWithInvalidInputReturnsValidationFailureStatus()
+    {
+        $this->json('POST', route('orders.store_order'), ['garbage input'])
+            ->assertStatus(422);
+    }
+
+    /**
+     * Ensure that Create requests with one Order Item result in OK HTTP
      * status and the expected JSON structure.
      */
-    public function testStoreWithOrderItemsReturnsOkStatusAndExpectedJsonStructure()
+    public function testStoreWithOneOrderItemReturnsOkStatusAndExpectedJsonStructure()
     {
         $order = $this->order->create([]);
 
@@ -135,6 +145,29 @@ class OrderControllerTest extends ControllerTestCase
         ])->toArray();
 
         $this->json('POST', route('orders.store_order'), ['items' => $orderItem])
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    /**
+     * Ensure that Create requests with more than one Order Item result in OK HTTP
+     * status and the expected JSON structure.
+     */
+    public function testStoreWithMultipleOrderItemsReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem1 = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $orderItem2 = $this->makeOrderItem([
+            'order_id' => $order->id
+        ])->toArray();
+
+        $this->json('POST', route('orders.store_order'), ['items' => [$orderItem1, $orderItem2]])
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -161,7 +194,7 @@ class OrderControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that Update requests with one or more Order Items result in OK HTTP
+     * Ensure that Update requests with more than one Order Item result in OK HTTP
      * status and the expected JSON structure.
      */
     public function testUpdateWithMultipleOrderItemsReturnsOkStatusAndExpectedJsonStructure()
