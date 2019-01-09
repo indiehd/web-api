@@ -138,11 +138,7 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testStoreWithOneOrderItemReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = $this->order->create([]);
-
-        $orderItem = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
+        $orderItem = $this->makeOrderItem()->toArray();
 
         $this->json('POST', route('orders.store_order'), ['items' => $orderItem])
             ->assertStatus(201)
@@ -157,15 +153,9 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testStoreWithMultipleOrderItemsReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = $this->order->create([]);
+        $orderItem1 = $this->makeOrderItem()->toArray();
 
-        $orderItem1 = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
-
-        $orderItem2 = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
+        $orderItem2 = $this->makeOrderItem()->toArray();
 
         $this->json('POST', route('orders.store_order'), ['items' => [$orderItem1, $orderItem2]])
             ->assertStatus(201)
@@ -182,9 +172,7 @@ class OrderControllerTest extends ControllerTestCase
     {
         $order = $this->order->create([]);
 
-        $orderItem = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
+        $orderItem = $this->makeOrderItem()->toArray();
 
         $this->json('POST', route('orders.update_order', ['orderId' => $order->id]), ['items' => $orderItem])
             ->assertStatus(201)
@@ -201,17 +189,11 @@ class OrderControllerTest extends ControllerTestCase
     {
         $order = $this->order->create([]);
 
-        $orderItem1 = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
+        $orderItem1 = $this->makeOrderItem()->toArray();
 
-        $orderItem2 = $this->makeOrderItem([
-            'order_id' => $order->id
-        ])->toArray();
+        $orderItem2 = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route(
-                'orders.update_order',
-                ['orderId' => $order->id]),
+        $this->json('POST', route('orders.update_order', ['id' => $order->id]),
                 ['items' => [$orderItem1, $orderItem2]]
             )
             ->assertStatus(201)
@@ -320,9 +302,6 @@ class OrderControllerTest extends ControllerTestCase
     protected function makeOrderItem($properties = [])
     {
         return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                    factory($this->order->class())->raw()
-                )->id,
             'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
                     $this->makeAlbum()->toArray()
                 )->id,
