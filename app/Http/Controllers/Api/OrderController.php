@@ -81,12 +81,16 @@ class OrderController extends ApiController
             $items = [$request->input('items')];
         }
 
+        $order = $this->orderRepository->model()->create();
+
         foreach ($items as $item) {
+            $item['order_id'] = $order->id;
+
             $this->orderItemRepository->model()->create($item);
         }
 
         return response()->json(
-            ['data' => $this->orderRepository->findById($items[0]['order_id'])],
+            ['data' => $this->orderRepository->findById($order->id)],
             201
         );
     }
@@ -106,11 +110,13 @@ class OrderController extends ApiController
         }
 
         foreach ($items as $item) {
+            $item['order_id'] = $request->route('orderId');
+
             $this->orderItemRepository->model()->create($item);
         }
 
         return response()->json(
-            ['data' => $this->orderRepository->findById($items[0]['order_id'])],
+            ['data' => $this->orderRepository->findById($request->route('orderId'))],
             201
         );
     }

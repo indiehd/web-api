@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrder extends FormRequest
@@ -13,7 +14,7 @@ class UpdateOrder extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return !empty(Order::find($this->route('orderId')));
     }
 
     /**
