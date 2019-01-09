@@ -41,12 +41,4 @@ class OrderRepository extends CrudRepository implements OrderRepositoryInterface
     {
         return $this->order;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function create(array $data)
-    {
-        return $this->model()->create($data);
-    }
 }
