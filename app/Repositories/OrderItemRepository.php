@@ -41,4 +41,13 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
     {
         return $this->orderItem;
     }
+
+    public function findByOrderId($orderId, $orderableId, $orderableType)
+    {
+        return $this->model()->where([
+            'order_id' => $orderId,
+            'orderable_id' => $orderableId,
+            'orderable_type' => $orderableType
+        ])->first();
+    }
 }

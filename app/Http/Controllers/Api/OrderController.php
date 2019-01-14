@@ -98,10 +98,10 @@ class OrderController extends ApiController
     /**
      * Add one or more Items to an existing Order.
      *
-     * @param Request $request
+     * @param UpdateOrder $request
      * @return Response
      */
-    public function updateOrder(UpdateOrder $request)
+    public function addItems(UpdateOrder $request)
     {
         if (isset($request->input('items')[0]) && is_array($request->input('items')[0])) {
             $items = $request->input('items');
@@ -112,12 +112,46 @@ class OrderController extends ApiController
         foreach ($items as $item) {
             $item['order_id'] = $request->route('orderId');
 
-            $this->orderItemRepository->model()->create($item);
+            try {
+                $this->orderItemRepository->model()->create($item);
+            } catch (\Exception $e) {
+                // If Integrity Constraint violation, the same item has already
+                // been added to the Order, and we should handle gracefully.
+            }
         }
 
         return response()->json(
             ['data' => $this->orderRepository->findById($request->route('orderId'))],
             201
         );
+    }
+
+    /**
+     * Remove one or more Items from an existing Order.
+     *
+     * @param UpdateOrder $request
+     * @return Response
+     */
+    public function removeItems(UpdateOrder $request)
+    {
+        if (isset($request->input('items')[0]) && is_array($request->input('items')[0])) {
+            $items = $request->input('items');
+        } else {
+            $items = [$request->input('items')];
+        }
+
+        foreach ($items as $item) {
+            $item['order_id'] = $request->route('orderId');
+
+            $model = $this->orderItemRepository->findByOrderId(
+                $item['order_id'],
+                $item['orderable_id'],
+                $item['orderable_type']
+            );
+
+            $this->orderItemRepository->model()->delete($model->id);
+        }
+
+        return response(['success' => true], 200);
     }
 }

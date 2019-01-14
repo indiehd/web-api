@@ -49,7 +49,10 @@ class ApiRouteServiceProvider extends ServiceProvider
             ->mapAdditionalRoute('/storeOrder', 'storeOrder', 'post');
 
         (new ApiRoute('orders', 'OrderController'))
-            ->mapAdditionalRoute('/updateOrder/{orderId}', 'updateOrder', 'post');
+            ->mapAdditionalRoute('/addItems/{orderId}', 'addItems', 'post');
+
+        (new ApiRoute('orders', 'OrderController'))
+            ->mapAdditionalRoute('/removeItems/{orderId}', 'removeItems', 'delete');
     }
 
     protected function mapRoutes($prefix, $controller)
