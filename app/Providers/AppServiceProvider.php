@@ -37,11 +37,13 @@ use App\Album;
 use App\Genre;
 use App\Label;
 use App\User;
+use App\OrderItem;
 use App\Observers\ArtistObserver;
 use App\Observers\AlbumObserver;
 use App\Observers\GenreObserver;
 use App\Observers\LabelObserver;
 use App\Observers\UserObserver;
+use App\Observers\OrderItemObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -57,6 +59,7 @@ class AppServiceProvider extends ServiceProvider
         Genre::observe(GenreObserver::class);
         Label::observe(LabelObserver::class);
         User::observe(UserObserver::class);
+        OrderItem::observe(OrderItemObserver::class);
     }
 
     /**
