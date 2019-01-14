@@ -165,7 +165,7 @@ class OrderControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that Update requests with exactly one Order Items result in OK HTTP
+     * Ensure that Update requests with exactly one Order Item results in OK HTTP
      * status and the expected JSON structure.
      */
     public function testUpdateWithOneOrderItemReturnsOkStatusAndExpectedJsonStructure()
@@ -174,7 +174,7 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.update_order', ['orderId' => $order->id]), ['items' => $orderItem])
+        $this->json('POST', route('orders.add_items', ['orderId' => $order->id]), ['items' => $orderItem])
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -193,9 +193,28 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem2 = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.update_order', ['id' => $order->id]),
+        $this->json('POST', route('orders.add_items', ['id' => $order->id]),
                 ['items' => [$orderItem1, $orderItem2]]
             )
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructure()
+            ]);
+    }
+
+    /**
+     * Ensure that Update requests with two identical Order Items result in OK HTTP
+     * status and the expected JSON structure.
+     */
+    public function testUpdateWithTwoIdenticalOrderItemsReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem = $this->makeOrderItem()->toArray();
+
+        $this->json('POST', route('orders.add_items', ['id' => $order->id]),
+            ['items' => [$orderItem, $orderItem]]
+        )
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -233,6 +252,23 @@ class OrderControllerTest extends ControllerTestCase
     {
         $this->json('DELETE', route('orders.destroy', ['id' => null]))
             ->assertStatus(405);
+    }
+
+    /**
+     * Ensure that when a valid ID is supplied, the record is destroyed, and an
+     * OK HTTP status is returned, along with the expected JSON structure.
+     */
+    public function testDestroyIndividualOrderItemReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem = $this->orderItem->create($this->makeOrderItem(['order_id' => $order->id])->toArray());
+
+        $order->items()->save($orderItem);
+
+        $this->json('DELETE', route('orders.remove_items', ['id' => $order->id]), ['items' => $orderItem])
+            ->assertStatus(200)
+            ->assertJsonStructure([]);
     }
 
     /**
@@ -302,6 +338,9 @@ class OrderControllerTest extends ControllerTestCase
     protected function makeOrderItem($properties = [])
     {
         return factory($this->orderItem->class())->make([
+            'order_id' => $properties['order_id'] ?? $this->order->create(
+                    factory($this->order->class())->raw()
+                )->id,
             'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
                     $this->makeAlbum()->toArray()
                 )->id,
