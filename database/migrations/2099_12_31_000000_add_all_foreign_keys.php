@@ -48,6 +48,7 @@ class AddAllForeignKeys extends Migration
 
         Schema::table('order_items', function (Blueprint $table) {
             $table->foreign('order_id', 'orders_order_id_fk')->references('id')->on('orders');
+            $table->unique(['order_id', 'orderable_id', 'orderable_type'], 'unique_order_item_cols');
         });
     }
 
