@@ -37,8 +37,10 @@ class OrderItemObserver
     public function deleted(OrderItem $orderItem)
     {
         // If this was the last Order Item to be deleted, then delete the Order.
-        
-        // ...
+
+        if ($orderItem->order->items->isEmpty()) {
+            $orderItem->order->delete();
+        }
     }
 
     /**
