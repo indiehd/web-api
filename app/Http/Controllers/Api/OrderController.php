@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\OrderRepository;
+use DB;
 use Illuminate\Http\Request;
-
+use Illuminate\Http\Response;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\OrderRepositoryInterface;
 use App\Http\Requests\StoreOrder;
 use App\Http\Requests\UpdateOrder;
 use App\Http\Resources\OrderResource;
-use Illuminate\Http\Response;
 
 class OrderController extends ApiController
 {
@@ -83,11 +82,13 @@ class OrderController extends ApiController
 
         $order = $this->orderRepository->model()->create();
 
-        foreach ($items as $item) {
-            $item['order_id'] = $order->id;
+        DB::transaction(function () use ($items, $order) {
+            foreach ($items as $item) {
+                $item['order_id'] = $order->id;
 
-            $this->orderItemRepository->model()->create($item);
-        }
+                $this->orderItemRepository->create($item);
+            }
+        });
 
         return response()->json(
             ['data' => $this->orderRepository->findById($order->id)],
@@ -109,16 +110,13 @@ class OrderController extends ApiController
             $items = [$request->input('items')];
         }
 
-        foreach ($items as $item) {
-            $item['order_id'] = $request->route('orderId');
+        DB::transaction(function () use ($items, $request) {
+            foreach ($items as $item) {
+                $item['order_id'] = $request->route('orderId');
 
-            try {
-                $this->orderItemRepository->model()->create($item);
-            } catch (\Exception $e) {
-                // If Integrity Constraint violation, the same item has already
-                // been added to the Order, and we should handle gracefully.
+                $this->orderItemRepository->create($item);
             }
-        }
+        });
 
         return response()->json(
             ['data' => $this->orderRepository->findById($request->route('orderId'))],
@@ -140,17 +138,19 @@ class OrderController extends ApiController
             $items = [$request->input('items')];
         }
 
-        foreach ($items as $item) {
-            $item['order_id'] = $request->route('orderId');
+        DB::transaction(function () use ($items, $request) {
+            foreach ($items as $item) {
+                $item['order_id'] = $request->route('orderId');
 
-            $model = $this->orderItemRepository->findByOrderId(
-                $item['order_id'],
-                $item['orderable_id'],
-                $item['orderable_type']
-            );
+                $model = $this->orderItemRepository->findByOrderId(
+                    $item['order_id'],
+                    $item['orderable_id'],
+                    $item['orderable_type']
+                );
 
-            $this->orderItemRepository->model()->delete($model->id);
-        }
+                $this->orderItemRepository->delete($model->id);
+            }
+        });
 
         return response(['success' => true], 200);
     }
