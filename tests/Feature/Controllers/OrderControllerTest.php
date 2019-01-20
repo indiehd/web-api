@@ -80,17 +80,6 @@ class OrderControllerTest extends ControllerTestCase
     }
 
     /**
-     * Generate an exhaustive list of valid inputs for use with test methods
-     * that accept inputs.
-     *
-     * @return array
-     */
-    public function getAllInputsInValidState()
-    {
-        return [];
-    }
-
-    /**
      * Ensure that a request for the index returns OK HTTP status and the
      * expected JSON structure.
      */
@@ -204,7 +193,9 @@ class OrderControllerTest extends ControllerTestCase
 
     /**
      * Ensure that Update requests with two identical Order Items result in OK HTTP
-     * status and the expected JSON structure.
+     * status and the expected JSON structure (this is to ensure that even though
+     * adding the same Order Item to the Order more than once is not possible,
+     * doing so does not result in an error and the duplicate is simply ignored).
      */
     public function testUpdateWithTwoIdenticalOrderItemsReturnsOkStatusAndExpectedJsonStructure()
     {
@@ -262,11 +253,32 @@ class OrderControllerTest extends ControllerTestCase
     {
         $order = $this->order->create([]);
 
-        $orderItem = $this->orderItem->create($this->makeOrderItem(['order_id' => $order->id])->toArray());
-
-        $order->items()->save($orderItem);
+        $orderItem = $this->orderItem->create(
+            $this->makeOrderItem(['order_id' => $order->id])->toArray()
+        );
 
         $this->json('DELETE', route('orders.remove_items', ['id' => $order->id]), ['items' => $orderItem])
+            ->assertStatus(200)
+            ->assertJsonStructure([]);
+    }
+
+    /**
+     * Ensure that when a valid ID is supplied, the record is destroyed, and an
+     * OK HTTP status is returned, along with the expected JSON structure.
+     */
+    public function testDestroyMoreThanOneOrderItemReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $order = $this->order->create([]);
+
+        $orderItem1 = $this->orderItem->create(
+            $this->makeOrderItem(['order_id' => $order->id])->toArray()
+        );
+
+        $orderItem2 = $this->orderItem->create(
+            $this->makeOrderItem(['order_id' => $order->id])->toArray()
+        );
+
+        $this->json('DELETE', route('orders.remove_items', ['id' => $order->id]), ['items' => [$orderItem1, $orderItem2]])
             ->assertStatus(200)
             ->assertJsonStructure([]);
     }
