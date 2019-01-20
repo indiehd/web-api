@@ -130,6 +130,23 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Ensure that deleting the last Order Item in an Order causes the Order
+     * to be deleted, too.
+     */
+    public function testDeleteLastItemDeletesOrder()
+    {
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
+
+        $item->delete();
+
+        try {
+            $this->assertNull($this->order->findById($item->order_id));
+        } catch (ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    /**
      * Ensure that when an Order is related to an Order Item, the Order
      * Item belongs to an Order.
      *
