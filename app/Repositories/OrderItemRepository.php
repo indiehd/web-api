@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\QueryException;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\OrderItem;
 
@@ -40,6 +41,20 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
     public function model()
     {
         return $this->orderItem;
+    }
+
+    public function create(array $data)
+    {
+        try {
+            return $this->model()->create($data);
+        } catch (QueryException $e) {
+            // If Integrity Constraint violation, the same item has already
+            // been added to the Order, and we should simply ignore the failure.
+
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+        }
     }
 
     public function findByOrderId($orderId, $orderableId, $orderableType)
