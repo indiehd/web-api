@@ -21,41 +21,79 @@ class ApiRoute
      */
     private $controller;
 
+    /**
+     * @var array $routes
+     */
+    private $routes = [
+        'index' => [
+            'uri' => '/',
+            'httpMethod' => 'get',
+            'action' => 'all'
+        ],
+        'show' => [
+            'uri' => '/{id}',
+            'httpMethod' => 'get',
+            'action' => 'show'
+        ],
+        'store' => [
+            'uri' => '/create',
+            'httpMethod' => 'post',
+            'action' => 'store'
+        ],
+        'update' => [
+            'uri' => '/{id}',
+            'httpMethod' => 'put',
+            'action' => 'update'
+        ],
+        'destroy' => [
+            'uri' => '/{id}',
+            'httpMethod' => 'delete',
+            'action' => 'destroy'
+        ],
+    ];
 
     public function __construct($prefix, $controller)
     {
         $this->prefix = $prefix;
         $this->controller = $controller;
-
-        $this->mapDefaultRoutes();
     }
 
-    protected function mapDefaultRoutes()
+    public function addDefaultRoutes()
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
+        $routes = $this->routes;
 
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->namespace)
-            ->group(function () use ($controller, $prefix) {
-                Route::prefix($this->prefix)->group(function () use ($controller, $prefix) {
-                    Route::get('/', "$controller@all")->name("$prefix.index");
-                    Route::get('/{id}', "$controller@show")->name("$prefix.show");
-                    Route::post('/create', "$controller@store")->name("$prefix.store");
-                    Route::put('/{id}', "$controller@update")->name("$prefix.update");
-                    Route::delete('/{id}', "$controller@destroy")->name("$prefix.destroy");
+            ->group(function () use ($routes, $controller, $prefix) {
+                Route::prefix($prefix)->group(function () use ($routes, $controller, $prefix) {
+                    foreach ($routes as $key => $route) {
+                        $uri = $route['uri'];
+                        $httpMethod = $route['httpMethod'];
+                        $action = $route['action'];
+
+                        Route::$httpMethod($uri, "$controller@$action")->name("$prefix.$key");
+                    }
                 });
             });
 
         return $this;
     }
 
-    public function mapAdditionalRoute($uri, $controllerMethod, $httpMethod = 'get')
+    public function except(array $routes = [])
+    {
+        $this->routes = array_except($this->routes, $routes);
+        return $this;
+    }
+
+    public function addRoute($uri, $controllerMethod, $httpMethod = 'get', $name = null)
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
         $httpMethod = strtolower($httpMethod);
+        $name = is_null($name) ? strtolower($controllerMethod) : strtolower($name);
 
         Route::prefix('api')
             ->middleware('api')
@@ -63,6 +101,7 @@ class ApiRoute
             ->group(function () use (
                 $controller,
                 $prefix,
+                $name,
                 $uri,
                 $controllerMethod,
                 $httpMethod
@@ -70,6 +109,7 @@ class ApiRoute
                 Route::prefix($this->prefix)->group(function () use (
                     $controller,
                     $prefix,
+                    $name,
                     $uri,
                     $controllerMethod,
                     $httpMethod

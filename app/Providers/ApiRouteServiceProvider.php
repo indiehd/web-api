@@ -36,26 +36,19 @@ class ApiRouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapRoutes('users', 'UserController');
-        $this->mapRoutes('artists', 'ArtistController');
-        $this->mapRoutes('albums', 'AlbumController');
-        $this->mapRoutes('songs', 'SongController');
-        $this->mapRoutes('orders', 'OrderController');
-        $this->mapRoutes('order-items', 'OrderItemController');
+        $this->apiRoute('users', 'UserController')->addDefaultRoutes();
+        $this->apiRoute('artists', 'ArtistController')->addDefaultRoutes();
+        $this->apiRoute('albums', 'AlbumController')->addDefaultRoutes();
+        $this->apiRoute('songs', 'SongController')->addDefaultRoutes();
 
-        // TODO There's probably a better means by which to add these, syntactically.
-
-        (new ApiRoute('orders', 'OrderController'))
-            ->mapAdditionalRoute('/storeOrder', 'storeOrder', 'post');
-
-        (new ApiRoute('orders', 'OrderController'))
-            ->mapAdditionalRoute('/addItems/{orderId}', 'addItems', 'post');
-
-        (new ApiRoute('orders', 'OrderController'))
-            ->mapAdditionalRoute('/removeItems/{orderId}', 'removeItems', 'delete');
+        $this->apiRoute('orders', 'OrderController')
+            ->addDefaultRoutes()
+            ->addRoute('/storeOrder', 'storeOrder', 'post')
+            ->addRoute('/addItems/{orderId}', 'addItems', 'post')
+            ->addRoute('/removeItems/{orderId}', 'removeItems', 'delete');
     }
 
-    protected function mapRoutes($prefix, $controller)
+    protected function apiRoute($prefix, $controller)
     {
         return new ApiRoute($prefix, $controller);
     }
