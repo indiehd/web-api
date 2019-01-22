@@ -42,6 +42,7 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->apiRoute('songs', 'SongController')->addDefaultRoutes();
 
         $this->apiRoute('orders', 'OrderController')
+            ->except(['store', 'update'])
             ->addDefaultRoutes()
             ->addRoute('/storeOrder', 'storeOrder', 'post')
             ->addRoute('/addItems/{orderId}', 'addItems', 'post')
