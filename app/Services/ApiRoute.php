@@ -93,7 +93,7 @@ class ApiRoute
         $controller = $this->controller;
         $prefix = $this->prefix;
         $httpMethod = strtolower($httpMethod);
-        $name = is_null($name) ? strtolower($controllerMethod) : strtolower($name);
+        $name = is_null($name) ? snake_case($controllerMethod) : $name;
 
         Route::prefix('api')
             ->middleware('api')
@@ -114,8 +114,7 @@ class ApiRoute
                     $controllerMethod,
                     $httpMethod
                 ) {
-                    Route::$httpMethod($uri, "$controller@$controllerMethod")
-                        ->name("$prefix." . snake_case($controllerMethod));
+                    Route::$httpMethod($uri, "$controller@$controllerMethod")->name("$prefix.$name");
                 });
             });
 
