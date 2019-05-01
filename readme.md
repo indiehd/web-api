@@ -7,4 +7,4 @@
 The `Web API` for `IndieHD` products & services.
 
 ## Contributing
-Visit our documentation [Contributing](http://docs.indiehd.com/#/web-api/CONTRIBUTING)
+[View the documentation](http://docs.indiehd.com).
