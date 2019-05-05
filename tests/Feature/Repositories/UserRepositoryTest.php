@@ -161,6 +161,7 @@ class UserRepositoryTest extends RepositoryCrudTestCase
 
         $user = $this->user->create([
             'email' => $user->email,
+            'name' => $user->name,
             'password' => $user->password,
             'account' => factory($this->account->class())->raw()
         ]);
