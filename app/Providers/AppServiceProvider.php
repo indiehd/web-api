@@ -54,12 +54,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Artist::observe(ArtistObserver::class);
-        Album::observe(AlbumObserver::class);
-        Genre::observe(GenreObserver::class);
-        Label::observe(LabelObserver::class);
-        User::observe(UserObserver::class);
-        OrderItem::observe(OrderItemObserver::class);
+
     }
 
     /**
@@ -82,5 +77,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+
+        Artist::observe(ArtistObserver::class);
+        Album::observe(AlbumObserver::class);
+        Genre::observe(GenreObserver::class);
+        Label::observe(LabelObserver::class);
+        User::observe(UserObserver::class);
+        OrderItem::observe(OrderItemObserver::class);
     }
 }
