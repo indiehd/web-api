@@ -14,7 +14,7 @@ class CreateSongUserTable extends Migration
     public function up()
     {
         Schema::create('song_user', function (Blueprint $table) {
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('song_id');
             $table->foreign('song_id')->references('id')->on('songs');

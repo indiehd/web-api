@@ -11,7 +11,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 
 class UserControllerTest extends ControllerTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -65,6 +65,7 @@ class UserControllerTest extends ControllerTestCase
     {
         return [
             'email' => 'foo@bar.com',
+            'name' => 'Foobius Barius',
             'password' => 'secretsauce',
             'account' => $this->getAllAccountInputsInValidState()
         ];

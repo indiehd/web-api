@@ -49,7 +49,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
      */
     protected $song;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
