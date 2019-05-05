@@ -28,9 +28,11 @@ services:
 - mysql
 
 script:
-  - vendor/bin/phpunit tests
+  - mkdir -p build/logs
+  - vendor/bin/phpunit tests --coverage-clover build/logs/clover.xml
 
 after_success:
+  - travis_retry php vendor/bin/php-coveralls
   - ./send.sh success $DISCORD_WEBHOOK
 
 after_failure:
