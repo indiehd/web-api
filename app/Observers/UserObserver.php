@@ -37,6 +37,7 @@ class UserObserver
     public function deleting(User $user)
     {
         $user->entities()->delete();
+
         $user->account()->delete();
     }
 

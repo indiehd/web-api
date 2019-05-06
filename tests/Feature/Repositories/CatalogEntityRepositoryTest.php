@@ -42,7 +42,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -217,6 +217,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
 
         $user = $this->user->create([
             'email' => $user->email,
+            'name' => $user->name,
             'password' => $user->password,
             'account' => factory($this->account->class())->raw()
         ]);

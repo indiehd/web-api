@@ -24,7 +24,7 @@ class CreateAlbumsTable extends Migration
             $table->unsignedDecimal('full_album_price', 8, 4)->nullable();
             $table->unsignedInteger('rank')->nullable();
             $table->boolean('is_active')->default(false);
-            $table->unsignedInteger('deleter_id')->nullable();
+            $table->unsignedBigInteger('deleter_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

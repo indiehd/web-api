@@ -32,7 +32,7 @@ class ArtistControllerTest extends ControllerTestCase
      */
     protected $updateArtist;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

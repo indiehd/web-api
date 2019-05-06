@@ -29,11 +29,11 @@ class CreateCatalogEntitiesTable extends Migration
             $table->boolean('is_active')->default(false);
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedInteger('approver_id')->nullable();
+            $table->unsignedBigInteger('approver_id')->nullable();
             // $table->foreign('approver_id')->references('id')->on('users');
-            $table->unsignedInteger('deleter_id')->nullable();
+            $table->unsignedBigInteger('deleter_id')->nullable();
             // $table->foreign('deleter_id')->references('id')->on('users');
             $table->unsignedInteger('catalogable_id');
             $table->string('catalogable_type');
