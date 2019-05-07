@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\QueryException;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\OrderItem;
 
@@ -13,13 +14,13 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
     protected $class = OrderItem::class;
 
     /**
-     * @var OrderItem $cartItem
+     * @var OrderItem $orderItem
      */
-    protected $cartItem;
+    protected $orderItem;
 
-    public function __construct(OrderItem $cartItem)
+    public function __construct(OrderItem $orderItem)
     {
-        $this->cartItem = $cartItem;
+        $this->orderItem = $orderItem;
     }
 
     /**
@@ -39,6 +40,29 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
      */
     public function model()
     {
-        return $this->cartItem;
+        return $this->orderItem;
+    }
+
+    public function create(array $data)
+    {
+        try {
+            return $this->model()->create($data);
+        } catch (QueryException $e) {
+            // If Integrity Constraint violation, the same item has already
+            // been added to the Order, and we should simply ignore the failure.
+
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+        }
+    }
+
+    public function findByOrderId($orderId, $orderableId, $orderableType)
+    {
+        return $this->model()->where([
+            'order_id' => $orderId,
+            'orderable_id' => $orderableId,
+            'orderable_type' => $orderableType
+        ])->first();
     }
 }

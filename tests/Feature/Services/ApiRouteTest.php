@@ -32,7 +32,7 @@ class ApiRouteTest extends TestCase
     protected $router;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -59,6 +59,24 @@ class ApiRouteTest extends TestCase
                     ->getByName("tests.$method")
             );
         }
+    }
+
+    public function testExceptMethodHasIndexRoute()
+    {
+        $this->assertNotNull(
+            $this->router
+                ->getRoutes()
+                ->getByName("excepts.index")
+        );
+    }
+
+    public function testExceptMethodExcludesUpdateRoute()
+    {
+        $this->assertNull(
+            $this->router
+                ->getRoutes()
+                ->getByName("excepts.update")
+        );
     }
 
     public function test_routes_have_proper_httpMethods()
@@ -153,12 +171,17 @@ class MockApiRouteServiceProvider extends RouteServiceProvider
 
     public function map()
     {
-        $this->mapRoutes('tests', 'TestController')
-            ->mapAdditionalRoute('/whatever', 'whatever')
-            ->mapAdditionalRoute('/another', 'another', 'post');
+        $this->apiRoute('tests', 'TestController')
+            ->addDefaultRoutes()
+            ->addRoute('/whatever', 'whatever')
+            ->addRoute('/another', 'another', 'post');
+
+        $this->apiRoute('excepts', 'ExceptsController')
+            ->except(['update'])
+            ->addDefaultRoutes();
     }
 
-    public function mapRoutes($prefix, $controller)
+    public function apiRoute($prefix, $controller)
     {
         return new ApiRoute($prefix, $controller);
     }

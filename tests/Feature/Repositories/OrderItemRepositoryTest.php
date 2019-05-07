@@ -41,7 +41,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -124,6 +124,23 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
 
         try {
             $this->repo->findById($item->id);
+        } catch (ModelNotFoundException $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    /**
+     * Ensure that deleting the last Order Item in an Order causes the Order
+     * to be deleted, too.
+     */
+    public function testDeleteLastItemDeletesOrder()
+    {
+        $item = $this->repo->create($this->makeOrderItem()->toArray());
+
+        $item->delete();
+
+        try {
+            $this->assertNull($this->order->findById($item->order_id));
         } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
         }

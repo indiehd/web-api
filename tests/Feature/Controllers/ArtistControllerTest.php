@@ -4,7 +4,6 @@ namespace Tests\Feature\Controllers;
 
 use CountriesSeeder;
 
-use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Http\Requests\StoreArtist;
@@ -33,7 +32,7 @@ class ArtistControllerTest extends ControllerTestCase
      */
     protected $updateArtist;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

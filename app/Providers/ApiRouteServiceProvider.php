@@ -31,19 +31,25 @@ class ApiRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Map all Api Routes here
+     * Map all Api Routes here.
      *
      */
     public function map()
     {
-        $this->mapRoutes('users', 'UserController');
-        $this->mapRoutes('artists', 'ArtistController');
-        $this->mapRoutes('albums', 'AlbumController');
-        $this->mapRoutes('songs', 'SongController');
-        // ...
+        $this->apiRoute('users', 'UserController')->addDefaultRoutes();
+        $this->apiRoute('artists', 'ArtistController')->addDefaultRoutes();
+        $this->apiRoute('albums', 'AlbumController')->addDefaultRoutes();
+        $this->apiRoute('songs', 'SongController')->addDefaultRoutes();
+
+        $this->apiRoute('orders', 'OrderController')
+            ->except(['store', 'update'])
+            ->addDefaultRoutes()
+            ->addRoute('/storeOrder', 'storeOrder', 'post')
+            ->addRoute('/addItems/{orderId}', 'addItems', 'post')
+            ->addRoute('/removeItems/{orderId}', 'removeItems', 'delete');
     }
 
-    protected function mapRoutes($prefix, $controller)
+    protected function apiRoute($prefix, $controller)
     {
         return new ApiRoute($prefix, $controller);
     }
