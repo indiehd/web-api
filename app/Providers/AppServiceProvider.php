@@ -48,26 +48,21 @@ use App\Observers\OrderItemObserver;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Artist::observe(ArtistObserver::class);
-        Album::observe(AlbumObserver::class);
-        Genre::observe(GenreObserver::class);
-        Label::observe(LabelObserver::class);
-        User::observe(UserObserver::class);
-        OrderItem::observe(OrderItemObserver::class);
-    }
-
-    /**
      * Register any application services.
      *
      * @return void
      */
     public function register()
+    {
+
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(AccountRepositoryInterface::class, AccountRepository::class);
@@ -82,5 +77,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+
+        Artist::observe(ArtistObserver::class);
+        Album::observe(AlbumObserver::class);
+        Genre::observe(GenreObserver::class);
+        Label::observe(LabelObserver::class);
+        User::observe(UserObserver::class);
+        OrderItem::observe(OrderItemObserver::class);
     }
 }

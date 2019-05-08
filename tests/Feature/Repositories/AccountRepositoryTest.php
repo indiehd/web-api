@@ -23,7 +23,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -149,6 +149,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
 
         $user = $this->user->create([
             'email' => $user->email,
+            'name' => $user->name,
             'password' => $user->password,
             'account' => $account->toArray(),
         ]);
