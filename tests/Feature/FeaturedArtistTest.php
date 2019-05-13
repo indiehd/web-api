@@ -2,23 +2,28 @@
 
 namespace Tests\Feature;
 
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\GenreRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\SongRepositoryInterface;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use CountriesSeeder;
-use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
-use App\Contracts\CountryRepositoryInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use App\Contracts\FeaturedRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 
 class FeaturedArtistTest extends TestCase
 {
+    use RefreshDatabase;
+
+    /**
+     * @var $featured FeaturedRepositoryInterface
+     */
+    protected $featured;
+
+    /**
+     * @var $artist ArtistRepositoryInterface
+     */
+    protected $album;
+
     /**
      * @var $artist ArtistRepositoryInterface
      */
@@ -30,16 +35,6 @@ class FeaturedArtistTest extends TestCase
     protected $profile;
 
     /**
-     * @var $song SongRepositoryInterface
-     */
-    protected $song;
-
-    /**
-     * @var $genre GenreRepositoryInterface
-     */
-    protected $genre;
-
-    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -48,22 +43,30 @@ class FeaturedArtistTest extends TestCase
 
         $this->seed('CountriesSeeder');
 
+        $this->featured = resolve(FeaturedRepositoryInterface::class);
+
+        $this->album = resolve(AlbumRepositoryInterface::class);
+
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
-
-        $this->song = resolve(SongRepositoryInterface::class);
-
-        $this->genre = resolve(GenreRepositoryInterface::class);
-
-        $this->order = resolve(OrderRepositoryInterface::class);
-
-        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
     }
 
-    public function testWhenArtistIsFeaturedItHasCompletedAccountProfile()
+    public function testWhenArtistIsFeaturedItHasAccountProfile()
     {
-        
+        $album = $this->makeAlbum();
+
+        factory($this->featured->class())->create([
+            'featurable_id' => $album->artist->id,
+            'featurable_type' => $this->artist->class(),
+        ]);
+
+        $featured = $this->featured->artists()->first();
+
+        $this->assertInstanceOf(
+            $this->profile->class(),
+            $featured->featurable->profile
+        );
     }
 
     /**
@@ -74,17 +77,13 @@ class FeaturedArtistTest extends TestCase
      */
     protected function makeAlbum(array $properties = [])
     {
-        $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
-            )->toArray()
-        );
+        $artist = factory($this->artist->class())->create();
 
         // This is the one property that can't be passed via the argument.
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->repo->class())->make($properties);
+        return factory($this->album->class())->make($properties);
     }
 
     /**
