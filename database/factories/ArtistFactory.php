@@ -2,10 +2,12 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Artist::class, function (Faker $faker) {
-    return [
+use App\Contracts\ArtistRepositoryInterface;
 
-    ];
+$repo = resolve(ArtistRepositoryInterface::class);
+
+$factory->define($repo->class(), function (Faker $faker) {
+    return [];
 });
 
 $factory->state(App\Artist::class, 'onLabel', [
@@ -14,10 +16,15 @@ $factory->state(App\Artist::class, 'onLabel', [
     },
 ]);
 
-$factory->afterCreating(App\Artist::class, function ($artist, $faker) {
+$factory->afterCreating($repo->class(), function ($artist, $faker) use ($repo) {
     factory(App\CatalogEntity::class)->create([
         'user_id' => factory(App\User::class)->create()->id,
         'catalogable_id' => $artist->id,
-        'catalogable_type' => App\Artist::class
+        'catalogable_type' => $repo->class()
+    ]);
+
+    factory(App\Profile::class)->create([
+        'profilable_id' => $artist->id,
+        'profilable_type' => $repo->class()
     ]);
 });
