@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Artist;
+use App\Contracts\ArtistRepositoryInterface;
 
 class Featured extends Model
 {
@@ -15,6 +15,8 @@ class Featured extends Model
 
     public function scopeArtists($query)
     {
-        return $query->where('featurable_type', Artist::class);
+        $artist = resolve(ArtistRepositoryInterface::class);
+
+        return $query->where('featurable_type', $artist->class());
     }
 }
