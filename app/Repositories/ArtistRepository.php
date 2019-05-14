@@ -64,6 +64,11 @@ class ArtistRepository extends CrudRepository implements ArtistRepositoryInterfa
 
     public function profile()
     {
-        $this->artist->profile();
+        return $this->artist->profile();
+    }
+
+    public function featurable()
+    {
+        return $this->model()->featurable();
     }
 }

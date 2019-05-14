@@ -8,6 +8,11 @@ use App\Contracts\ArtistRepositoryInterface;
 
 class Featured extends Model
 {
+    protected $fillable = [
+        'featurable_id',
+        'featurable_type',
+    ];
+
     public function featurable()
     {
         return $this->morphTo();
@@ -17,6 +22,7 @@ class Featured extends Model
     {
         $artist = resolve(ArtistRepositoryInterface::class);
 
-        return $query->where('featurable_type', $artist->class());
+        return $query->where('featurable_type', $artist->class())
+            ->where('active', true);
     }
 }

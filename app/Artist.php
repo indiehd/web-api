@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
@@ -36,5 +38,21 @@ class Artist extends Model
     public function user()
     {
         return $this->catalogable->user();
+    }
+
+    public function scopeFeaturable($query)
+    {
+        return $query->has('profile')
+            ->whereHas('albums', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->whereDoesntHave('featureds', function ($query) {
+                $query->where('created_at', '<', Carbon::now()->subDays(180));
+            });
+    }
+
+    public function featureds()
+    {
+        return $this->morphMany(Featured::class, 'featurable');
     }
 }
