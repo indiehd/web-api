@@ -17,7 +17,7 @@ class CreateFeaturedsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('featurable_id');
             $table->string('featurable_type');
-            $table->boolean('active')->default(true);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
