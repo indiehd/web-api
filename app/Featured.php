@@ -23,6 +23,6 @@ class Featured extends Model
         $artist = resolve(ArtistRepositoryInterface::class);
 
         return $query->where('featurable_type', $artist->class())
-            ->where('active', true);
+            ->where('is_active', true);
     }
 }

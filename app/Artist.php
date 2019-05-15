@@ -47,7 +47,11 @@ class Artist extends Model
                 $query->where('is_active', 1);
             })
             ->whereDoesntHave('featureds', function ($query) {
-                $query->where('created_at', '<', Carbon::now()->subDays(180));
+                // "... where created_at is more recent than 180 days ago."
+                // The goal is to exclude Artists who have been Featured in the
+                // past 180 days.
+
+                $query->where('created_at', '>', Carbon::now()->subDays(180)->toDateTimeString());
             });
     }
 
