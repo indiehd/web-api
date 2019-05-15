@@ -37,6 +37,11 @@ class FeaturedArtistTest extends TestCase
     protected $profile;
 
     /**
+     * @var $eligibleArtists array
+     */
+    protected $eligibleArtists = [];
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -63,19 +68,16 @@ class FeaturedArtistTest extends TestCase
 
         $this->createArtist();
 
-        // Three Artists that DO meet every condition.
+        // One Artist that DOES meet every condition.
 
         $artist = $this->createArtist();
 
-        $this->makeAlbum(['artist_id' => $artist->id])->save();
+        $this->eligibleArtists[] = $artist;
 
-        $artist = $this->createArtist();
-
-        $this->makeAlbum(['artist_id' => $artist->id])->save();
-
-        $artist = $this->createArtist();
-
-        $this->makeAlbum(['artist_id' => $artist->id])->save();
+        $this->makeAlbum([
+            'artist_id' => $artist->id,
+            'is_active' => true,
+        ])->save();
 
         // Two more Artists...
 
@@ -84,7 +86,10 @@ class FeaturedArtistTest extends TestCase
 
         $artist = $this->createArtist();
 
-        $this->makeAlbum(['artist_id' => $artist->id])->save();
+        $this->makeAlbum([
+            'artist_id' => $artist->id,
+            'is_active' => true,
+        ])->save();
 
         $featured = $this->featured->create([
             'featurable_id' => $artist->id,
@@ -94,12 +99,17 @@ class FeaturedArtistTest extends TestCase
         $featured->created_at = Carbon::now()->subDays(7);
         $featured->save();
 
-        // ... Artist was featured more than 180 days ago (implies longer than
-        // 7 days ago, obviously), which makes the Artist eligible again.
+        // ... Artist was featured more than 180 days ago, which makes the
+        // Artist eligible again.
 
         $artist = $this->createArtist();
 
-        $this->makeAlbum(['artist_id' => $artist->id])->save();
+        $this->eligibleArtists[] = $artist;
+
+        $this->makeAlbum([
+            'artist_id' => $artist->id,
+            'is_active' => true,
+        ])->save();
 
         $featured = $this->featured->create([
             'featurable_id' => $artist->id,
@@ -119,35 +129,21 @@ class FeaturedArtistTest extends TestCase
         return $artist;
     }
 
-    public function testFeaturableResultsHasExactlyThreeEntities()
+    public function testFeaturableResultsMatchExpected()
     {
         $this->assertEquals(
-            3,
-            $this->artist->featurable()->get()->count()
+            collect($this->eligibleArtists)->pluck('id'),
+            $this->artist->featurable()->get()->pluck('id')
         );
     }
 
-    /*
-    public function testFeaturedResultsAreExcluded()
+    public function testFeaturedEntityIsInstanceOfArtist()
     {
-
+        $this->assertInstanceOf(
+            $this->artist->class(),
+            $this->featured->artists()->first()->featurable
+        );
     }
-
-    public function testFeaturedResultsAreEligible()
-    {
-
-    }
-
-    public function testFeaturedEntityInstanceOfArtist()
-    {
-
-    }
-
-    public function testFeaturedArtistExists()
-    {
-
-    }
-    */
 
     /**
      * Create an Artist.
