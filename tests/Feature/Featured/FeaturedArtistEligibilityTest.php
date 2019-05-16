@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Featured;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,7 +11,7 @@ use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 
-class FeaturedArtistTest extends TestCase
+class FeaturedArtistEligibilityTest extends TestCase
 {
     use RefreshDatabase;
 
