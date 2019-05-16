@@ -44,7 +44,7 @@ class Artist extends Model implements FeaturableModelInterface
         return $this->catalogable->user();
     }
 
-    public function scopeFeaturable($query): Builder
+    public function scopeFeaturable(Builder $query): Builder
     {
         return $query->has('profile')
             ->whereHas('albums', function ($query) {
