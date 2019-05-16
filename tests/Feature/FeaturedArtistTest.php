@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
 
 class FeaturedArtistTest extends TestCase
 {
@@ -32,11 +31,6 @@ class FeaturedArtistTest extends TestCase
     protected $artist;
 
     /**
-     * @var $profile ProfileRepositoryInterface
-     */
-    protected $profile;
-
-    /**
      * @var $eligibleArtists array
      */
     protected $eligibleArtists = [];
@@ -55,8 +49,6 @@ class FeaturedArtistTest extends TestCase
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
-
-        $this->profile = resolve(ProfileRepositoryInterface::class);
 
         // Two Artists that DO NOT meet every condition...
 
