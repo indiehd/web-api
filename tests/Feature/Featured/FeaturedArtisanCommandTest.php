@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Featured;
 
+use Carbon\Carbon;
+
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -31,11 +33,6 @@ class FeaturedArtistTest extends TestCase
     protected $artist;
 
     /**
-     * @var $eligibleArtists array
-     */
-    #protected $eligibleArtists = [];
-
-    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -50,6 +47,25 @@ class FeaturedArtistTest extends TestCase
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
+        // Create an Artist and attendant Feature that is 180 days old.
+
+        $artist = $this->createArtist();
+
+        $this->makeAlbum([
+            'artist_id' => $artist->id,
+            'is_active' => true,
+        ])->save();
+
+        $featured = $this->featured->create([
+            'featurable_id' => $artist->id,
+            'featurable_type' => $this->artist->class(),
+        ]);
+
+        $featured->created_at = Carbon::now()->subDays(180);
+        $featured->save();
+
+        // Create an Artist that has never been featured.
+
         $artist = $this->createArtist();
 
         $this->makeAlbum([
@@ -62,9 +78,17 @@ class FeaturedArtistTest extends TestCase
     {
         Artisan::call('feature:process');
 
+        // Ensure that only one Featured record is returned, and that it's the
+        // more recent of the two.
+
         $this->assertEquals(
             1,
             $this->featured->artists()->count()
+        );
+
+        $this->assertEquals(
+            2,
+            $this->featured->artists()->first()->id
         );
     }
 
