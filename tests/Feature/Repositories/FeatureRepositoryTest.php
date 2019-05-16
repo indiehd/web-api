@@ -58,11 +58,11 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
         ]);
 
         $this->repo->update($featured->id, [
-            'is_active' => false,
+            'featurable_type' => 'App\Foo',
         ]);
 
         $this->assertTrue(
-            $this->repo->findById($featured->id)->is_active === 0
+            $this->repo->findById($featured->id)->featurable_type === 'App\Foo'
         );
     }
 
