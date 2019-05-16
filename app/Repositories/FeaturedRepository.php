@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Featured;
 use App\Contracts\FeaturedRepositoryInterface;
+use App\Contracts\FeaturableRepositoryInterface;
 
 class FeaturedRepository extends CrudRepository implements FeaturedRepositoryInterface
 {
@@ -35,5 +36,17 @@ class FeaturedRepository extends CrudRepository implements FeaturedRepositoryInt
     public function artists()
     {
         return $this->model()->artists();
+    }
+
+    public function makeFeatured(FeaturableRepositoryInterface $featurable): void
+    {
+        $eligible = $featurable->featurable()->get();
+
+        $eligible->each(function ($item, $key) use ($featurable) {
+            $this->create([
+                'featurable_type' => $featurable->class(),
+                'featurable_id' => $item->id,
+            ]);
+        });
     }
 }

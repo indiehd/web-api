@@ -4,9 +4,10 @@ namespace App\Repositories;
 
 use App\Artist;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\FeaturableRepositoryInterface;
 use App\Traits\IsProfilable;
 
-class ArtistRepository extends CrudRepository implements ArtistRepositoryInterface
+class ArtistRepository extends CrudRepository implements ArtistRepositoryInterface, FeaturableRepositoryInterface
 {
     use IsProfilable;
 

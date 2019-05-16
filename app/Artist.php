@@ -5,8 +5,12 @@ namespace App;
 use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Artist extends Model
+use App\Contracts\FeaturableModelInterface;
+
+class Artist extends Model implements FeaturableModelInterface
 {
     protected $guarded = ['id'];
 
@@ -40,7 +44,7 @@ class Artist extends Model
         return $this->catalogable->user();
     }
 
-    public function scopeFeaturable($query)
+    public function scopeFeaturable($query): Builder
     {
         return $query->has('profile')
             ->whereHas('albums', function ($query) {
@@ -55,7 +59,7 @@ class Artist extends Model
             });
     }
 
-    public function featureds()
+    public function featureds(): MorphMany
     {
         return $this->morphMany(Featured::class, 'featurable');
     }
