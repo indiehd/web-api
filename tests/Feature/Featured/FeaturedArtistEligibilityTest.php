@@ -129,14 +129,6 @@ class FeaturedArtistEligibilityTest extends TestCase
         );
     }
 
-    public function testFeaturedEntityIsInstanceOfArtist()
-    {
-        $this->assertInstanceOf(
-            $this->artist->class(),
-            $this->featured->artists()->first()->featurable
-        );
-    }
-
     /**
      * Create an Artist.
      *
