@@ -33,6 +33,11 @@ class FeaturedArtistTest extends TestCase
     protected $artist;
 
     /**
+     * @var $expectedValues array
+     */
+    protected $expectedValues = [];
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -64,6 +69,8 @@ class FeaturedArtistTest extends TestCase
         $featured->created_at = Carbon::now()->subDays(180);
         $featured->save();
 
+        $this->expectedValues['olderFeatured'] = $featured;
+
         // Create an Artist that has never been featured.
 
         $artist = $this->createArtist();
@@ -78,16 +85,22 @@ class FeaturedArtistTest extends TestCase
     {
         Artisan::call('feature:process');
 
-        // Ensure that only one Featured record is returned, and that it's the
-        // more recent of the two.
-
-        $this->assertEquals(
-            1,
-            $this->featured->artists()->count()
-        );
+        // Ensure that exactly two Featured entities are returned: one for the
+        // first Artist whose first Featured we expired manually, because the
+        // Artisan call will create a new one for it; and one for the second
+        // Artist.
 
         $this->assertEquals(
             2,
+            $this->featured->artists()->get()->count()
+        );
+
+        // Ensure that the Feature retrieved for the first Artist we created
+        // is not the older one, which means (per the previous assertion) that
+        // it must be the newer Feature that the Artisan command created .
+
+        $this->assertNotEquals(
+            $this->expectedValues['olderFeatured']->id,
             $this->featured->artists()->first()->id
         );
     }
