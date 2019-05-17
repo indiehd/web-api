@@ -40,7 +40,10 @@ class FeaturedRepository extends CrudRepository implements FeaturedRepositoryInt
 
     public function makeFeatured(FeaturableRepositoryInterface $featurable): void
     {
-        $eligible = $featurable->featurable()->get();
+        $eligible = $featurable->featurable()
+            ->inRandomOrder()
+            ->take(config('indiehd.featured.artists.numFeatured'))
+            ->get();
 
         $eligible->each(function ($item, $key) use ($featurable) {
             $this->create([
