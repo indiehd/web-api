@@ -42,7 +42,7 @@ class FeaturedRepository extends CrudRepository implements FeaturedRepositoryInt
     {
         $eligible = $featurable->featurable()
             ->inRandomOrder()
-            ->take(config('indiehd.featured.artists.numFeatured'))
+            ->take(config('ihd.featured.artists.limit'))
             ->get();
 
         $eligible->each(function ($item, $key) use ($featurable) {
