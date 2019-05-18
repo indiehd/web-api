@@ -46,8 +46,7 @@ class Artist extends Model implements FeaturableModelInterface
 
     public function scopeFeaturable(Builder $query): Builder
     {
-        return $query->has('profile')
-            ->whereHas('albums', function ($query) {
+        return $query->whereHas('albums', function ($query) {
                 $query->where('is_active', 1);
             })
             ->whereDoesntHave('featureds', function ($query) {
