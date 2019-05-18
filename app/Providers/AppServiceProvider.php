@@ -17,6 +17,7 @@ use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\OrderItemRepositoryInterface;
+use App\Contracts\FeaturedRepositoryInterface;
 
 use App\Repositories\AccountRepository;
 use App\Repositories\ArtistRepository;
@@ -31,6 +32,7 @@ use App\Repositories\LabelRepository;
 use App\Repositories\SongRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\OrderItemRepository;
+use App\Repositories\FeaturedRepository;
 
 use App\Artist;
 use App\Album;
@@ -54,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        //
     }
 
     /**
@@ -77,6 +79,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+        $this->app->bind(FeaturedRepositoryInterface::class, FeaturedRepository::class);
 
         Artist::observe(ArtistObserver::class);
         Album::observe(AlbumObserver::class);

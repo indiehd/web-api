@@ -45,7 +45,7 @@ class ArtistControllerTest extends ControllerTestCase
         $this->updateArtist = new UpdateArtist();
     }
 
-    public function createArtist()
+    protected function createArtist()
     {
         $artist = $this->artist->model()->create();
 
@@ -59,7 +59,7 @@ class ArtistControllerTest extends ControllerTestCase
         return $artist;
     }
 
-    public function getJsonStructure()
+    protected function getJsonStructure()
     {
         return [
             'id',
@@ -70,7 +70,7 @@ class ArtistControllerTest extends ControllerTestCase
         ];
     }
 
-    public function getAllInputsInValidState()
+    protected function getAllInputsInValidState()
     {
         return [
             'moniker' => 'Joey\'s Basement Band',
