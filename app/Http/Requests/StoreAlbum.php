@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use App\Contracts\AlbumRepositoryInterface;
+
 class StoreAlbum extends FormRequest
 {
     /**
@@ -13,7 +15,13 @@ class StoreAlbum extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        if (is_null($this->user())) {
+            return false;
+        }
+
+        $albumRepository = resolve(AlbumRepositoryInterface::class);
+
+        return $this->user()->can('create', $albumRepository->class());
     }
 
     /**
