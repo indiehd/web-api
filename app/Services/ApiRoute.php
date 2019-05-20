@@ -28,7 +28,7 @@ class ApiRoute
         'index' => [
             'uri' => '/',
             'httpMethod' => 'get',
-            'action' => 'all'
+            'action' => 'index'
         ],
         'show' => [
             'uri' => '/{id}',

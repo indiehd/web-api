@@ -61,7 +61,7 @@ abstract class ApiController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function all()
+    public function index(Request $request)
     {
         return $this->resource::collection(
             $this->repository->all()
