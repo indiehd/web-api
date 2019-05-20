@@ -16,5 +16,7 @@ class DatabaseSeeder extends BaseSeeder
         $this->call(AlbumsSeeder::class);
 
         $this->call(OrderSeeder::class);
+
+        $this->call(FeaturedSeeder::class);
     }
 }
