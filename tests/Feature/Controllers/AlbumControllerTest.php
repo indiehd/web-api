@@ -9,8 +9,8 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use App\Http\Requests\StoreArtist;
-use App\Http\Requests\UpdateArtist;
+use App\Http\Requests\StoreAlbum;
+use App\Http\Requests\UpdateAlbum;
 
 class AlbumControllerTest extends ControllerTestCase
 {
@@ -82,55 +82,42 @@ class AlbumControllerTest extends ControllerTestCase
         ]);
     }
 
-    protected function getJsonStructure(Album $album)
+    protected function getJsonStructure(Album $album, $castIntAndBool = false)
     {
-        return [
-            'id' => $album->id,
+        $structure = [
             'title' => $album->title,
             'alt_title' => $album->alt_title,
-            'year' => (int) $album->year,
+            'year' => $album->year,
             'description' => $album->description,
-            'has_explicit_lyrics' => (int) $album->has_explicit_lyrics,
+            'has_explicit_lyrics' => $album->has_explicit_lyrics,
             'full_album_price' => $album->full_album_price,
             'rank' => $album->rank,
-            'is_active' => (int) $album->is_active,
+            'is_active' => $album->is_active,
             'deleter' => $album->deleter,
             'deleted_at' => null,
         ];
-    }
 
-    // TODO Move this into ArtistControllerTest
-    /*
-    protected function getJsonStructureForOne(Album $album)
-    {
-        return [
-            'albums' => [
-                [
-                    'id' => $album->id,
-                    'title' => $album->title,
-                    'alt_title' => $album->alt_title,
-                    'year' => (int) $album->year,
-                    'description' => $album->description,
-                    'has_explicit_lyrics' => (int) $album->has_explicit_lyrics,
-                    'full_album_price' => $album->full_album_price,
-                    'rank' => $album->rank,
-                    'is_active' => (int) $album->is_active,
-                    'deleter' => $album->deleter,
-                    'deleted_at' => null,
-                ],
-            ],
-            'id' => $album->id,
-            'label' => null,
-            'profile' => null,
-            'songs' => [],
-        ];
+        if ($castIntAndBool) {
+            $structure['year'] = (int) $album->year;
+            $structure['has_explicit_lyrics'] = (int) $album->has_explicit_lyrics;
+            $structure['is_active'] = (int) $album->is_active;
+        }
+
+        if (isset($album->id)) {
+            $structure['id'] = $album->id;
+        }
+
+        return $structure;
     }
-    */
 
     protected function getAllInputsInValidState()
     {
         return [
-            'title' => 'Foobius Barius',
+            'title' => 'Foobar\'s Fiddle-Along',
+            'year' => (int) 1981,
+            'description' => 'The best album, evaaah!',
+            'has_explicit_lyrics' => 0,
+            'full_album_price' => 9.99,
         ];
     }
 
@@ -142,7 +129,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
-                    $this->getJsonStructure($album)
+                    $this->getJsonStructure($album, true)
                 ]
             ]);
     }
@@ -154,7 +141,7 @@ class AlbumControllerTest extends ControllerTestCase
         $this->json('GET', route('albums.show', ['id' => $album->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album)
+                'data' => $this->getJsonStructure($album, true)
             ]);
     }
 
@@ -168,17 +155,24 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $artist = factory($this->artist->class())->create();
 
+        $album = factory($this->album->class())->make();
+
+        $albumAsArray = $album->toArray();
+
         $this->actingAs($artist->user)
-            ->json('POST', route('albums.store'), $this->getAllInputsInValidState())
+            ->json('POST', route('albums.store'), $albumAsArray)
             ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+            ->assertJson([
+                'data' => $this->getJsonStructure($album)
             ]);
     }
 
     public function testStoreWithInvalidInputReturnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('albums.store'), [])
+        $artist = factory($this->artist->class())->create();
+
+        $this->actingAs($artist->user)
+            ->json('POST', route('albums.store'), [])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -190,7 +184,10 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $this->json('POST', route('albums.update', ['id' => $album->id]), $this->getAllInputsInValidState())
+        $this->json(
+            'PUT', route('albums.update', ['id' => $album->id]),
+            $this->getAllInputsInValidState()
+        )
             ->assertStatus(403);
     }
 
@@ -198,14 +195,15 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $inputs = $this->getAllInputsInValidState();
+        $album->title = 'Some New Title';
 
-        $inputs['title'] = 'Some New Title';
+        $albumAsArray = $album->toArray();
 
-        $this->json('PUT', route('albums.update', ['id' => $album->id]), $inputs)
+        $this->actingAs($album->artist->user)
+            ->json('PUT', route('albums.update', ['id' => $album->id]), $albumAsArray)
             ->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+            ->assertExactJson([
+                'data' => $this->getJsonStructure($album, true)
             ]);
     }
 
@@ -213,7 +211,8 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $this->json('PUT', route('albums.update', ['id' => $album->id]), ['title' => ''])
+        $this->actingAs($album->artist->user)
+            ->json('PUT', route('albums.update', ['id' => $album->id]), ['title' => ''])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
