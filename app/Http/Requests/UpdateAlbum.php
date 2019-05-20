@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Contracts\AlbumRepositoryInterface;
 
 class UpdateAlbum extends FormRequest
 {
@@ -13,7 +14,15 @@ class UpdateAlbum extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        if (is_null($this->user())) {
+            return false;
+        }
+
+        $albumRepository = resolve(AlbumRepositoryInterface::class);
+
+        $album = $albumRepository->findById($this->route('id'));
+
+        return $album && $this->user()->can('update', $album);
     }
 
     /**
@@ -24,7 +33,13 @@ class UpdateAlbum extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'string|max:255',
+            'alt_title' => 'string|max:255',
+            'year' => 'integer|min:1900|max:' . (string)(date('Y') + 1),
+            'description' => 'max:4096',
+            'has_explicit_lyrics' => 'boolean',
+            'full_album_price' => 'between:0.00,999.99',
+            'is_active' => 'boolean',
         ];
     }
 }

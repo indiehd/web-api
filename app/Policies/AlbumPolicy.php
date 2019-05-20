@@ -42,7 +42,9 @@ class AlbumPolicy
      */
     public function update(User $user, Album $album)
     {
-        //
+        // The User must own the Album.
+
+        return $album->artist->user->id === $user->id;
     }
 
     /**
@@ -54,7 +56,9 @@ class AlbumPolicy
      */
     public function delete(User $user, Album $album)
     {
-        //
+        // The User must own the Album.
+
+        return $album->artist->user->id === $user->id;
     }
 
     /**
