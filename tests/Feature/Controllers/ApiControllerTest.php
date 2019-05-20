@@ -28,7 +28,7 @@ class ApiControllerTest extends ControllerTestCase
         ];
     }
 
-    public function testApiControllerAllMethodReturnsAllModels()
+    public function testApiControllerIndexMethodReturnsAllModels()
     {
         factory($this->model->class(), 5)->create();
 
@@ -37,7 +37,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(5, 'data');
     }
 
-    public function testApiControllerAllMethodReturnsOneOfFiveModels()
+    public function testApiControllerIndexMethodReturnsOneOfFiveModels()
     {
         factory($this->model->class(), 5)->create();
 
@@ -46,7 +46,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(1, 'data');
     }
 
-    public function testApiControllerAllMethodReturnsPaginatedModels()
+    public function testApiControllerIndexMethodReturnsPaginatedModels()
     {
         factory($this->model->class(), 10)->create();
 
@@ -57,7 +57,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(5, 'data');
     }
 
-    public function testApiControllerAllMethodReturnsLimitedPaginatedModels()
+    public function testApiControllerIndexMethodReturnsLimitedPaginatedModels()
     {
         factory($this->model->class(), 10)->create();
 
