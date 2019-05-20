@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
+use App\Http\Requests\DestroyUser;
 use App\Http\Resources\UserResource;
 
 class UserController extends ApiController
@@ -48,5 +49,15 @@ class UserController extends ApiController
     public function updateRequest()
     {
         return UpdateUser::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyUser::class;
     }
 }

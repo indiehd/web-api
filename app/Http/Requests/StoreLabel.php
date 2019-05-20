@@ -24,7 +24,14 @@ class StoreLabel extends FormRequest
     public function rules()
     {
         return [
-            //
+            'moniker' => 'required|max:255',
+            'alt_moniker' => 'max:255',
+            'email' => 'email',
+            'city' => 'max:255',
+            'territory' => 'max:255',
+            'country_code' => 'exists:countries,code',
+            'official_url' => 'url',
+            'profile_url' => 'max:64', // TODO This requires further validation, to prevent tomfoolery, profanity, etc..
         ];
     }
 }
