@@ -56,8 +56,8 @@ class AlbumControllerTest extends ControllerTestCase
 
         $this->album = resolve(AlbumRepositoryInterface::class);
 
-        $this->storeAlbum = new StoreArtist();
-        $this->updateAlbum = new UpdateArtist();
+        $this->storeAlbum = new StoreAlbum();
+        $this->updateAlbum = new UpdateAlbum();
     }
 
     protected function createArtist()
