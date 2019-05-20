@@ -1,11 +1,12 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature\Controllers\Routes;
 
 use App\Contracts\UserRepositoryInterface;
+use Tests\Feature\Controllers\ControllerTestCase;
 use CountriesSeeder;
 
-class ApiControllerTest extends ControllerTestCase
+class IndexRouteTest extends ControllerTestCase
 {
     protected $model;
 
@@ -28,7 +29,7 @@ class ApiControllerTest extends ControllerTestCase
         ];
     }
 
-    public function testApiControllerIndexMethodReturnsAllModels()
+    public function testRouteReturnsAllResults()
     {
         factory($this->model->class(), 5)->create();
 
@@ -37,7 +38,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(5, 'data');
     }
 
-    public function testApiControllerIndexMethodReturnsOneOfFiveModels()
+    public function testRouteReturnsOneOfFiveResults()
     {
         factory($this->model->class(), 5)->create();
 
@@ -46,7 +47,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(1, 'data');
     }
 
-    public function testApiControllerIndexMethodReturnsPaginatedModels()
+    public function testRouteReturnsPaginatedResults()
     {
         factory($this->model->class(), 10)->create();
 
@@ -57,7 +58,7 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonCount(5, 'data');
     }
 
-    public function testApiControllerIndexMethodReturnsLimitedPaginatedModels()
+    public function testRouteReturnsLimitedPaginatedResults()
     {
         factory($this->model->class(), 10)->create();
 
@@ -69,6 +70,25 @@ class ApiControllerTest extends ControllerTestCase
             ->assertJsonStructure($this->paginatedJsonStructure())
             ->assertJsonFragment(['total' => 8, 'per_page' => 2])
             ->assertJsonCount(2, 'data');
+    }
+
+    public function testRouteReturnsLimitedPaginatedResultsForPageTwo()
+    {
+        factory($this->model->class(), 10)->create();
+
+        $this->json('GET', route('users.index'), [
+            'limit' => 8,
+            'paginate' => 3,
+            'page' => 2
+        ])
+            ->assertStatus(200)
+            ->assertJsonStructure($this->paginatedJsonStructure())
+            ->assertJsonFragment([
+                'per_page' => 3,
+                'current_page' => 2,
+                'total' => 8
+            ])
+            ->assertJsonCount(3, 'data');
     }
 
 }
