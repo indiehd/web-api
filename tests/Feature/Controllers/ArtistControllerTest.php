@@ -6,8 +6,6 @@ use CountriesSeeder;
 
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-use App\Http\Requests\StoreArtist;
-use App\Http\Requests\UpdateArtist;
 
 class ArtistControllerTest extends ControllerTestCase
 {
@@ -22,16 +20,6 @@ class ArtistControllerTest extends ControllerTestCase
      */
     protected $profile;
 
-    /**
-     * @var StoreArtist
-     */
-    protected $storeArtist;
-
-    /**
-     * @var UpdateArtist
-     */
-    protected $updateArtist;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -40,23 +28,11 @@ class ArtistControllerTest extends ControllerTestCase
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
         $this->profile = resolve(ProfileRepositoryInterface::class);
-
-        $this->storeArtist = new StoreArtist();
-        $this->updateArtist = new UpdateArtist();
     }
 
     protected function createArtist()
     {
-        $artist = $this->artist->model()->create();
-
-        $this->profile->model()->create(
-            $this->getAllInputsInValidState() + [
-                'profilable_id' => $artist->id,
-                'profilable_type' => $this->artist->class()
-            ]
-        );
-
-        return $artist;
+        return factory($this->artist->class())->create();
     }
 
     protected function getJsonStructure()
@@ -158,14 +134,18 @@ class ArtistControllerTest extends ControllerTestCase
     {
         $artist = $this->createArtist();
 
-        $this->json('DELETE', route('artists.destroy', ['id' => $artist->id]))
+        $this->actingAs($artist->user)
+            ->json('DELETE', route('artists.destroy', ['id' => $artist->id]))
             ->assertStatus(200)
             ->assertJsonStructure([]);
     }
 
     public function test_destroy_withInvalidInput_returnsUnprocessableEntityStatus()
     {
-        $this->json('DELETE', route('artists.destroy', ['id' => 'foo']))
+        $artist = $this->createArtist();
+
+        $this->actingAs($artist->user)
+            ->json('DELETE', route('artists.destroy', ['id' => 'foo']))
             ->assertStatus(404);
     }
 

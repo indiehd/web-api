@@ -145,14 +145,18 @@ class UserControllerTest extends ControllerTestCase
     {
         $user = $this->createUser();
 
-        $this->json('DELETE', route('users.destroy', ['id' => $user->id]))
+        $this->actingAs($user)
+            ->json('DELETE', route('users.destroy', ['id' => $user->id]))
             ->assertStatus(200)
             ->assertJsonStructure([]);
     }
 
     public function test_destroy_withInvalidInput_returnsUnprocessableEntityStatus()
     {
-        $this->json('DELETE', route('users.destroy', ['id' => 'foo']))
+        $user = $this->createUser();
+
+        $this->actingAs($user)
+            ->json('DELETE', route('users.destroy', ['id' => 'foo']))
             ->assertStatus(404);
     }
 

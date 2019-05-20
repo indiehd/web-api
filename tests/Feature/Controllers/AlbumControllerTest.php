@@ -9,8 +9,6 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use App\Http\Requests\StoreAlbum;
-use App\Http\Requests\UpdateAlbum;
 
 class AlbumControllerTest extends ControllerTestCase
 {
@@ -34,16 +32,6 @@ class AlbumControllerTest extends ControllerTestCase
      */
     protected $user;
 
-    /**
-     * @var StoreAlbum
-     */
-    protected $storeArtist;
-
-    /**
-     * @var UpdateAlbum
-     */
-    protected $updateArtist;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -55,9 +43,6 @@ class AlbumControllerTest extends ControllerTestCase
         $this->user = resolve(UserRepositoryInterface::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
-
-        $this->storeAlbum = new StoreAlbum();
-        $this->updateAlbum = new UpdateAlbum();
     }
 
     protected function createArtist()
@@ -232,14 +217,17 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $this->json('DELETE', route('albums.destroy', ['id' => $album->id]))
-            ->assertStatus(200)
-            ->assertJsonStructure([]);
+        $this->actingAs($album->artist->user)
+            ->json('DELETE', route('albums.destroy', ['id' => $album->id]))
+            ->assertStatus(200);
     }
 
     public function testDestroyWithInvalidInputReturnsUnprocessableEntityStatus()
     {
-        $this->json('DELETE', route('albums.destroy', ['id' => 'foo']))
+        $album = $this->createAlbum();
+
+        $this->actingAs($album->artist->user)
+            ->json('DELETE', route('albums.destroy', ['id' => 'foo']))
             ->assertStatus(404);
     }
 
