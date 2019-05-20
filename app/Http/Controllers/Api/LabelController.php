@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\LabelRepositoryInterface;
 use App\Http\Requests\StoreLabel;
 use App\Http\Requests\UpdateLabel;
+use App\Http\Requests\DestroyLabel;
 use App\Http\Resources\LabelResource;
 
 class LabelController extends ApiController
@@ -48,5 +49,15 @@ class LabelController extends ApiController
     public function updateRequest()
     {
         return UpdateLabel::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyLabel::class;
     }
 }
