@@ -59,12 +59,37 @@ abstract class ApiController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request)
     {
+        $this->validate($request, [
+            'paginate' => 'numeric|min:1|max:100',
+            'limit' => 'numeric|min:1'
+        ]);
+
+        $has_paginate = $request->has('paginate');
+        $has_limit = $request->has('limit');
+
+        if ($has_paginate && !$has_limit) {
+            $models = $this->repository
+                ->paginate($request->get('paginate'));
+        } elseif ($has_limit && !$has_paginate) {
+            $models = $this->repository
+                ->limit($request->get('limit'));
+        } elseif ($has_paginate && $has_limit) {
+            $models = $this->repository
+                ->limit(
+                    $request->get('limit'),
+                    $request->get('paginate')
+                );
+        }
+
+
         return $this->resource::collection(
-            $this->repository->all()
+            isset($models) ? $models : $this->repository->all()
         );
     }
 
@@ -84,7 +109,7 @@ abstract class ApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return JsonResource
      */
     public function show($id)
@@ -95,8 +120,8 @@ abstract class ApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int $id
+     * @param Request $request
+     * @param int $id
      * @return JsonResource
      */
     public function update(Request $request, $id)
@@ -111,7 +136,7 @@ abstract class ApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
