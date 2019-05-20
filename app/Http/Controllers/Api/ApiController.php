@@ -48,6 +48,13 @@ abstract class ApiController extends Controller
     abstract public function updateRequest();
 
     /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    abstract public function destroyRequest();
+
+    /**
      * ApiController constructor.
      */
     public function __construct()
@@ -111,11 +118,14 @@ abstract class ApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        resolve($this->destroyRequest());
+
         $this->repository->delete($id);
 
         return response(['success' => true], 200);
