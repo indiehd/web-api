@@ -9,6 +9,7 @@ use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\OrderRepositoryInterface;
 use App\Http\Requests\StoreOrder;
 use App\Http\Requests\UpdateOrder;
+use App\Http\Requests\DestroyOrder;
 use App\Http\Resources\OrderResource;
 
 class OrderController extends ApiController
@@ -64,6 +65,16 @@ class OrderController extends ApiController
     public function updateRequest()
     {
         return UpdateOrder::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyOrder::class;
     }
 
     /**

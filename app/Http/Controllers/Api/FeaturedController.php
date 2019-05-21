@@ -28,6 +28,16 @@ class FeaturedController extends ApiController
     }
 
     /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyFeatured::class;
+    }
+
+    /**
      * Sets the RepositoryInterface to resolve
      *
      * @return string

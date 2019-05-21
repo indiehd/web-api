@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\GenreRepositoryInterface;
 use App\Http\Requests\StoreGenre;
 use App\Http\Requests\UpdateGenre;
+use App\Http\Requests\DestroyGenre;
 use App\Http\Resources\GenreResource;
 
 class GenreController extends ApiController
@@ -48,5 +49,15 @@ class GenreController extends ApiController
     public function updateRequest()
     {
         return UpdateGenre::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyGenre::class;
     }
 }

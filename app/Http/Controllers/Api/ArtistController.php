@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Http\Requests\StoreArtist;
 use App\Http\Requests\UpdateArtist;
+use App\Http\Requests\DestroyArtist;
 use App\Http\Resources\ArtistResource;
 
 class ArtistController extends ApiController
@@ -28,6 +29,16 @@ class ArtistController extends ApiController
     public function updateRequest()
     {
         return UpdateArtist::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroyArtist::class;
     }
 
     /**

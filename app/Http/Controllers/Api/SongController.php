@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\SongRepositoryInterface;
 use App\Http\Requests\StoreSong;
 use App\Http\Requests\UpdateSong;
+use App\Http\Requests\DestroySong;
 use App\Http\Resources\SongResource;
 
 class SongController extends ApiController
@@ -48,5 +49,15 @@ class SongController extends ApiController
     public function updateRequest()
     {
         return UpdateSong::class;
+    }
+
+    /**
+     * Should return <DestroyRequest>::class
+     *
+     * @return string
+     */
+    public function destroyRequest()
+    {
+        return DestroySong::class;
     }
 }
