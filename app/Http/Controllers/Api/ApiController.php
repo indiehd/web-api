@@ -70,16 +70,16 @@ abstract class ApiController extends Controller
             'limit' => 'numeric|min:1'
         ]);
 
-        $has_paginate = $request->has('paginate');
-        $has_limit = $request->has('limit');
+        $hasPaginate = $request->has('paginate');
+        $hasLimit = $request->has('limit');
 
-        if ($has_paginate && !$has_limit) {
+        if ($hasPaginate && !$hasLimit) {
             $models = $this->repository
                 ->paginate($request->get('paginate'));
-        } elseif ($has_limit && !$has_paginate) {
+        } elseif ($hasLimit && !$hasPaginate) {
             $models = $this->repository
                 ->limit($request->get('limit'));
-        } elseif ($has_paginate && $has_limit) {
+        } elseif ($hasPaginate && $hasLimit) {
             $models = $this->repository
                 ->limit(
                     $request->get('limit'),
