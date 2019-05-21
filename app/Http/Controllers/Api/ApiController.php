@@ -66,12 +66,37 @@ abstract class ApiController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function all()
+    public function index(Request $request)
     {
+        $this->validate($request, [
+            'paginate' => 'numeric|min:1|max:100',
+            'limit' => 'numeric|min:1'
+        ]);
+
+        $hasPaginate = $request->has('paginate');
+        $hasLimit = $request->has('limit');
+
+        if ($hasPaginate && !$hasLimit) {
+            $models = $this->repository
+                ->paginate($request->get('paginate'));
+        } elseif ($hasLimit && !$hasPaginate) {
+            $models = $this->repository
+                ->limit($request->get('limit'));
+        } elseif ($hasPaginate && $hasLimit) {
+            $models = $this->repository
+                ->limit(
+                    $request->get('limit'),
+                    $request->get('paginate')
+                );
+        }
+
+
         return $this->resource::collection(
-            $this->repository->all()
+            isset($models) ? $models : $this->repository->all()
         );
     }
 
@@ -91,7 +116,7 @@ abstract class ApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return JsonResource
      */
     public function show($id)
@@ -102,8 +127,8 @@ abstract class ApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int $id
+     * @param Request $request
+     * @param int $id
      * @return JsonResource
      */
     public function update(Request $request, $id)

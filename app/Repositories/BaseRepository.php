@@ -2,19 +2,45 @@
 
 namespace App\Repositories;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
 abstract class BaseRepository
 {
     abstract public function model();
 
     /**
+     * @return mixed
+     */
+    public function all()
+    {
+        return $this->model()->all();
+    }
+
+    /**
+     * @param int $limit
      * @param int|null $paginate
      * @return mixed
      */
-    public function all(int $paginate = null)
+    public function limit(int $limit, int $paginate = null)
     {
-        return is_null($paginate)
-            ? $this->model()->all()
-            : $this->model()->paginate($paginate);
+        $results = $this->model()->limit($limit)->get();
+
+        if ($paginate) {
+            $page = LengthAwarePaginator::resolveCurrentPage();
+            $items = $results->slice(($page * $paginate) - $paginate, $paginate)->all();
+            return new LengthAwarePaginator($items, count($results), $paginate);
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param int $paginate
+     * @return mixed
+     */
+    public function paginate(int $paginate)
+    {
+        return $this->model()->paginate($paginate);
     }
 
     /**
