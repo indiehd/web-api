@@ -6,14 +6,13 @@ use Faker\Provider\en_US\Person;
 use Faker\Provider\en_US\PhoneNumber;
 use Faker\Provider\en_US\Company;
 
+use App\User;
+
 $factory->define(App\CatalogEntity::class, function (Faker $faker) {
     $faker->addProvider(new Person($faker));
     $faker->addProvider(new Address($faker));
     $faker->addProvider(new PhoneNumber($faker));
     $faker->addProvider(new Company($faker));
-
-    $approver_id = $faker->boolean(50) ? App\User::inRandomOrder()->first()->id : null;
-    $deleter_id = $faker->boolean(15) ? App\User::inRandomOrder()->first()->id : null;
 
     return [
         'first_name' => $faker->firstName,
@@ -29,10 +28,9 @@ $factory->define(App\CatalogEntity::class, function (Faker $faker) {
         'alt_phone' => $faker->boolean(25) ? $faker->phoneNumber : null,
         'is_active' => $faker->boolean(50),
         'user_id' => null, // should be overwritten on creation
-        'approver_id' => $approver_id,
-        'deleter_id' => $deleter_id,
+        'approver_id' => 1,
+        'deleter_id' => 1,
         'catalogable_id' => null, // should be overwritten on creation
         'catalogable_type' => null // should be overwritten on creation
-
     ];
 });
