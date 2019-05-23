@@ -40,6 +40,7 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->apiRoute('artists', 'ArtistController')->addDefaultRoutes();
         $this->apiRoute('albums', 'AlbumController')->addDefaultRoutes();
         $this->apiRoute('songs', 'SongController')->addDefaultRoutes();
+        $this->apiRoute('genres', 'GenreController')->addDefaultRoutes();
 
         $this->apiRoute('featured', 'FeaturedController')
             ->except(['store', 'update'])
