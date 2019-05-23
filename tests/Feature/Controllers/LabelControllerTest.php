@@ -7,6 +7,9 @@ use CountriesSeeder;
 use App\Label;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 #use App\Http\Resources\ArtistResource;
 #use App\Http\Resources\AlbumResource;
 
@@ -17,6 +20,12 @@ class LabelControllerTest extends ControllerTestCase
     protected $artist;
 
     protected $album;
+
+    protected $user;
+
+    protected $profile;
+
+    protected $catalogEntity;
 
     /**
      * @inheritdoc
@@ -32,6 +41,12 @@ class LabelControllerTest extends ControllerTestCase
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->user = resolve(UserRepositoryInterface::class);
+
+        $this->profile = resolve(ProfileRepositoryInterface::class);
+
+        $this->catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
     }
 
     protected function getExactJson(Label $model)
@@ -52,6 +67,13 @@ class LabelControllerTest extends ControllerTestCase
             #'albums' => AlbumResource::collection($model->albums),
             'artists_count' => 1,
             'albums_count' => 1,
+        ];
+    }
+
+    protected function getExactJsonForLabel(Label $model)
+    {
+        return [
+            'id' => $model->id,
         ];
     }
 
@@ -116,6 +138,43 @@ class LabelControllerTest extends ControllerTestCase
     }
 
     /**
+     * Ensure that Create request returns OK HTTP status and the expected JSON string.
+     */
+    public function testStoreReturnsOkStatusAndExpectedJsonStructure()
+    {
+        $user = factory($this->user->class())->create();
+
+        $label = factory($this->label->class())->create();
+
+        $catalogEntity = factory($this->catalogEntity->class())->create([
+            'is_active' => false,
+            'user_id' => $user->id,
+            'approver_id' => null,
+            'deleter_id' => null,
+            'catalogable_id' => $label->id,
+            'catalogable_type' => $this->catalogEntity->class(),
+        ]);
+
+        $profile = factory($this->profile->class())->create([
+            'profilable_id' => $label->id,
+            'profilable_type' => $this->label->class(),
+        ]);
+
+        $catalogEntityAsArray = $catalogEntity->toArray();
+
+        $profileAsArray = $profile->toArray();
+
+        $allInputs = $catalogEntityAsArray + $profileAsArray;
+
+        $this->actingAs($catalogEntity->user)
+            ->json('POST', route('labels.store'), $allInputs)
+            ->assertStatus(201)
+            ->assertJson([
+                'data' => $this->getJsonStructure($allInputs)
+            ]);
+    }
+
+    /**
      * Ensure that Create requests when the user is not authorized result in
      * Forbidden HTTP status.
      */
@@ -124,4 +183,6 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('DELETE', route('labels.destroy', ['id' => 1]))
             ->assertStatus(403);
     }
+
+
 }
