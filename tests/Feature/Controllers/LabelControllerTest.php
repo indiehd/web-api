@@ -70,10 +70,12 @@ class LabelControllerTest extends ControllerTestCase
         ];
     }
 
-    protected function getExactJsonForLabel(Label $model)
+    protected function getJsonStructureForLabel()
     {
         return [
-            'id' => $model->id,
+            'id',
+            'artists_count',
+            'albums_count',
         ];
     }
 
@@ -144,20 +146,16 @@ class LabelControllerTest extends ControllerTestCase
     {
         $user = factory($this->user->class())->create();
 
-        $label = factory($this->label->class())->create();
-
-        $catalogEntity = factory($this->catalogEntity->class())->create([
+        $catalogEntity = factory($this->catalogEntity->class())->make([
+            'email' => 'foo@bar.com',
             'is_active' => false,
             'user_id' => $user->id,
             'approver_id' => null,
             'deleter_id' => null,
-            'catalogable_id' => $label->id,
-            'catalogable_type' => $this->catalogEntity->class(),
         ]);
 
-        $profile = factory($this->profile->class())->create([
-            'profilable_id' => $label->id,
-            'profilable_type' => $this->label->class(),
+        $profile = factory($this->profile->class())->make([
+            'official_url' => 'https://foo.com',
         ]);
 
         $catalogEntityAsArray = $catalogEntity->toArray();
@@ -169,8 +167,8 @@ class LabelControllerTest extends ControllerTestCase
         $this->actingAs($catalogEntity->user)
             ->json('POST', route('labels.store'), $allInputs)
             ->assertStatus(201)
-            ->assertJson([
-                'data' => $this->getJsonStructure($allInputs)
+            ->assertJsonStructure([
+                'data' => $this->getJsonStructureForLabel()
             ]);
     }
 
@@ -183,6 +181,4 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('DELETE', route('labels.destroy', ['id' => 1]))
             ->assertStatus(403);
     }
-
-
 }
