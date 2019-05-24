@@ -181,4 +181,34 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('DELETE', route('labels.destroy', ['id' => 1]))
             ->assertStatus(403);
     }
+
+    /**
+     * Ensure that Delete request returns OK HTTP status.
+     */
+    public function testDeleteReturnsOkStatus()
+    {
+        $user = factory($this->user->class())->create();
+
+        $label = factory($this->label->class())->create();
+
+        $catalogEntity = factory($this->catalogEntity->class())->create([
+            'email' => 'foo@bar.com',
+            'is_active' => false,
+            'user_id' => $user->id,
+            'approver_id' => null,
+            'deleter_id' => null,
+            'catalogable_id' => $label->id,
+            'catalogable_type' => $this->label->class(),
+        ]);
+
+        factory($this->profile->class())->create([
+            'official_url' => 'https://foo.com',
+            'profilable_id' => $label->id,
+            'profilable_type' => $this->label->class(),
+        ]);
+
+        $this->actingAs($catalogEntity->user)
+            ->json('DELETE', route('labels.destroy', ['id' => $label->id]))
+            ->assertStatus(200);
+    }
 }
