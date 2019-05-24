@@ -20,7 +20,7 @@ $factory->define(App\Profile::class, function (Faker $faker) {
         'territory' => $faker->state,
         'country_code' => 'US',
         'official_url' => $faker->boolean(70) ? $faker->url : null,
-        'profile_url' => $faker->slug,
+        'profile_url' => trim(substr($faker->slug(), 0, rand(1, 64)), '-'), // ensure reasonable length and no resultant leading/trailing dashes
         'rank' => $faker->boolean(80) ? $faker->numberBetween(1, 100000) : null,
         'profilable_id' => null, // should be overwritten on creation
         'profilable_type' => null // should be overwritten on creation
