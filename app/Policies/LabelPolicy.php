@@ -66,7 +66,7 @@ class LabelPolicy
     {
         // The User must own the Label.
 
-        return $label->user->id === $user->id;
+        return $label->catalogable->user_id === $user->id;
     }
 
     /**
