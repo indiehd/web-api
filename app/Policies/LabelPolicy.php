@@ -30,7 +30,15 @@ class LabelPolicy
      */
     public function create(User $user)
     {
-        return !$user->entities()->get()->isEmpty();
+        // Any User is permitted to create a Label, because Labels are inactive
+        // and therefor "provisional", by default; they must be approved to be
+        // seen in the public Catalog.
+
+        // Furthermore, any given User is able to be associated with an
+        // unlimited number of Labels, so there is no reason ever to deny this
+        // request.
+
+        return true;
     }
 
     /**
