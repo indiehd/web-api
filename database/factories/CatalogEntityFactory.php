@@ -6,9 +6,13 @@ use Faker\Provider\en_US\Person;
 use Faker\Provider\en_US\PhoneNumber;
 use Faker\Provider\en_US\Company;
 
-use App\User;
+use App\Contracts\CatalogEntityRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 
-$factory->define(App\CatalogEntity::class, function (Faker $faker) {
+$catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
+$user = resolve(UserRepositoryInterface::class);
+
+$factory->define($catalogEntity->class(), function (Faker $faker) use ($user) {
     $faker->addProvider(new Person($faker));
     $faker->addProvider(new Address($faker));
     $faker->addProvider(new PhoneNumber($faker));
@@ -28,8 +32,8 @@ $factory->define(App\CatalogEntity::class, function (Faker $faker) {
         'alt_phone' => $faker->boolean(25) ? $faker->phoneNumber : null,
         'is_active' => $faker->boolean(50),
         'user_id' => null, // should be overwritten on creation
-        'approver_id' => 1,
-        'deleter_id' => 1,
+        'approver_id' => $faker->boolean(50) ? $user->model()::inRandomOrder()->first()->id : null,
+        'deleter_id' => $faker->boolean(15) ? $user->model()::inRandomOrder()->first()->id : null,
         'catalogable_id' => null, // should be overwritten on creation
         'catalogable_type' => null // should be overwritten on creation
     ];
