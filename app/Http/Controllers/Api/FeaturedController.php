@@ -71,8 +71,14 @@ class FeaturedController extends ApiController
      *
      * @return string
      */
-    public function featured()
+    public function artists()
     {
-        return ArtistResource::collection($this->featured->artists()->get());
+        return ArtistResource::collection(
+            $this->featured
+                ->artists()
+                ->with('featurable')
+                ->get()
+                ->pluck('featurable')
+        );
     }
 }
