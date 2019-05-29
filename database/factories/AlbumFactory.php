@@ -1,9 +1,16 @@
 <?php
 
 use App\Album;
-use App\Artist;
 use App\Genre;
 use Faker\Generator as Faker;
+
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
+
+$artist = resolve(ArtistRepositoryInterface::class);
+$album = resolve(AlbumRepositoryInterface::class);
+$song = resolve(SongRepositoryInterface::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +23,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Album::class, function (Faker $faker) {
+$factory->define($album->class(), function (Faker $faker) use ($artist, $song) {
 
     return [
-        'artist_id' => function() {
-            return factory(App\Artist::class)->create()->id;
+        'artist_id' => function() use ($artist) {
+            return factory($artist->class())->create()->id;
         },
         'title' => $faker->company,
         'alt_title' => $faker->company,
@@ -31,7 +38,16 @@ $factory->define(Album::class, function (Faker $faker) {
     ];
 });
 
-$factory->afterCreating(Album::class, function ($album, $faker) {
+$factory->afterCreating($album->class(), function ($album, $faker) use ($song) {
+
+    // Create and associate some Songs.
+
+    factory($song->class(), rand(1, 20))->make()->each(function ($s) use ($album) {
+        $s->album()->associate($album);
+    });
+
+    // Fetch and attach some Genres.
+
     $genres = Genre::inRandomOrder()->take(rand(1, 10))->get();
 
     $album->genres()->attach($genres->pluck('id'));
