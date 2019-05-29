@@ -58,34 +58,12 @@ class FeaturedControllerTest extends ControllerTestCase
             ]);
     }
 
-    public function testShowReturnsOkStatusAndExpectedJsonStructure()
-    {
-        $artist = $this->createArtist();
-
-        $this->makeAlbum([
-            'artist_id' => $artist->id,
-            'is_active' => true,
-        ])->save();
-
-        $featured = factory($this->featured->class())->create([
-            'featurable_id' => $artist->id,
-            'featurable_type' => $this->artist->class(),
-        ]);
-
-        $this->json('GET', route('featured.show', ['id' => $featured->id]))
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
-            ]);
-    }
-
     protected function getJsonStructure()
     {
         return [
-            'moniker',
-            'songs_count',
-            'albums_count',
-            'profile_url',
+            'id',
+            'label',
+            'profile',
         ];
     }
 
