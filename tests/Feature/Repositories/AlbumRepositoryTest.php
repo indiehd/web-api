@@ -149,11 +149,6 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        factory($this->song->class())->create([
-            'track_number' => 1,
-            'album_id' => $album->id
-        ]);
-
         $this->assertInstanceOf($this->song->class(), $album->songs->first());
     }
 
