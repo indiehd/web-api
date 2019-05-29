@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\FeaturedRepositoryInterface;
+use App\Http\Requests\StoreFeatured;
+use App\Http\Requests\UpdateFeatured;
+use App\Http\Requests\DestroyFeatured;
 use App\Http\Resources\FeaturedResource;
 
 class FeaturedController extends ApiController
