@@ -4,9 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\FeaturedRepositoryInterface;
 use App\Http\Resources\FeaturedResource;
+use App\Http\Resources\ArtistResource;
 
 class FeaturedController extends ApiController
 {
+    public function __construct(
+        FeaturedRepositoryInterface $featured
+    ) {
+        parent::__construct();
+
+        $this->featured = $featured;
+    }
+
     /**
      * Sets the StoreRequest to resolve for validation during a store request
      *
@@ -55,5 +64,15 @@ class FeaturedController extends ApiController
     public function resource()
     {
         return FeaturedResource::class;
+    }
+
+    /**
+     * Returns a Featured Artist resource.
+     *
+     * @return string
+     */
+    public function featured()
+    {
+        return ArtistResource::collection($this->featured->artists()->get());
     }
 }
