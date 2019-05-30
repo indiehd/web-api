@@ -53,12 +53,15 @@ parameters:
       sniffs: []
       triggered_by: [php]
     git_blacklist:
+      # todo: Apparently keywords are not words but rather contains
+      # e.g. `->add()` will be seen as `dd(`
+      # This is assumed an issue that probably should be opened with GrumPHP
       keywords:
           - "die("
           - "var_dump("
           - "exit;"
           - "exit("
-          - "dd("
+          # - "dd("
       whitelist_patterns:
         - /^app\/(?!Console)(.*)/
         - /^bootstrap\/(.*)/
