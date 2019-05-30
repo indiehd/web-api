@@ -90,6 +90,12 @@ class ApiRoute
         return $this;
     }
 
+    public function only(array $routes = [])
+    {
+        $this->routes = Arr::only($this->routes, $routes);
+        return $this;
+    }
+
     public function addRoute($uri, $controllerMethod, $httpMethod = 'get', $name = null)
     {
         $controller = $this->controller;
