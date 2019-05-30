@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class ApiRoute
 {
@@ -84,7 +86,7 @@ class ApiRoute
 
     public function except(array $routes = [])
     {
-        $this->routes = array_except($this->routes, $routes);
+        $this->routes = Arr::except($this->routes, $routes);
         return $this;
     }
 
@@ -93,7 +95,7 @@ class ApiRoute
         $controller = $this->controller;
         $prefix = $this->prefix;
         $httpMethod = strtolower($httpMethod);
-        $name = is_null($name) ? snake_case($controllerMethod) : $name;
+        $name = is_null($name) ? Str::snake($controllerMethod) : $name;
 
         Route::prefix('api')
             ->middleware('api')
