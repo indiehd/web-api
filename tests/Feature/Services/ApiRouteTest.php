@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Providers\RouteServiceProvider;
 use App\Services\ApiRoute;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ApiRouteTest extends TestCase
@@ -56,7 +57,7 @@ class ApiRouteTest extends TestCase
             $this->assertNotNull(
                 $this->router
                     ->getRoutes()
-                    ->getByName("tests.$method")
+                    ->getByName("test.$method")
             );
         }
     }
@@ -66,7 +67,7 @@ class ApiRouteTest extends TestCase
         $this->assertNotNull(
             $this->router
                 ->getRoutes()
-                ->getByName("excepts.index")
+                ->getByName("except.index")
         );
     }
 
@@ -75,8 +76,23 @@ class ApiRouteTest extends TestCase
         $this->assertNull(
             $this->router
                 ->getRoutes()
-                ->getByName("excepts.update")
+                ->getByName("except.update")
         );
+    }
+
+    public function testOnlyMethodOnlyHasIndexRoute()
+    {
+        $methods = array_keys($this->methods);
+
+        foreach ($methods as $method) {
+            if ($method === 'index') continue;
+
+            $this->assertNull(
+                $this->router
+                    ->getRoutes()
+                    ->getByName("only.$method")
+            );
+        }
     }
 
     public function test_routes_have_proper_httpMethods()
@@ -85,7 +101,7 @@ class ApiRouteTest extends TestCase
 
         foreach ($methods as $method => $httpMethod) {
             $this->assertTrue(
-                $this->has_httpMethod("tests.$method", $httpMethod),
+                $this->has_httpMethod("test.$method", $httpMethod),
                 "Invalid http method for $method! Expected $httpMethod"
             );
         }
@@ -96,7 +112,7 @@ class ApiRouteTest extends TestCase
         $methods = array_keys($this->methods);
 
         foreach ($methods as $method) {
-            $this->assertTrue($this->has_prefix("tests.$method"));
+            $this->assertTrue($this->has_prefix("test.$method"));
         }
     }
 
@@ -105,7 +121,7 @@ class ApiRouteTest extends TestCase
         $methods = array_keys($this->methods);
 
         foreach ($methods as $method) {
-            $this->assertTrue($this->has_middleware("tests.$method"));
+            $this->assertTrue($this->has_middleware("test.$method"));
         }
     }
 
@@ -114,7 +130,7 @@ class ApiRouteTest extends TestCase
         $methods = array_keys($this->methods);
 
         foreach ($methods as $method) {
-            $this->assertTrue($this->has_namespace("tests.$method"));
+            $this->assertTrue($this->has_namespace("test.$method"));
         }
     }
 
@@ -132,7 +148,7 @@ class ApiRouteTest extends TestCase
 
     protected function has_prefix($route, $prefix = 'api')
     {
-        return starts_with(
+        return Str::startsWith(
             $this->router
                 ->getRoutes()
                 ->getByName($route)
@@ -171,14 +187,16 @@ class MockApiRouteServiceProvider extends RouteServiceProvider
 
     public function map()
     {
-        $this->apiRoute('tests', 'TestController')
-            ->addDefaultRoutes()
-            ->addRoute('/whatever', 'whatever')
-            ->addRoute('/another', 'another', 'post');
+        $this->apiRoute('test', 'TestController')
+            ->addDefaults()
+            ->add('/whatever', 'whatever')
+            ->add('/another', 'another', 'post');
 
-        $this->apiRoute('excepts', 'ExceptsController')
-            ->except(['update'])
-            ->addDefaultRoutes();
+        $this->apiRoute('except', 'ExceptController')
+            ->except(['update']);
+
+        $this->apiRoute('only', 'OnlyController')
+            ->only(['index']);
     }
 
     public function apiRoute($prefix, $controller)
