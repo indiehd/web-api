@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 
 class FeaturedArtistEligibilityTest extends TestCase
 {
@@ -24,6 +25,11 @@ class FeaturedArtistEligibilityTest extends TestCase
      * @var $artist ArtistRepositoryInterface
      */
     protected $album;
+
+    /**
+     * @var $song SongRepositoryInterface
+     */
+    protected $song;
 
     /**
      * @var $artist ArtistRepositoryInterface
@@ -48,9 +54,11 @@ class FeaturedArtistEligibilityTest extends TestCase
 
         $this->album = resolve(AlbumRepositoryInterface::class);
 
+        $this->song = resolve(SongRepositoryInterface::class);
+
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
-        // Two Artists that DO NOT meet every condition...
+        // Artists that DO NOT meet every condition...
 
         // ... Artist doesn't have a Profile.
 
@@ -59,6 +67,34 @@ class FeaturedArtistEligibilityTest extends TestCase
         // ... Artist doesn't have at least one Album.
 
         $this->createArtist();
+
+        // ... Artist has at least one Album, but the Album is inactive.
+
+        $this->createAlbum(['is_active' => false]);
+
+        // ... Artist has one Album, but it doesn't contain at least one Song.
+
+        $album = $this->createAlbum();
+
+        $album->songs()->each(function ($song) {
+            $song->delete();
+        });
+
+        // ... Artist has one Album, and it contains at least one Song, but the Song is inactive.
+
+        $album = $this->createAlbum();
+
+        $album->songs()->each(function ($song) {
+            $song->delete();
+        });
+
+        $song = factory($this->song->class())->make([
+            'track_number' => 1,
+            'is_active' => false,
+            'album_id' => $album->id
+        ]);
+
+        factory($this->song->class())->create($song->toArray());
 
         // One Artist that DOES meet every condition.
 
