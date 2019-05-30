@@ -93,13 +93,13 @@ class ApiRoute
         return $this->defaults();
     }
 
-    public function except(array $routes = [])
+    public function except(array $routes)
     {
         $this->routes = Arr::except($this->routes, $routes);
         return $this->defaults();
     }
 
-    public function only(array $routes = [])
+    public function only(array $routes)
     {
         $this->routes = Arr::only($this->routes, $routes);
         return $this->defaults();
