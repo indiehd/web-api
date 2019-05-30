@@ -38,13 +38,24 @@ $factory->define($album->class(), function (Faker $faker) use ($artist, $song) {
     ];
 });
 
+$factory->state($album->class(), 'withSongs', function ($faker) use ($song) {
+    return [
+        'songs' => factory($song->class(), rand(1, 20))->make(),
+    ];
+});
+
 $factory->afterCreating($album->class(), function ($album, $faker) use ($song) {
 
     // Create and associate some Songs.
 
-    factory($song->class(), rand(1, 20))->make()->each(function ($s) use ($album) {
-        $s->album()->associate($album);
-    });
+    for ($i = 1; $i < rand(2, 21); $i++) {
+        $s = factory($song->class())->create([
+            'album_id' => $album->id,
+            'track_number' => $i
+        ]);
+
+        $s->album()->associate($album)->save();
+    }
 
     // Fetch and attach some Genres.
 

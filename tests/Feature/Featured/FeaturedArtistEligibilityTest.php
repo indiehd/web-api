@@ -66,10 +66,10 @@ class FeaturedArtistEligibilityTest extends TestCase
 
         $this->eligibleArtists[] = $artist;
 
-        $this->makeAlbum([
+        $this->createAlbum([
             'artist_id' => $artist->id,
             'is_active' => true,
-        ])->save();
+        ]);
 
         // Two more Artists...
 
@@ -98,10 +98,10 @@ class FeaturedArtistEligibilityTest extends TestCase
 
         $this->eligibleArtists[] = $artist;
 
-        $this->makeAlbum([
+        $this->createAlbum([
             'artist_id' => $artist->id,
             'is_active' => true,
-        ])->save();
+        ]);
 
         $featured = $this->featured->create([
             'featurable_id' => $artist->id,
@@ -138,6 +138,21 @@ class FeaturedArtistEligibilityTest extends TestCase
     protected function createArtist(array $properties = [])
     {
         return factory($this->artist->class())->create($properties);
+    }
+
+    /**
+     * Create an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function createAlbum(array $properties = [])
+    {
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
+
+        return factory($this->album->class())->create($properties);
     }
 
     /**

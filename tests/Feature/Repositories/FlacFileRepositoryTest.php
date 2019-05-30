@@ -146,20 +146,13 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        $album = $this->album->create(
-            factory($this->album->class())->raw(['artist_id' => $artist->id])
-        );
-
-        $song = factory($this->song->class())->create([
-            'album_id' => $album->id,
-            'track_number' => 1,
-        ]);
+        $album = factory($this->album->class())->create(['artist_id' => $artist->id]);
 
         $flacFile = $this->repo->create(
             factory($this->repo->class())->raw()
         );
 
-        $song->flacFile()->associate($flacFile)->save();
+        $album->songs()->first()->flacFile()->associate($flacFile)->save();
 
         $this->assertInstanceOf(
             $this->song->class(),

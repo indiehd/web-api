@@ -125,7 +125,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function testWhenGenreAssociatedWithAlbumItHasManyAlbums()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
+        $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
         $genre = $this->repo->create(
             factory($this->repo->class())->raw()

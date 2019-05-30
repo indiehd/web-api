@@ -140,7 +140,7 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $artist = factory($this->artist->class())->create();
 
-        $album = factory($this->album->class())->make();
+        $album = factory($this->album->class())->state('withSongs')->make();
 
         $albumAsArray = $album->toArray();
 

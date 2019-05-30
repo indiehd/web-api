@@ -204,11 +204,17 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        // Add a Song to the Album.
+        // Use the withSongs factory state.
 
-        $properties['songs'] = factory($this->song->class())->raw();
+        $album = factory($this->repo->class())
+            ->state('withSongs')
+            ->make($properties);
 
-        return factory($this->repo->class())->make($properties);
+        // Cast the songs to an array, too.
+
+        $album['songs'] = $album['songs']->toArray();
+
+        return $album;
     }
 
     /**
