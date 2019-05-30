@@ -60,7 +60,7 @@ class ApiRoute
         $this->controller = $controller;
     }
 
-    public function addDefaultRoutes()
+    protected function defaults()
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
@@ -84,19 +84,28 @@ class ApiRoute
         return $this;
     }
 
+    public function addDefaults(array $excepts = [])
+    {
+        if (count($excepts) > 0) {
+            return $this->except($excepts);
+        }
+
+        return $this->defaults();
+    }
+
     public function except(array $routes = [])
     {
         $this->routes = Arr::except($this->routes, $routes);
-        return $this;
+        return $this->defaults();
     }
 
     public function only(array $routes = [])
     {
         $this->routes = Arr::only($this->routes, $routes);
-        return $this;
+        return $this->defaults();
     }
 
-    public function addRoute($uri, $controllerMethod, $httpMethod = 'get', $name = null)
+    public function add($uri, $controllerMethod, $httpMethod = 'get', $name = null)
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
