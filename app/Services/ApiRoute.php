@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class ApiRoute
 {
@@ -58,7 +60,7 @@ class ApiRoute
         $this->controller = $controller;
     }
 
-    public function addDefaultRoutes()
+    protected function defaults()
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
@@ -82,18 +84,33 @@ class ApiRoute
         return $this;
     }
 
-    public function except(array $routes = [])
+    public function addDefaults(array $excepts = [])
     {
-        $this->routes = array_except($this->routes, $routes);
-        return $this;
+        if (count($excepts) > 0) {
+            return $this->except($excepts);
+        }
+
+        return $this->defaults();
     }
 
-    public function addRoute($uri, $controllerMethod, $httpMethod = 'get', $name = null)
+    public function except(array $routes)
+    {
+        $this->routes = Arr::except($this->routes, $routes);
+        return $this->defaults();
+    }
+
+    public function only(array $routes)
+    {
+        $this->routes = Arr::only($this->routes, $routes);
+        return $this->defaults();
+    }
+
+    public function add($uri, $controllerMethod, $httpMethod = 'get', $name = null)
     {
         $controller = $this->controller;
         $prefix = $this->prefix;
         $httpMethod = strtolower($httpMethod);
-        $name = is_null($name) ? snake_case($controllerMethod) : $name;
+        $name = is_null($name) ? Str::snake($controllerMethod) : $name;
 
         Route::prefix('api')
             ->middleware('api')
