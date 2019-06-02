@@ -162,16 +162,9 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createSong()
     {
-        $album = $this->album->create(
-            factory($this->album->class())->raw()
-        );
+        $album = factory($this->album->class())->create();
 
-        return $this->repo->create(
-            factory($this->repo->class())->raw([
-                'album_id' => $album->id,
-                'track_number' => 1,
-            ])
-        );
+        return $album->songs()->first();
     }
 
     /**

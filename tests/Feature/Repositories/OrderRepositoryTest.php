@@ -206,7 +206,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeOrderItem()
     {
-        $album = $this->album->create($this->makeAlbum()->toArray());
+        $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
         $order = $this->repo->create(
             factory($this->repo->class())->raw()
