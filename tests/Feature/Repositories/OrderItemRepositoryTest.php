@@ -86,7 +86,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
-        $album = $this->album->create($this->makeAlbum()->toArray());
+        $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
         $newValue = $album->id;
 
@@ -189,6 +189,27 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Create an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function createAlbum(array $properties = [])
+    {
+        $artist = $this->artist->create(
+            factory($this->artist->class())->raw(
+                factory($this->profile->class())->raw()
+            )
+        );
+
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $artist->id;
+
+        return factory($this->album->class())->create($properties);
+    }
+
+    /**
      * Make an Album.
      *
      * @param array $properties
@@ -216,16 +237,9 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createSong()
     {
-        $album = $this->album->create(
-            factory($this->album->class())->raw()
-        );
+        $album = factory($this->album->class())->create();
 
-        return $this->song->create(
-            factory($this->song->class())->raw([
-                'album_id' => $album->id,
-                'track_number' => 1,
-            ])
-        );
+        return $album->songs()->first();
     }
 
     /**
@@ -240,7 +254,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
             'order_id' => $properties['order_id'] ?? $this->order->create(
                 factory($this->order->class())->raw()
             )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+            'orderable_id' => $properties['orderable_id'] ?? factory($this->album->class())->create(
                 $this->makeAlbum()->toArray()
             )->id,
             'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),

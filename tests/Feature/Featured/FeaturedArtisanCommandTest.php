@@ -56,10 +56,10 @@ class FeaturedArtistTest extends TestCase
 
         $artist = $this->createArtist();
 
-        $this->makeAlbum([
+        $this->createAlbum([
             'artist_id' => $artist->id,
             'is_active' => true,
-        ])->save();
+        ]);
 
         $featured = $this->featured->create([
             'featurable_id' => $artist->id,
@@ -75,10 +75,10 @@ class FeaturedArtistTest extends TestCase
 
         $artist = $this->createArtist();
 
-        $this->makeAlbum([
+        $this->createAlbum([
             'artist_id' => $artist->id,
             'is_active' => true,
-        ])->save();
+        ]);
     }
 
     public function testWhenCalledFeatureArtisanCommandFeaturesExpectedEntities()
@@ -117,6 +117,21 @@ class FeaturedArtistTest extends TestCase
     }
 
     /**
+     * Create an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function createAlbum(array $properties = [])
+    {
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
+
+        return factory($this->album->class())->create($properties);
+    }
+
+    /**
      * Make an Album.
      *
      * @param array $properties
@@ -129,5 +144,30 @@ class FeaturedArtistTest extends TestCase
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
         return factory($this->album->class())->make($properties);
+    }
+
+    /**
+     * Make an Album.
+     *
+     * @param array $properties
+     * @return \App\Album
+     */
+    protected function makeAlbumWithSongs(array $properties = [])
+    {
+        // This is the one property that can't be passed via the argument.
+
+        $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
+
+        // Use the withSongs factory state.
+
+        $album = factory($this->album->class())
+            ->state('withSongs')
+            ->make($properties);
+
+        // Cast the songs to an array, too.
+
+        $album['songs'] = $album['songs']->toArray();
+
+        return $album;
     }
 }

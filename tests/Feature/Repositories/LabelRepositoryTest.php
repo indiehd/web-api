@@ -232,9 +232,9 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
             factory($this->profile->class())->raw(['label_id' => $label->id])
         );
 
-        $this->album->create(
-            factory($this->album->class())->raw(['artist_id' => $artist->id])
-        );
+        #$this->album->create(
+            factory($this->album->class())->create(['artist_id' => $artist->id]);
+        #);
 
         $this->assertInstanceOf($this->album->class(), $artist->label->albums->first());
     }
