@@ -149,11 +149,6 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        factory($this->song->class())->create([
-            'track_number' => 1,
-            'album_id' => $album->id
-        ]);
-
         $this->assertInstanceOf($this->song->class(), $album->songs->first());
     }
 
@@ -209,7 +204,17 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->repo->class())->make($properties);
+        // Use the withSongs factory state.
+
+        $album = factory($this->repo->class())
+            ->state('withSongs')
+            ->make($properties);
+
+        // Cast the songs to an array, too.
+
+        $album['songs'] = $album['songs']->toArray();
+
+        return $album;
     }
 
     /**

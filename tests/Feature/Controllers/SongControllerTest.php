@@ -89,16 +89,11 @@ class SongControllerTest extends ControllerTestCase
     {
         $album = factory($this->album->class())->create();
 
-        $song = factory($this->song->class())->create([
-            'track_number' => 1,
-            'album_id' => $album->id,
-        ]);
-
         $this->json('GET', route('songs.index'))
             ->assertStatus(200)
-            ->assertExactJson([
-                'data' => [$this->getExactJson($song)]
-            ]);
+            ->assertJsonFragment(
+                $this->getExactJson($album->songs->first())
+            );
     }
 
     /**
@@ -109,15 +104,10 @@ class SongControllerTest extends ControllerTestCase
     {
         $album = factory($this->album->class())->create();
 
-        $song = factory($this->song->class())->create([
-            'track_number' => 1,
-            'album_id' => $album->id,
-        ]);
-
-        $this->json('GET', route('songs.show', ['id' => $song->id]))
+        $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getExactJson($song)
+                'data' => $this->getExactJson($album->songs->first())
             ]);
     }
 
@@ -129,15 +119,12 @@ class SongControllerTest extends ControllerTestCase
     {
         $album = factory($this->album->class())->create();
 
-        $song = factory($this->song->class())->create([
-            'track_number' => 1,
-            'album_id' => $album->id,
-        ]);
-
-        $this->json('GET', route('songs.show', ['id' => $song->id]))
+        $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getExactJsonWithFlacFile($song->flacFile)
+                'data' => $this->getExactJsonWithFlacFile(
+                    $album->songs->first()->flacFile
+                )
             ]);
     }
 }

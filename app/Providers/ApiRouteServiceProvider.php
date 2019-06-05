@@ -36,23 +36,21 @@ class ApiRouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->apiRoute('users', 'UserController')->addDefaultRoutes();
-        $this->apiRoute('artists', 'ArtistController')->addDefaultRoutes();
-        $this->apiRoute('albums', 'AlbumController')->addDefaultRoutes();
-        $this->apiRoute('labels', 'LabelController')->addDefaultRoutes();
-        $this->apiRoute('songs', 'SongController')->addDefaultRoutes();
-        $this->apiRoute('genres', 'GenreController')->addDefaultRoutes();
+        $this->apiRoute('users', 'UserController')->addDefaults();
+        $this->apiRoute('artists', 'ArtistController')->addDefaults();
+        $this->apiRoute('albums', 'AlbumController')->addDefaults();
+        $this->apiRoute('labels', 'LabelController')->addDefaults();
+        $this->apiRoute('songs', 'SongController')->addDefaults();
+        $this->apiRoute('genres', 'GenreController')->addDefaults();
 
         $this->apiRoute('featured', 'FeaturedController')
-            ->except(['store', 'update'])
-            ->addDefaultRoutes();
+            ->add('artists', 'artists', 'get', 'artists');
 
         $this->apiRoute('orders', 'OrderController')
             ->except(['store', 'update'])
-            ->addDefaultRoutes()
-            ->addRoute('/storeOrder', 'storeOrder', 'post')
-            ->addRoute('/addItems/{orderId}', 'addItems', 'post')
-            ->addRoute('/removeItems/{orderId}', 'removeItems', 'delete');
+            ->add('/storeOrder', 'storeOrder', 'post')
+            ->add('/addItems/{orderId}', 'addItems', 'post')
+            ->add('/removeItems/{orderId}', 'removeItems', 'delete');
     }
 
     protected function apiRoute($prefix, $controller)

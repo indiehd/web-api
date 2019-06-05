@@ -234,9 +234,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
             factory($this->profile->class())->raw()
         );
 
-        $this->album->create(
-            factory($this->album->class())->raw(['artist_id' => $artist->id])
-        );
+        factory($this->album->class())->create(['artist_id' => $artist->id]);
 
         $this->assertInstanceOf($this->album->class(), $artist->albums()->first());
     }
@@ -253,16 +251,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
             factory($this->profile->class())->raw()
         );
 
-        $album = $this->album->create(
-            factory($this->album->class())->raw(['artist_id' => $artist->id])
-        );
-
-        $song = factory($this->song->class())->make([
-            'track_number' => 1,
-            'album_id' => $album->id
-        ]);
-
-        $this->song->create($song->toArray());
+        factory($this->album->class())->create(['artist_id' => $artist->id]);
 
         $this->assertInstanceOf($this->song->class(), $artist->albums()->first()->songs->first());
     }

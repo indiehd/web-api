@@ -319,7 +319,17 @@ class OrderControllerTest extends ControllerTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->album->class())->make($properties);
+        // Use the withSongs factory state.
+
+        $album = factory($this->album->class())
+            ->state('withSongs')
+            ->make($properties);
+
+        // Cast the songs to an array, too.
+
+        $album['songs'] = $album['songs']->toArray();
+
+        return $album;
     }
 
     /**
