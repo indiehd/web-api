@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
+use Illuminate\Support\Str;
 use App\Contracts\ProfileRepositoryInterface;
 use CountriesSeeder;
 use App\Contracts\FlacFileRepositoryInterface;
@@ -80,7 +81,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
             factory($this->repo->class())->raw()
         );
 
-        $newValue = str_random(32);
+        $newValue = Str::random(32);
 
         $property = 'md5_data_source';
 

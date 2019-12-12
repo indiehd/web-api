@@ -233,7 +233,7 @@ class AlbumControllerTest extends ControllerTestCase
 
     public function testDestroyWithMissingInputReturnsMethodNotAllowedStatus()
     {
-        $this->json('DELETE', route('albums.destroy', ['id' => null]))
+        $this->json('DELETE', str_replace('foo', '', route('albums.destroy', ['id' => 'foo'])))
             ->assertStatus(405);
     }
 }

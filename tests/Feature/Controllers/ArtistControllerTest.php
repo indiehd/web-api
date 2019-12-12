@@ -151,7 +151,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_destroy_withMissingInput_returnsMethodNotAllowedStatus()
     {
-        $this->json('DELETE', route('artists.destroy', ['id' => null]))
+        $this->json('DELETE', str_replace('foo', '', route('artists.destroy', ['id' => 'foo'])))
             ->assertStatus(405);
     }
 }

@@ -182,7 +182,7 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem2 = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.add_items', ['id' => $order->id]),
+        $this->json('POST', route('orders.add_items', ['orderId' => $order->id]),
                 ['items' => [$orderItem1, $orderItem2]]
             )
             ->assertStatus(201)
@@ -203,7 +203,7 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.add_items', ['id' => $order->id]),
+        $this->json('POST', route('orders.add_items', ['orderId' => $order->id]),
             ['items' => [$orderItem, $orderItem]]
         )
             ->assertStatus(201)
@@ -241,7 +241,7 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testDestroyWithMissingInputReturnsMethodNotAllowedStatus()
     {
-        $this->json('DELETE', route('orders.destroy', ['id' => null]))
+        $this->json('DELETE', str_replace('foo', '', route('orders.destroy', ['id' => 'foo'])))
             ->assertStatus(405);
     }
 
@@ -257,7 +257,7 @@ class OrderControllerTest extends ControllerTestCase
             $this->makeOrderItem(['order_id' => $order->id])->toArray()
         );
 
-        $this->json('DELETE', route('orders.remove_items', ['id' => $order->id]), ['items' => $orderItem])
+        $this->json('DELETE', route('orders.remove_items', ['orderId' => $order->id]), ['items' => $orderItem])
             ->assertStatus(200)
             ->assertJsonStructure([]);
     }
@@ -278,7 +278,7 @@ class OrderControllerTest extends ControllerTestCase
             $this->makeOrderItem(['order_id' => $order->id])->toArray()
         );
 
-        $this->json('DELETE', route('orders.remove_items', ['id' => $order->id]), ['items' => [$orderItem1, $orderItem2]])
+        $this->json('DELETE', route('orders.remove_items', ['orderId' => $order->id]), ['items' => [$orderItem1, $orderItem2]])
             ->assertStatus(200)
             ->assertJsonStructure([]);
     }

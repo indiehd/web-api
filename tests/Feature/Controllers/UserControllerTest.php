@@ -162,7 +162,7 @@ class UserControllerTest extends ControllerTestCase
 
     public function test_destroy_withMissingInput_returnsMethodNotAllowedStatus()
     {
-        $this->json('DELETE', route('users.destroy', ['id' => null]))
+        $this->json('DELETE', str_replace('foo', '', route('users.destroy', ['id' => 'foo'])))
             ->assertStatus(405);
     }
 
