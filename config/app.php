@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        IndieHD\Velkart\VelkartServiceProvider::class,
 
         /*
          * Application Service Providers...
