@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\OrderRepositoryInterface;
-use App\Order;
+use IndieHD\Velkart\Models\Eloquent\Order;
 
 class OrderRepository extends CrudRepository implements OrderRepositoryInterface
 {
