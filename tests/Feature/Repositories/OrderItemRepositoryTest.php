@@ -97,7 +97,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
         ]);
 
         $this->assertTrue(
-            $this->repo->findById($item->id)->{$property} === $newValue
+            $this->repo->findById($item->id)->{$property} === (string) $newValue
         );
     }
 

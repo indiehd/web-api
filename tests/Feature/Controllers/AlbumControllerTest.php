@@ -83,9 +83,9 @@ class AlbumControllerTest extends ControllerTestCase
         ];
 
         if ($castIntAndBool) {
-            $structure['year'] = (int) $album->year;
-            $structure['has_explicit_lyrics'] = (int) $album->has_explicit_lyrics;
-            $structure['is_active'] = (int) $album->is_active;
+            $structure['year'] = (string) (int) $album->year;
+            $structure['has_explicit_lyrics'] = (string) (int) $album->has_explicit_lyrics;
+            $structure['is_active'] = (string) (int) $album->is_active;
         }
 
         if (isset($album->id)) {
