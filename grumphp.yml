@@ -57,11 +57,11 @@ parameters:
       # e.g. `->add()` will be seen as `dd(`
       # This is assumed an issue that probably should be opened with GrumPHP
       keywords:
-          - "die("
-          - "var_dump("
+          - "die\\("
+          - "var_dump\\("
           - "exit;"
-          - "exit("
-          # - "dd("
+          - "exit\\("
+          # - "dd\\("
       whitelist_patterns:
         - /^app\/(?!Console)(.*)/
         - /^bootstrap\/(.*)/
@@ -70,5 +70,5 @@ parameters:
         - /^routes\/(.*)/
         - /^tests\/(.*)/
       triggered_by: ['php']
-      regexp_type: G
+      regexp_type: E
   ascii: ~
