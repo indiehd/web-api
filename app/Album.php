@@ -8,6 +8,12 @@ class Album extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'has_explicit_lyrics' => 'bool',
+        'is_active' => 'bool',
+        'year' => 'int',
+    ];
+
     public function songs()
     {
         return $this->hasMany(Song::class);
