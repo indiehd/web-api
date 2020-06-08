@@ -12,6 +12,10 @@ class OrderItem extends Model
         'orderable_type'
     ];
 
+    protected $casts = [
+        'orderable_id' => 'int',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);

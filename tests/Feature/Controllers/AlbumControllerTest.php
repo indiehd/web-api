@@ -9,6 +9,9 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Http\Resources\AlbumResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class AlbumControllerTest extends ControllerTestCase
 {
@@ -67,32 +70,9 @@ class AlbumControllerTest extends ControllerTestCase
         ]);
     }
 
-    protected function getJsonStructure(Album $album, $castIntAndBool = false)
+    protected function getJsonStructure(Album $album)
     {
-        $structure = [
-            'title' => $album->title,
-            'alt_title' => $album->alt_title,
-            'year' => $album->year,
-            'description' => $album->description,
-            'has_explicit_lyrics' => $album->has_explicit_lyrics,
-            'full_album_price' => $album->full_album_price,
-            'rank' => $album->rank,
-            'is_active' => $album->is_active,
-            'deleter' => $album->deleter,
-            'deleted_at' => null,
-        ];
-
-        if ($castIntAndBool) {
-            $structure['year'] = (int) $album->year;
-            $structure['has_explicit_lyrics'] = (int) $album->has_explicit_lyrics;
-            $structure['is_active'] = (int) $album->is_active;
-        }
-
-        if (isset($album->id)) {
-            $structure['id'] = $album->id;
-        }
-
-        return $structure;
+        return AlbumResource::make($album)->jsonSerialize();
     }
 
     protected function getAllInputsInValidState()
@@ -148,7 +128,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('POST', route('albums.store'), $albumAsArray)
             ->assertStatus(201)
             ->assertJson([
-                'data' => $this->getJsonStructure($album)
+                'data' => Arr::except($this->getJsonStructure($album), ['id'])
             ]);
     }
 
@@ -188,7 +168,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('PUT', route('albums.update', ['id' => $album->id]), $albumAsArray)
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album, true)
+                'data' => Arr::except($this->getJsonStructure($album), ['artist'])
             ]);
     }
 
