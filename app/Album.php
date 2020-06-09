@@ -9,6 +9,7 @@ class Album extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'full_album_price' => 'decimal:4',
         'has_explicit_lyrics' => 'bool',
         'is_active' => 'bool',
         'year' => 'int',
