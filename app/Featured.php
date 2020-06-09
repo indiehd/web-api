@@ -11,7 +11,6 @@ use App\Contracts\ArtistRepositoryInterface;
 class Featured extends Model
 {
     protected $fillable = [
-        'is_active',
         'featurable_id',
         'featurable_type',
     ];
