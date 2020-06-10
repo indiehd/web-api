@@ -82,7 +82,7 @@ class AlbumControllerTest extends ControllerTestCase
             'year' => (int) 1981,
             'description' => 'The best album, evaaah!',
             'has_explicit_lyrics' => 0,
-            'full_album_price' => 9.99,
+            'full_album_price' => 999,
         ];
     }
 
@@ -122,7 +122,11 @@ class AlbumControllerTest extends ControllerTestCase
 
         $album = factory($this->album->class())->state('withSongs')->make();
 
+        $album->full_album_price = 999;
+
         $albumAsArray = $album->toArray();
+        $albumAsArray['full_album_price'] = 999;
+        $albumAsArray['artist_id'] = $artist->id;
 
         $this->actingAs($artist->user)
             ->json('POST', route('albums.store'), $albumAsArray)

@@ -1,6 +1,5 @@
 <?php
 
-use App\Album;
 use App\Genre;
 use Faker\Generator as Faker;
 
@@ -34,7 +33,7 @@ $factory->define($album->class(), function (Faker $faker) use ($artist, $song) {
         'year' => $faker->year('now'),
         'description' => $faker->sentence(10),
         'has_explicit_lyrics' => $faker->boolean(25),
-        'is_active' => $faker->boolean(80)
+        'is_active' => $faker->boolean(80),
     ];
 });
 

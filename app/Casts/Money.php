@@ -8,6 +8,10 @@ use Money\Money as MoneyMoney;
 
 class Money implements CastsAttributes
 {
+    const CURRENCY_DEFAULT = 'USD';
+
+    const CURRENCY_CONFIG_KEY = 'ihd.currency';
+
     /** @var string */
     protected static $currency;
 
@@ -22,13 +26,21 @@ class Money implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        if (!static::$currency) {
-            static::$currency = new Currency(config('indiehd.currency', 'USD'));
+        if ($value === null || $value instanceof MoneyMoney) {
+            return $value;
         }
 
-        return $value !== null ?
-            new MoneyMoney($value, static::$currency)
-            : null;
+        if (is_string($value) && empty($value)) {
+            return null;
+        }
+
+        if (!static::$currency) {
+            static::$currency = new Currency(
+                config(self::CURRENCY_CONFIG_KEY) ?: self::CURRENCY_DEFAULT
+            );
+        }
+
+        return new MoneyMoney((int) $value, static::$currency);
     }
 
     /**
@@ -42,7 +54,10 @@ class Money implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
-        /** @var MoneyMoney $value */
-        return $value !== null ? $value->getAmount() : null;
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $value instanceof MoneyMoney ? $value->getAmount() : (int) $value;
     }
 }
