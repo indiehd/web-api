@@ -26,12 +26,13 @@ class Money implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        if ($value === null || $value instanceof MoneyMoney) {
-            return $value;
+        // Allow 0 but not other empty values
+        if (empty($value) && $value !== 0) {
+            return null;
         }
 
-        if (is_string($value) && empty($value)) {
-            return null;
+        if ($value instanceof MoneyMoney) {
+            return $value;
         }
 
         if (!static::$currency) {
@@ -54,7 +55,8 @@ class Money implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
-        if ($value === null || $value === '') {
+        // Allow 0 but not other empty values
+        if (empty($value) && $value !== 0) {
             return null;
         }
 
