@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Casts\Money;
 use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
@@ -9,7 +10,7 @@ class Album extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'full_album_price' => 'decimal:4',
+        'full_album_price' => Money::class,
         'has_explicit_lyrics' => 'bool',
         'is_active' => 'bool',
         'year' => 'int',
