@@ -13,7 +13,7 @@ class Song extends Model
         'is_active' => 'bool',
         'is_digital' => 'bool',
         'is_taxable' => 'bool',
-        'preview_start' => 'decimal:3',
+        'preview_start' => 'float',
         'price' => Money::class,
         'requires_shipping' => 'bool',
         'track_number' => 'int',

@@ -11,7 +11,7 @@ class FlacFile extends Model
     protected $casts = [
         'bitrate' => 'decimal:7',
         'bits_per_sample' => 'int',
-        'compression_ratio' => 'decimal:14',
+        'compression_ratio' => 'float',
         'file_size' => 'int',
         'is_lossless' => 'bool',
         'num_channels' => 'int',
