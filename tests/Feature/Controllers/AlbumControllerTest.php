@@ -12,6 +12,7 @@ use App\Contracts\UserRepositoryInterface;
 use App\Http\Resources\AlbumResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Money\Money;
 
 class AlbumControllerTest extends ControllerTestCase
 {
@@ -123,6 +124,8 @@ class AlbumControllerTest extends ControllerTestCase
         $album = factory($this->album->class())->state('withSongs')->make();
 
         $album->full_album_price = 999;
+
+        $this->assertInstanceOf(Money::class, $album->full_album_price);
 
         $albumAsArray = $album->toArray();
         $albumAsArray['full_album_price'] = 999;
