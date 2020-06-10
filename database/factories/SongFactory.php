@@ -26,7 +26,7 @@ $factory->define(Song::class, function (Faker $faker) {
         },
         'track_number' => null, // passed during creation
         'preview_start' => $faker->numberBetween(0, 60),
-        'price' => (float)(rand(0, 10).'.'.rand(0, 9).rand(0, 9)),
+        'price' =>  $faker->numberBetween(0, 1000),
         'is_digital' => 1,
         'is_taxable' => 0,
         'requires_shipping' => false,
