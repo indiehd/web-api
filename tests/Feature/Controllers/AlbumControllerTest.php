@@ -95,7 +95,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
-                    $this->getJsonStructure($album, true)
+                    $this->getJsonStructure($album)
                 ]
             ]);
     }
@@ -107,7 +107,7 @@ class AlbumControllerTest extends ControllerTestCase
         $this->json('GET', route('albums.show', ['id' => $album->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album, true)
+                'data' => $this->getJsonStructure($album)
             ]);
     }
 
