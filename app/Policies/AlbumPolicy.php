@@ -11,6 +11,17 @@ class AlbumPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the album.
      *
      * @param  \App\User  $user
