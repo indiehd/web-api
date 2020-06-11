@@ -2,11 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts;
+use App\Policies;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-
-use App\Policies\AlbumPolicy;
-use App\Contracts\AlbumRepositoryInterface;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,9 +22,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $albumRepository = resolve(AlbumRepositoryInterface::class);
-
-        $this->policies[$albumRepository->class()] = AlbumPolicy::class;
+        $this->policies[resolve(Contracts\AlbumRepositoryInterface::class)->class()] = Policies\AlbumPolicy::class;
+        $this->policies[resolve(Contracts\ArtistRepositoryInterface::class)->class()] = Policies\ArtistPolicy::class;
+        $this->policies[resolve(Contracts\UserRepositoryInterface::class)->class()] = Policies\UserPolicy::class;
 
         $this->registerPolicies();
     }
