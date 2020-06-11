@@ -8,6 +8,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class ApiController extends Controller
 {
+    /**
+     * When true authorization is enabled
+     * @var bool
+     */
+    protected $should_authorize = false;
 
     /**
      * @var string $repository
@@ -61,6 +66,10 @@ abstract class ApiController extends Controller
     {
         $this->repository = resolve($this->repository());
         $this->resource = $this->resource();
+
+        if ($this->should_authorize) {
+            $this->authorizeResource($this->resource);
+        }
     }
 
     /**
