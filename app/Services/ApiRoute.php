@@ -24,6 +24,11 @@ class ApiRoute
     private $controller;
 
     /**
+     * @var string|array|null
+     */
+    private $middleware;
+
+    /**
      * @var array $routes
      */
     private $routes = [
@@ -67,7 +72,7 @@ class ApiRoute
         $routes = $this->routes;
 
         Route::prefix('api')
-            ->middleware('api')
+            ->middleware($this->middleware ?: 'api')
             ->namespace($this->namespace)
             ->group(function () use ($routes, $controller, $prefix) {
                 Route::prefix($prefix)->group(function () use ($routes, $controller, $prefix) {
@@ -80,6 +85,17 @@ class ApiRoute
                     }
                 });
             });
+
+        return $this;
+    }
+
+    /**
+     * @param string|array $middleware
+     * @return $this
+     */
+    public function middleware($middleware)
+    {
+        $this->middleware = $middleware;
 
         return $this;
     }
@@ -113,7 +129,7 @@ class ApiRoute
         $name = is_null($name) ? Str::snake($controllerMethod) : $name;
 
         Route::prefix('api')
-            ->middleware('api')
+            ->middleware($this->middleware ?: 'api')
             ->namespace($this->namespace)
             ->group(function () use (
                 $controller,
