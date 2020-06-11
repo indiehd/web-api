@@ -30,7 +30,7 @@ class AlbumPolicy
      */
     public function view(User $user, Album $album)
     {
-        //
+        return $album->is_active || $album->artist->user->is($user);
     }
 
     /**
