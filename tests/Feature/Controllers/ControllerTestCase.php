@@ -3,10 +3,9 @@
 namespace Tests\Feature\Controllers;
 
 use App\Contracts\UserRepositoryInterface;
-use Tests\TestCase;
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 abstract class ControllerTestCase extends TestCase
 {
