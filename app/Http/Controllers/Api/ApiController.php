@@ -10,9 +10,10 @@ abstract class ApiController extends Controller
 {
     /**
      * When true authorization is enabled
+     *
      * @var bool
      */
-    protected $should_authorize = false;
+    protected $shouldAuthorize = false;
 
     /**
      * @var string $repository
@@ -67,7 +68,7 @@ abstract class ApiController extends Controller
         $this->repository = resolve($this->repository());
         $this->resource = $this->resource();
 
-        if ($this->should_authorize) {
+        if ($this->shouldAuthorize) {
             $this->authorizeResource($this->resource);
         }
     }
