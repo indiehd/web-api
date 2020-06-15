@@ -1,6 +1,6 @@
 # indieHD Web API
 [![Build Status](https://travis-ci.org/indiehd/web-api.svg?branch=master)](https://travis-ci.org/indiehd/web-api)
-[![Coverage Status](https://coveralls.io/repos/github/indiehd/web-api/badge.svg?branch=master)](https://coveralls.io/github/indiehd/web-api?branch=master)
+[![Coverage Status](https://codecov.io/gh/indieHD/web-api/branch/master/graph/badge.svg)](https://codecov.io/gh/indieHD/web-api)
 
 ## About
 
