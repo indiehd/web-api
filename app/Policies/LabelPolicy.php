@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Song;
+use App\Label;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SongPolicy
+class LabelPolicy
 {
     use HandlesAuthorization;
 
@@ -22,77 +22,73 @@ class SongPolicy
     }
 
     /**
-     * Determine whether the user can view the song.
+     * Determine whether the user can view the label.
      *
      * @param  \App\User  $user
-     * @param  \App\Song  $song
+     * @param  \App\Label  $label
      * @return mixed
      */
-    public function view(User $user, Song $song)
+    public function view(User $user, Label $label)
     {
-        return $song->is_active || $user->is($song->artist->user);
+        return true;
     }
 
     /**
-     * Determine whether the user can create songs.
+     * Determine whether the user can create labels.
      *
      * @param  \App\User  $user
      * @return mixed
      */
     public function create(User $user)
     {
-        return $user->entities()->get()->isNotEmpty();
+        return true;
     }
 
     /**
-     * Determine whether the user can update the song.
+     * Determine whether the user can update the label.
      *
      * @param  \App\User  $user
-     * @param  \App\Song  $song
+     * @param  \App\Label  $label
      * @return mixed
      */
-    public function update(User $user, Song $song)
+    public function update(User $user, Label $label)
     {
-        // The User must own the Song.
-
-        return $song->users->search($user) !== false;
+        // TODO
     }
 
     /**
-     * Determine whether the user can delete the song.
+     * Determine whether the user can delete the label.
      *
      * @param  \App\User  $user
-     * @param  \App\Song  $song
+     * @param  \App\Label  $label
      * @return mixed
      */
-    public function delete(User $user, Song $song)
+    public function delete(User $user, Label $label)
     {
-        // The User must own the Song.
-
-        return $song->users->search($user) !== false;
+        // TODO
     }
 
     /**
-     * Determine whether the user can restore the song.
+     * Determine whether the user can restore the label.
      *
      * @param  \App\User  $user
-     * @param  \App\Song  $song
+     * @param  \App\Label  $label
      * @return mixed
      */
-    public function restore(User $user, Song $song)
+    public function restore(User $user, Label $label)
     {
-        return $song->users->search($user) !== false;
+        // TODO
     }
 
     /**
-     * Determine whether the user can permanently delete the song.
+     * Determine whether the user can permanently delete the label.
      *
      * @param  \App\User  $user
-     * @param  \App\Song  $song
+     * @param  \App\Label  $label
      * @return mixed
      */
-    public function forceDelete(User $user, Song $song)
+    public function forceDelete(User $user, Label $label)
     {
-        return $song->users->search($user) !== false;
+        // TODO
     }
 }
