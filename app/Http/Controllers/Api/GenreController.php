@@ -10,6 +10,7 @@ use App\Http\Resources\GenreResource;
 
 class GenreController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Sets the RepositoryInterface to resolve

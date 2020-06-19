@@ -10,6 +10,7 @@ use App\Http\Resources\LabelResource;
 
 class LabelController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Sets the RepositoryInterface to resolve
