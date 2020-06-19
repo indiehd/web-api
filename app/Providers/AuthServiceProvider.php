@@ -24,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->policies[resolve(Contracts\AlbumRepositoryInterface::class)->class()] = Policies\AlbumPolicy::class;
         $this->policies[resolve(Contracts\ArtistRepositoryInterface::class)->class()] = Policies\ArtistPolicy::class;
+        $this->policies[resolve(Contracts\GenreRepositoryInterface::class)->class()] = Policies\GenrePolicy::class;
         $this->policies[resolve(Contracts\LabelRepositoryInterface::class)->class()] = Policies\LabelPolicy::class;
         $this->policies[resolve(Contracts\SongRepositoryInterface::class)->class()] = Policies\SongPolicy::class;
         $this->policies[resolve(Contracts\UserRepositoryInterface::class)->class()] = Policies\UserPolicy::class;
