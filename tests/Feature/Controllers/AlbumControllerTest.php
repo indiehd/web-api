@@ -10,7 +10,6 @@ use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Resources\AlbumResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Money\Money;
 
