@@ -30,7 +30,7 @@ class AlbumPolicy
      */
     public function view(User $user, Album $album)
     {
-        return $album->is_active || $album->artist->user->is($user);
+        return $album->is_active || $user->is($album->artist->user);
     }
 
     /**
@@ -41,7 +41,7 @@ class AlbumPolicy
      */
     public function create(User $user)
     {
-        return !$user->entities()->get()->isEmpty();
+        return $user->entities()->get()->isNotEmpty();
     }
 
     /**
@@ -55,7 +55,7 @@ class AlbumPolicy
     {
         // The User must own the Album.
 
-        return $album->artist->user->id === $user->id;
+        return $user->is($album->artist->user);
     }
 
     /**
@@ -69,7 +69,7 @@ class AlbumPolicy
     {
         // The User must own the Album.
 
-        return $album->artist->user->id === $user->id;
+        return $user->is($album->artist->user);
     }
 
     /**
@@ -81,7 +81,7 @@ class AlbumPolicy
      */
     public function restore(User $user, Album $album)
     {
-        //
+        return $user->is($album->artist->user);
     }
 
     /**
@@ -93,6 +93,6 @@ class AlbumPolicy
      */
     public function forceDelete(User $user, Album $album)
     {
-        //
+        return $user->is($album->artist->user);
     }
 }

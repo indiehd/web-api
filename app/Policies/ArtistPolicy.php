@@ -30,7 +30,7 @@ class ArtistPolicy
      */
     public function view(User $user, Artist $artist)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class ArtistPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class ArtistPolicy
      */
     public function update(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 
     /**
@@ -67,7 +67,7 @@ class ArtistPolicy
     {
         // The User must own the Artist.
 
-        return $artist->user->id === $user->id;
+        return $user->is($artist->user);
     }
 
     /**
@@ -79,7 +79,7 @@ class ArtistPolicy
      */
     public function restore(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 
     /**
@@ -91,6 +91,6 @@ class ArtistPolicy
      */
     public function forceDelete(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 }

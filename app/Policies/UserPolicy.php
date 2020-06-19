@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        return $user->is($model);
     }
 
     /**
@@ -66,7 +66,7 @@ class UserPolicy
     {
         // The User is permitted to delete only his own User model.
 
-        return $model->id === $user->id;
+        return $user->is($model);
     }
 
     /**
@@ -78,7 +78,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        //
+        return false;
     }
 
     /**
@@ -90,6 +90,6 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        //
+        return false;
     }
 }
