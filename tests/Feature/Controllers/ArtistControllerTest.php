@@ -101,7 +101,11 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('artists.store'), [])
+        $user = factory($this->user->class())->create();
+
+        $this
+            ->actingAs($user)
+            ->json('POST', route('artists.store'), [])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -130,7 +134,9 @@ class ArtistControllerTest extends ControllerTestCase
     {
         $artist = $this->createArtist();
 
-        $this->json('PUT', route('artists.update', ['id' => $artist->id]), ['email' => 'foo@'])
+        $this
+            ->actingAs($artist->user)
+            ->json('PUT', route('artists.update', ['id' => $artist->id]), ['email' => 'foo@'])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
