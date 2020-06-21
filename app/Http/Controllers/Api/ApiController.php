@@ -78,12 +78,15 @@ abstract class ApiController extends Controller
      */
     public function index(Request $request)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('viewAny', $this->repository->class());
+        }
+
         $this->validate($request, [
             'paginate' => 'numeric|min:1|max:100',
             'limit' => 'numeric|min:1'
         ]);
 
-        $this->authorize('viewAny', $this->repository->class());
 
         $hasPaginate = $request->has('paginate');
         $hasLimit = $request->has('limit');
@@ -116,11 +119,11 @@ abstract class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        resolve($this->storeRequest());
-
         if ($this->shouldAuthorize) {
             $this->authorize('create', $this->repository->class());
         }
+
+        resolve($this->storeRequest());
 
         return new $this->resource($this->repository->create($request->all()));
     }
@@ -133,13 +136,12 @@ abstract class ApiController extends Controller
      */
     public function show($id)
     {
-        $model = $this->repository->findById($id);
-
         if ($this->shouldAuthorize) {
-            $this->authorize('view', $model);
+            $this->authorize('view', $this->repository->findById($id));
         }
 
-        return new $this->resource($model);
+
+        return new $this->resource($this->repository->findById($id));
     }
 
     /**
@@ -151,11 +153,11 @@ abstract class ApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        resolve($this->updateRequest());
-
         if ($this->shouldAuthorize) {
             $this->authorize('update', $this->repository->findById($id));
         }
+
+        resolve($this->updateRequest());
 
         $this->repository->update($id, $request->all());
 
@@ -171,11 +173,11 @@ abstract class ApiController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        resolve($this->destroyRequest());
-
         if ($this->shouldAuthorize) {
             $this->authorize('delete', $this->repository->findById($id));
         }
+
+        resolve($this->destroyRequest());
 
         $this->repository->delete($id);
 
