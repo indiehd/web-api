@@ -69,7 +69,7 @@ abstract class ApiController extends Controller
         $this->resource = $this->resource();
 
         if ($this->shouldAuthorize) {
-            $this->authorizeResource($this->resource);
+            $this->authorizeResource($this->repository->class());
         }
     }
 
