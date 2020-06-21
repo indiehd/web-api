@@ -53,7 +53,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label)
     {
-        // TODO
+        return $user->is($label->contenable);
     }
 
     /**
@@ -65,7 +65,7 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label)
     {
-        // TODO
+        return $user->is($label->contenable);
     }
 
     /**
@@ -77,7 +77,7 @@ class LabelPolicy
      */
     public function restore(User $user, Label $label)
     {
-        // TODO
+        return $user->is($label->contenable);
     }
 
     /**
@@ -89,6 +89,6 @@ class LabelPolicy
      */
     public function forceDelete(User $user, Label $label)
     {
-        // TODO
+        return false;
     }
 }

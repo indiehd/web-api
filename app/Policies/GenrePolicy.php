@@ -41,7 +41,7 @@ class GenrePolicy
      */
     public function create(User $user)
     {
-        return true;
+        return false;
     }
 
     /**
@@ -53,7 +53,7 @@ class GenrePolicy
      */
     public function update(User $user, Genre $genre)
     {
-        //
+        return false;
     }
 
     /**
@@ -65,7 +65,7 @@ class GenrePolicy
      */
     public function delete(User $user, Genre $genre)
     {
-        //
+        return $genre->albums()->count() === 0;
     }
 
     /**
@@ -77,7 +77,7 @@ class GenrePolicy
      */
     public function restore(User $user, Genre $genre)
     {
-        //
+        return false;
     }
 
     /**
@@ -89,6 +89,6 @@ class GenrePolicy
      */
     public function forceDelete(User $user, Genre $genre)
     {
-        //
+        return false;
     }
 }
