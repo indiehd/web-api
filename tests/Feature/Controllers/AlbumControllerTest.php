@@ -90,11 +90,12 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $this->json('GET', route('albums.index'))
+        $this
+            ->json('GET', route('albums.index'))
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
-                    $this->getJsonStructure($album)
+                    Arr::except($this->getJsonStructure($album), ['artist', 'songs'])
                 ]
             ]);
     }
@@ -103,10 +104,11 @@ class AlbumControllerTest extends ControllerTestCase
     {
         $album = $this->createAlbum();
 
-        $this->json('GET', route('albums.show', ['id' => $album->id]))
+        $this
+            ->json('GET', route('albums.show', ['id' => $album->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album)
+                'data' => Arr::except($this->getJsonStructure($album), ['artist', 'songs'])
             ]);
     }
 

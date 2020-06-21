@@ -6,6 +6,7 @@ use CountriesSeeder;
 
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 
 class ArtistControllerTest extends ControllerTestCase
 {
@@ -28,6 +29,7 @@ class ArtistControllerTest extends ControllerTestCase
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
         $this->profile = resolve(ProfileRepositoryInterface::class);
+        $this->user = resolve(UserRepositoryInterface::class);
     }
 
     protected function createArtist()
@@ -86,7 +88,11 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withValidInput_returnsOkStatusAndExpectedJsonStructure()
     {
-        $this->json('POST', route('artists.store'), $this->getAllInputsInValidState())
+        $user = factory($this->user->class())->create();
+
+        $this
+            ->actingAs($user)
+            ->json('POST', route('artists.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -111,7 +117,9 @@ class ArtistControllerTest extends ControllerTestCase
 
         $inputs['alt_moniker'] = 'Back in the Garage';
 
-        $this->json('PUT', route('artists.update', ['id' => $artist->id]), $inputs)
+        $this
+            ->actingAs($artist->user)
+            ->json('PUT', route('artists.update', ['id' => $artist->id]), $inputs)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
