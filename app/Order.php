@@ -19,4 +19,9 @@ class Order extends UuidModel
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
