@@ -16,7 +16,7 @@ abstract class ApiController extends Controller
     protected $shouldAuthorize = false;
 
     /**
-     * @var string $repository
+     * @var \App\Contracts\RepositoryShouldCrud|\App\Contracts\RepositoryShouldRead $repository
      */
     private $repository;
 
@@ -67,10 +67,6 @@ abstract class ApiController extends Controller
     {
         $this->repository = resolve($this->repository());
         $this->resource = $this->resource();
-
-        if ($this->shouldAuthorize) {
-            $this->authorizeResource($this->repository->class());
-        }
     }
 
     /**
@@ -86,6 +82,8 @@ abstract class ApiController extends Controller
             'paginate' => 'numeric|min:1|max:100',
             'limit' => 'numeric|min:1'
         ]);
+
+        $this->authorize('viewAny', $this->repository->class());
 
         $hasPaginate = $request->has('paginate');
         $hasLimit = $request->has('limit');
@@ -120,6 +118,10 @@ abstract class ApiController extends Controller
     {
         resolve($this->storeRequest());
 
+        if ($this->shouldAuthorize) {
+            $this->authorize('create', $this->repository->class());
+        }
+
         return new $this->resource($this->repository->create($request->all()));
     }
 
@@ -131,7 +133,13 @@ abstract class ApiController extends Controller
      */
     public function show($id)
     {
-        return new $this->resource($this->repository->findById($id));
+        $model = $this->repository->findById($id);
+
+        if ($this->shouldAuthorize) {
+            $this->authorize('view', $model);
+        }
+
+        return new $this->resource($model);
     }
 
     /**
@@ -144,6 +152,10 @@ abstract class ApiController extends Controller
     public function update(Request $request, $id)
     {
         resolve($this->updateRequest());
+
+        if ($this->shouldAuthorize) {
+            $this->authorize('update', $this->repository->findById($id));
+        }
 
         $this->repository->update($id, $request->all());
 
@@ -160,6 +172,10 @@ abstract class ApiController extends Controller
     public function destroy(Request $request, $id)
     {
         resolve($this->destroyRequest());
+
+        if ($this->shouldAuthorize) {
+            $this->authorize('delete', $this->repository->findById($id));
+        }
 
         $this->repository->delete($id);
 
