@@ -16,7 +16,7 @@ class ArtistPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -28,7 +28,7 @@ class ArtistPolicy
      * @param  \App\Artist  $artist
      * @return mixed
      */
-    public function view(User $user, Artist $artist)
+    public function view(?User $user, Artist $artist)
     {
         return true;
     }

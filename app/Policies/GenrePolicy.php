@@ -16,7 +16,7 @@ class GenrePolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -28,7 +28,7 @@ class GenrePolicy
      * @param  \App\Genre  $genre
      * @return mixed
      */
-    public function view(User $user, Genre $genre)
+    public function view(?User $user, Genre $genre)
     {
         return true;
     }
@@ -65,7 +65,7 @@ class GenrePolicy
      */
     public function delete(User $user, Genre $genre)
     {
-        return $genre->albums()->count() === 0;
+        return false;
     }
 
     /**

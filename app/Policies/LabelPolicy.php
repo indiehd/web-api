@@ -16,7 +16,7 @@ class LabelPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -28,7 +28,7 @@ class LabelPolicy
      * @param  \App\Label  $label
      * @return mixed
      */
-    public function view(User $user, Label $label)
+    public function view(?User $user, Label $label)
     {
         return true;
     }

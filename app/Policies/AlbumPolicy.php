@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Album;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AlbumPolicy
@@ -16,7 +16,7 @@ class AlbumPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -28,9 +28,9 @@ class AlbumPolicy
      * @param  \App\Album  $album
      * @return mixed
      */
-    public function view(User $user, Album $album)
+    public function view(?User $user, Album $album)
     {
-        return $album->is_active || $user->is($album->artist->user);
+        return $album->is_active || $user && $user->is($album->artist->user);
     }
 
     /**
