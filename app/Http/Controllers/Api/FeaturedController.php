@@ -11,6 +11,8 @@ use App\Http\Resources\ArtistResource;
 
 class FeaturedController extends ApiController
 {
+    protected $shouldAuthorize = true;
+
     public function __construct(
         FeaturedRepositoryInterface $featured
     ) {
@@ -76,6 +78,8 @@ class FeaturedController extends ApiController
      */
     public function artists()
     {
+        $this->authorize('viewAny', $this->featured->class());
+
         return ArtistResource::collection(
             $this->featured
                 ->artists()
