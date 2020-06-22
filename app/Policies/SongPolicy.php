@@ -55,7 +55,7 @@ class SongPolicy
     {
         // The User must own the Song.
 
-        return $song->users->search($user) !== false;
+        return $user->is($song->album->artist->user);
     }
 
     /**
@@ -69,7 +69,7 @@ class SongPolicy
     {
         // The User must own the Song.
 
-        return $song->users->search($user) !== false;
+        return $user->is($song->album->artist->user);
     }
 
     /**
@@ -81,7 +81,7 @@ class SongPolicy
      */
     public function restore(User $user, Song $song)
     {
-        return $song->users->search($user) !== false;
+        return $user->is($song->album->artist->user);
     }
 
     /**
@@ -93,6 +93,6 @@ class SongPolicy
      */
     public function forceDelete(User $user, Song $song)
     {
-        return $song->users->search($user) !== false;
+        return $user->is($song->album->artist->user);
     }
 }
