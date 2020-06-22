@@ -71,17 +71,22 @@ class UserControllerTest extends ControllerTestCase
         ];
     }
 
-    public function test_all_returnsOkStatusAndExpectedJsonStructure()
+    public function test_all_returnsUnauthorized()
     {
         $this->createUser();
 
         $this->json('GET', route('users.index'))
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => [
-                    $this->getJsonStructure()
-                ]
-            ]);
+            ->assertStatus(403);
+    }
+
+    public function test_all_returnsUnauthorizedForLoggedUser()
+    {
+        $user = $this->createUser();
+
+        $this
+            ->actingAs($user)
+            ->json('GET', route('users.index'))
+            ->assertStatus(403);
     }
 
     public function test_show_returnsOkStatusAndExpectedJsonStructure()
