@@ -53,7 +53,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label)
     {
-        return $user->is($label->contenable->user);
+        return $user->is($label->catalogable->user);
     }
 
     /**
@@ -65,7 +65,7 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label)
     {
-        return $user->is($label->contenable->user);
+        return $user->is($label->catalogable->user);
     }
 
     /**
@@ -77,7 +77,7 @@ class LabelPolicy
      */
     public function restore(User $user, Label $label)
     {
-        return $user->is($label->contenable->user);
+        return $user->is($label->catalogable->user);
     }
 
     /**
