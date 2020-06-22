@@ -103,14 +103,13 @@ abstract class ApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return JsonResource
      */
-    public function store(Request $request)
+    public function store()
     {
-        resolve($this->storeRequest());
+        $data = $this->validateRequest($this->storeRequest());
 
-        return new $this->resource($this->repository->create($request->all()));
+        return new $this->resource($this->repository->create($data));
     }
 
     /**
@@ -127,15 +126,14 @@ abstract class ApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
      * @param int $id
      * @return JsonResource
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        resolve($this->updateRequest());
+        $data = $this->validateRequest($this->updateRequest());
 
-        $this->repository->update($id, $request->all());
+        $this->repository->update($id, $data);
 
         return new $this->resource($this->repository->findById($id));
     }
@@ -147,12 +145,19 @@ abstract class ApiController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        resolve($this->destroyRequest());
+        $this->validateRequest($this->destroyRequest());
 
         $this->repository->delete($id);
 
         return response(['success' => true], 200);
+    }
+
+    protected function validateRequest($requestClass)
+    {
+        // Resolving the class will validate the FormRequest
+
+        return resolve($requestClass)->all();
     }
 }
