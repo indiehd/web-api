@@ -2,9 +2,8 @@
 
 namespace Tests\Feature\Controllers\Routes;
 
-use App\Contracts\UserRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
 use Tests\Feature\Controllers\ControllerTestCase;
-use CountriesSeeder;
 
 class IndexRouteTest extends ControllerTestCase
 {
@@ -14,10 +13,7 @@ class IndexRouteTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->seed(CountriesSeeder::class);
-
-        // To test the abstract ApiController we will use the User Model (as its the most likely to never change)
-        $this->model = resolve(UserRepositoryInterface::class);
+        $this->album = resolve(AlbumRepositoryInterface::class);
     }
 
     private function paginatedJsonStructure()
@@ -31,27 +27,27 @@ class IndexRouteTest extends ControllerTestCase
 
     public function testRouteReturnsAllResults()
     {
-        factory($this->model->class(), 5)->create();
+        $this->createAlbums(5);
 
-        $this->json('GET', route('users.index'))
+        $this->json('GET', route('albums.index'))
             ->assertStatus(200)
             ->assertJsonCount(5, 'data');
     }
 
     public function testRouteReturnsOneOfFiveResults()
     {
-        factory($this->model->class(), 5)->create();
+        $this->createAlbums(5);
 
-        $this->json('GET', route('users.index'), ['limit' => 1])
+        $this->json('GET', route('albums.index'), ['limit' => 1])
             ->assertStatus(200)
             ->assertJsonCount(1, 'data');
     }
 
     public function testRouteReturnsPaginatedResults()
     {
-        factory($this->model->class(), 10)->create();
+        $this->createAlbums(10);
 
-        $this->json('GET', route('users.index'), ['paginate' => 5])
+        $this->json('GET', route('albums.index'), ['paginate' => 5])
             ->assertStatus(200)
             ->assertJsonStructure($this->paginatedJsonStructure())
             ->assertJsonFragment(['per_page' => 5])
@@ -60,9 +56,9 @@ class IndexRouteTest extends ControllerTestCase
 
     public function testRouteReturnsLimitedPaginatedResults()
     {
-        factory($this->model->class(), 10)->create();
+        $this->createAlbums(10);
 
-        $this->json('GET', route('users.index'), [
+        $this->json('GET', route('albums.index'), [
             'limit' => 8,
             'paginate' => 2
         ])
@@ -74,9 +70,9 @@ class IndexRouteTest extends ControllerTestCase
 
     public function testRouteReturnsLimitedPaginatedResultsForPageTwo()
     {
-        factory($this->model->class(), 10)->create();
+        $this->createAlbums(10);
 
-        $this->json('GET', route('users.index'), [
+        $this->json('GET', route('albums.index'), [
             'limit' => 8,
             'paginate' => 3,
             'page' => 2
@@ -91,4 +87,11 @@ class IndexRouteTest extends ControllerTestCase
             ->assertJsonCount(3, 'data');
     }
 
+    protected function createAlbums(int $num)
+    {
+        return factory($this->album->class())->times($num)->create([
+            'is_active' => true,
+            'has_explicit_lyrics' => false,
+        ]);
+    }
 }

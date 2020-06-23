@@ -8,9 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class ApiController extends Controller
 {
+    /**
+     * When true authorization is enabled
+     *
+     * @var bool
+     */
+    protected $shouldAuthorize = false;
 
     /**
-     * @var string $repository
+     * @var \App\Contracts\RepositoryShouldCrud|\App\Contracts\RepositoryShouldRead $repository
      */
     private $repository;
 
@@ -72,6 +78,10 @@ abstract class ApiController extends Controller
      */
     public function index(Request $request)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('viewAny', $this->repository->class());
+        }
+
         $this->validate($request, [
             'paginate' => 'numeric|min:1|max:100',
             'limit' => 'numeric|min:1'
@@ -107,6 +117,10 @@ abstract class ApiController extends Controller
      */
     public function store()
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('create', $this->repository->class());
+        }
+
         $data = $this->validateRequest($this->storeRequest());
 
         return new $this->resource($this->repository->create($data));
@@ -120,6 +134,11 @@ abstract class ApiController extends Controller
      */
     public function show($id)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('view', $this->repository->findById($id));
+        }
+
+
         return new $this->resource($this->repository->findById($id));
     }
 
@@ -131,6 +150,10 @@ abstract class ApiController extends Controller
      */
     public function update($id)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('update', $this->repository->findById($id));
+        }
+
         $data = $this->validateRequest($this->updateRequest());
 
         $this->repository->update($id, $data);
@@ -141,12 +164,15 @@ abstract class ApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('delete', $this->repository->findById($id));
+        }
+
         $this->validateRequest($this->destroyRequest());
 
         $this->repository->delete($id);

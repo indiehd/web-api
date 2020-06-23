@@ -14,6 +14,8 @@ use App\Http\Resources\OrderResource;
 
 class OrderController extends ApiController
 {
+    protected $shouldAuthorize = true;
+
     public function __construct(
         OrderItemRepositoryInterface $orderItemRepository,
         OrderRepositoryInterface $orderRepository
@@ -85,6 +87,8 @@ class OrderController extends ApiController
      */
     public function storeOrder(StoreOrder $request)
     {
+        $this->authorize('create', $this->orderRepository->class());
+
         if (isset($request->input('items')[0]) && is_array($request->input('items')[0])) {
             $items = $request->input('items');
         } else {
@@ -115,22 +119,26 @@ class OrderController extends ApiController
      */
     public function addItems(UpdateOrder $request)
     {
+        $order = $this->orderRepository->findById($request->route('orderId'));
+
+        $this->authorize('update', $order);
+
         if (isset($request->input('items')[0]) && is_array($request->input('items')[0])) {
             $items = $request->input('items');
         } else {
             $items = [$request->input('items')];
         }
 
-        DB::transaction(function () use ($items, $request) {
+        DB::transaction(function () use ($items, $order) {
             foreach ($items as $item) {
-                $item['order_id'] = $request->route('orderId');
+                $item['order_id'] = $order->id;
 
                 $this->orderItemRepository->create($item);
             }
         });
 
         return response()->json(
-            ['data' => $this->orderRepository->findById($request->route('orderId'))],
+            ['data' => $this->orderRepository->findById($order->id)],
             201
         );
     }
@@ -143,15 +151,19 @@ class OrderController extends ApiController
      */
     public function removeItems(UpdateOrder $request)
     {
+        $order = $this->orderRepository->findById($request->route('orderId'));
+
+        $this->authorize('update', $order);
+
         if (isset($request->input('items')[0]) && is_array($request->input('items')[0])) {
             $items = $request->input('items');
         } else {
             $items = [$request->input('items')];
         }
 
-        DB::transaction(function () use ($items, $request) {
+        DB::transaction(function () use ($items, $order) {
             foreach ($items as $item) {
-                $item['order_id'] = $request->route('orderId');
+                $item['order_id'] = $order->id;
 
                 $model = $this->orderItemRepository->findByOrderId(
                     $item['order_id'],
