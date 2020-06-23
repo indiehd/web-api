@@ -13,7 +13,7 @@ use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 
-class FeaturedArtistTest extends TestCase
+class FeaturedArtisanCommandTest extends TestCase
 {
     use RefreshDatabase;
 
