@@ -9,6 +9,10 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Http\Resources\AlbumResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Money\Money;
 
 class AlbumControllerTest extends ControllerTestCase
 {
@@ -67,32 +71,9 @@ class AlbumControllerTest extends ControllerTestCase
         ]);
     }
 
-    protected function getJsonStructure(Album $album, $castIntAndBool = false)
+    protected function getJsonStructure(Album $album)
     {
-        $structure = [
-            'title' => $album->title,
-            'alt_title' => $album->alt_title,
-            'year' => $album->year,
-            'description' => $album->description,
-            'has_explicit_lyrics' => $album->has_explicit_lyrics,
-            'full_album_price' => $album->full_album_price,
-            'rank' => $album->rank,
-            'is_active' => $album->is_active,
-            'deleter' => $album->deleter,
-            'deleted_at' => null,
-        ];
-
-        if ($castIntAndBool) {
-            $structure['year'] = (int) $album->year;
-            $structure['has_explicit_lyrics'] = (int) $album->has_explicit_lyrics;
-            $structure['is_active'] = (int) $album->is_active;
-        }
-
-        if (isset($album->id)) {
-            $structure['id'] = $album->id;
-        }
-
-        return $structure;
+        return AlbumResource::make($album)->jsonSerialize();
     }
 
     protected function getAllInputsInValidState()
@@ -102,7 +83,7 @@ class AlbumControllerTest extends ControllerTestCase
             'year' => (int) 1981,
             'description' => 'The best album, evaaah!',
             'has_explicit_lyrics' => 0,
-            'full_album_price' => 9.99,
+            'full_album_price' => 999,
         ];
     }
 
@@ -114,7 +95,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
-                    $this->getJsonStructure($album, true)
+                    $this->getJsonStructure($album)
                 ]
             ]);
     }
@@ -126,7 +107,7 @@ class AlbumControllerTest extends ControllerTestCase
         $this->json('GET', route('albums.show', ['id' => $album->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album, true)
+                'data' => $this->getJsonStructure($album)
             ]);
     }
 
@@ -142,13 +123,19 @@ class AlbumControllerTest extends ControllerTestCase
 
         $album = factory($this->album->class())->state('withSongs')->make();
 
+        $album->full_album_price = 999;
+
+        $this->assertInstanceOf(Money::class, $album->full_album_price);
+
         $albumAsArray = $album->toArray();
+        $albumAsArray['full_album_price'] = 999;
+        $albumAsArray['artist_id'] = $artist->id;
 
         $this->actingAs($artist->user)
             ->json('POST', route('albums.store'), $albumAsArray)
             ->assertStatus(201)
             ->assertJson([
-                'data' => $this->getJsonStructure($album)
+                'data' => Arr::except($this->getJsonStructure($album), ['id'])
             ]);
     }
 
@@ -188,7 +175,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('PUT', route('albums.update', ['id' => $album->id]), $albumAsArray)
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getJsonStructure($album, true)
+                'data' => Arr::except($this->getJsonStructure($album), ['artist'])
             ]);
     }
 
@@ -233,7 +220,7 @@ class AlbumControllerTest extends ControllerTestCase
 
     public function testDestroyWithMissingInputReturnsMethodNotAllowedStatus()
     {
-        $this->json('DELETE', route('albums.destroy', ['id' => null]))
+        $this->json('DELETE', str_replace('foo', '', route('albums.destroy', ['id' => 'foo'])))
             ->assertStatus(405);
     }
 }

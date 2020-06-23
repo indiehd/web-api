@@ -21,7 +21,7 @@ class CreateAlbumsTable extends Migration
             $table->unsignedSmallInteger('year');
             $table->string('description')->nullable();
             $table->boolean('has_explicit_lyrics');
-            $table->unsignedDecimal('full_album_price', 8, 4)->nullable();
+            $table->unsignedInteger('full_album_price')->nullable();
             $table->unsignedInteger('rank')->nullable();
             $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('deleter_id')->nullable();

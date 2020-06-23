@@ -1,10 +1,6 @@
-env:
-  - DISCORD_WEBHOOK="https://discordapp.com/api/webhooks/480159786286186546/AB1KcL2wz94yP3ZRVwVploKFk7ewaOn6evD6tVGQ8ywyWsMjVOXDfA0QZF2qaP7-ap9g"
-
 language: php
 
 php:
-  - '7.1'
   - '7.2'
   - '7.3'
 
@@ -31,10 +27,11 @@ services:
 
 script:
   - mkdir -p build/logs
-  - vendor/bin/phpunit tests --coverage-clover build/logs/clover.xml
+  - phpdbg -qrr vendor/bin/phpunit tests --coverage-clover build/logs/clover.xml
 
 after_success:
-  - travis_retry php vendor/bin/php-coveralls
+  - bash <(curl -s https://codecov.io/bash)
+  - travis_retry php vendor/bin/php-coveralls -vvv
   - ./send.sh success $DISCORD_WEBHOOK
 
 after_failure:

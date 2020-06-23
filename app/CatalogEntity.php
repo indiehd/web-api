@@ -8,6 +8,15 @@ class CatalogEntity extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'is_active' => 'bool',
+    ];
+
+    protected $dates = [
+        'approved_at',
+        'deleted_at',
+    ];
+
     protected $morphClass = 'CatalogEntity';
 
     public function catalogable()

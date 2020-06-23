@@ -38,7 +38,7 @@ class StoreAlbum extends FormRequest
             'year' => 'required|integer|min:1900|max:' . (string)(date('Y') + 1),
             'description' => 'max:4096',
             'has_explicit_lyrics' => 'required|boolean',
-            'full_album_price' => 'between:0.00,999.99',
+            'full_album_price' => 'between:0,99999',
             'is_active' => 'boolean',
         ];
     }

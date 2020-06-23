@@ -8,6 +8,10 @@ class Profile extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'rank' => 'int',
+    ];
+
     public function profilable()
     {
         return $this->morphTo();
