@@ -10,6 +10,7 @@ use App\Http\Resources\ArtistResource;
 
 class ArtistController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Sets the StoreRequest to resolve for validation during a store request

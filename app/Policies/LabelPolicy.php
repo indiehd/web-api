@@ -2,13 +2,24 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Label;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class LabelPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewAny(?User $user)
+    {
+        return true;
+    }
 
     /**
      * Determine whether the user can view the label.
@@ -17,9 +28,9 @@ class LabelPolicy
      * @param  \App\Label  $label
      * @return mixed
      */
-    public function view(User $user, Label $label)
+    public function view(?User $user, Label $label)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,14 +41,6 @@ class LabelPolicy
      */
     public function create(User $user)
     {
-        // Any User is permitted to create a Label, because Labels are inactive
-        // and therefor "provisional", by default; they must be approved to be
-        // seen in the public Catalog.
-
-        // Furthermore, any given User is able to be associated with an
-        // unlimited number of Labels, so there is no reason ever to deny this
-        // request.
-
         return true;
     }
 
@@ -50,9 +53,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label)
     {
-        // The User must own the Label.
-
-        return $label->user->id === $user->id;
+        return $user->is($label->catalogable->user);
     }
 
     /**
@@ -64,9 +65,7 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label)
     {
-        // The User must own the Label.
-
-        return $label->catalogable->user_id === $user->id;
+        return $user->is($label->catalogable->user);
     }
 
     /**
@@ -78,7 +77,7 @@ class LabelPolicy
      */
     public function restore(User $user, Label $label)
     {
-        //
+        return $user->is($label->catalogable->user);
     }
 
     /**
@@ -90,6 +89,6 @@ class LabelPolicy
      */
     public function forceDelete(User $user, Label $label)
     {
-        //
+        return false;
     }
 }

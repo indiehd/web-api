@@ -10,6 +10,7 @@ use App\Http\Resources\AlbumResource;
 
 class AlbumController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Should return the <RepositoryInterface>::class

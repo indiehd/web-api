@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Order;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class OrderPolicy
 {
     use HandlesAuthorization;
 
@@ -17,17 +18,17 @@ class UserPolicy
      */
     public function viewAny(?User $user)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Order  $order
      * @return mixed
      */
-    public function view(?User $user, User $model)
+    public function view(?User $user, Order $order)
     {
         return true;
     }
@@ -47,48 +48,46 @@ class UserPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Order  $order
      * @return mixed
      */
-    public function update(User $user, User $model)
+    public function update(?User $user, Order $order)
     {
-        return $user->is($model);
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Order  $order
      * @return mixed
      */
-    public function delete(User $user, User $model)
+    public function delete(?User $user, Order $order)
     {
-        // The User is permitted to delete only his own User model.
-
-        return $user->is($model);
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Order  $order
      * @return mixed
      */
-    public function restore(User $user, User $model)
+    public function restore(?User $user, Order $order)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Order  $order
      * @return mixed
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(?User $user, Order $order)
     {
         return false;
     }

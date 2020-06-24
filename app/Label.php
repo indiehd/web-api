@@ -25,4 +25,9 @@ class Label extends Model
     {
         return $this->hasManyThrough(Album::class, Artist::class);
     }
+
+    public function user()
+    {
+        return $this->catalogable->user();
+    }
 }
