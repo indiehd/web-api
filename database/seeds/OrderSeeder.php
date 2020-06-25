@@ -36,10 +36,7 @@ class OrderSeeder extends BaseSeeder
                 } elseif ($type === 'App\Song') {
                     $album = factory(Album::class)->create();
 
-                    $song = factory(Song::class)->create([
-                        'album_id' => $album->id,
-                        'track_number' => 1,
-                    ]);
+                    $song = App\Song::where('album_id', $album->id)->inRandomOrder()->first();
 
                     $entity = $song;
                 }
