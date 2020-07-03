@@ -11,6 +11,7 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Resources\AlbumResource;
 use Illuminate\Support\Arr;
+use Laravel\Passport\Passport;
 use Money\Money;
 
 class AlbumControllerTest extends ControllerTestCase
@@ -132,8 +133,9 @@ class AlbumControllerTest extends ControllerTestCase
         $albumAsArray['full_album_price'] = 999;
         $albumAsArray['artist_id'] = $artist->id;
 
-        $this->actingAs($artist->user)
-            ->json('POST', route('albums.store'), $albumAsArray)
+        Passport::actingAs($artist->user);
+
+        $this->json('POST', route('albums.store'), $albumAsArray)
             ->assertStatus(201)
             ->assertJson([
                 'data' => Arr::except($this->getJsonStructure($album), ['id'])
@@ -158,7 +160,8 @@ class AlbumControllerTest extends ControllerTestCase
         $album = $this->createAlbum();
 
         $this->json(
-            'PUT', route('albums.update', ['id' => $album->id]),
+            'PUT',
+            route('albums.update', ['id' => $album->id]),
             $this->getAllInputsInValidState()
         )
             ->assertStatus(403);

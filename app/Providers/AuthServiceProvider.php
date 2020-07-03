@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Contracts;
-use App\Policies;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,5 +33,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->policies[resolve(Contracts\UserRepositoryInterface::class)->class()] = Policies\UserPolicy::class;
 
         $this->registerPolicies();
+
+        Passport::routes();
+        Passport::hashClientSecrets();
     }
 }
