@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         IndieHD\Velkart\VelkartServiceProvider::class,
+        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
         /*
          * Application Service Providers...

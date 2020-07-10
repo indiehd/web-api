@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Repositories;
 
-use CountriesSeeder;
-use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use App\Contracts\AlbumRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Contracts\OrderRepositoryContract;
 
 class OrderItemRepositoryTest extends RepositoryCrudTestCase
 {
@@ -34,7 +34,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     protected $song;
 
     /**
-     * @var OrderRepositoryInterface $order
+     * @var OrderRepositoryContract $order
      */
     protected $order;
 
@@ -55,7 +55,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
 
         $this->song = resolve(SongRepositoryInterface::class);
 
-        $this->order = resolve(OrderRepositoryInterface::class);
+        $this->order = resolve(OrderRepositoryContract::class);
     }
 
     /**
@@ -156,7 +156,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     {
         $item = $this->repo->create($this->makeOrderItem()->toArray());
 
-        $this->assertInstanceOf($this->order->class(), $item->order);
+        $this->assertInstanceOf($this->order->modelClass(), $item->order);
     }
 
     /**
@@ -250,10 +250,10 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeOrderItem($properties = [])
     {
+        $order = factory($this->order->modelClass())->create();
+
         return factory($this->repo->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->raw()
-            )->id,
+            'order_id' => $properties['order_id'] ?? $order->id,
             'orderable_id' => $properties['orderable_id'] ?? factory($this->album->class())->create(
                 $this->makeAlbum()->toArray()
             )->id,
