@@ -10,6 +10,7 @@ use App\Http\Resources\SongResource;
 
 class SongController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Should return the <RepositoryInterface>::class

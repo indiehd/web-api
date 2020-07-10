@@ -8,9 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class ApiController extends Controller
 {
+    /**
+     * When true authorization is enabled
+     *
+     * @var bool
+     */
+    protected $shouldAuthorize = false;
 
     /**
-     * @var string $repository
+     * @var \App\Contracts\RepositoryShouldCrud|\App\Contracts\RepositoryShouldRead $repository
      */
     private $repository;
 
@@ -72,6 +78,10 @@ abstract class ApiController extends Controller
      */
     public function index(Request $request)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('viewAny', $this->repository->class());
+        }
+
         $this->validate($request, [
             'paginate' => 'numeric|min:1|max:100',
             'limit' => 'numeric|min:1'
@@ -103,14 +113,17 @@ abstract class ApiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return JsonResource
      */
-    public function store(Request $request)
+    public function store()
     {
-        resolve($this->storeRequest());
+        if ($this->shouldAuthorize) {
+            $this->authorize('create', $this->repository->class());
+        }
 
-        return new $this->resource($this->repository->create($request->all()));
+        $data = $this->validateRequest($this->storeRequest());
+
+        return new $this->resource($this->repository->create($data));
     }
 
     /**
@@ -121,21 +134,29 @@ abstract class ApiController extends Controller
      */
     public function show($id)
     {
+        if ($this->shouldAuthorize) {
+            $this->authorize('view', $this->repository->findById($id));
+        }
+
+
         return new $this->resource($this->repository->findById($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
      * @param int $id
      * @return JsonResource
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        resolve($this->updateRequest());
+        if ($this->shouldAuthorize) {
+            $this->authorize('update', $this->repository->findById($id));
+        }
 
-        $this->repository->update($id, $request->all());
+        $data = $this->validateRequest($this->updateRequest());
+
+        $this->repository->update($id, $data);
 
         return new $this->resource($this->repository->findById($id));
     }
@@ -143,16 +164,26 @@ abstract class ApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        resolve($this->destroyRequest());
+        if ($this->shouldAuthorize) {
+            $this->authorize('delete', $this->repository->findById($id));
+        }
+
+        $this->validateRequest($this->destroyRequest());
 
         $this->repository->delete($id);
 
         return response(['success' => true], 200);
+    }
+
+    protected function validateRequest($requestClass)
+    {
+        // Resolving the class will validate the FormRequest
+
+        return resolve($requestClass)->all();
     }
 }

@@ -6,6 +6,10 @@ class Order extends UuidModel
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'user_id' => 'int',
+    ];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -14,5 +18,10 @@ class Order extends UuidModel
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

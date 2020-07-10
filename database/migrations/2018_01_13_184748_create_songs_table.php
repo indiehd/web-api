@@ -20,7 +20,7 @@ class CreateSongsTable extends Migration
             $table->unsignedInteger('flac_file_id');
             $table->unsignedTinyInteger('track_number')->default(1);
             $table->unsignedDecimal('preview_start', 7, 3)->default(0.000);
-            $table->unsignedDecimal('price', 8, 4);
+            $table->unsignedInteger('price');
             $table->boolean('is_digital')->default(true);
             $table->boolean('is_taxable')->default(false);
             $table->boolean('requires_shipping')->default(false);

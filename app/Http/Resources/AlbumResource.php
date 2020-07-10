@@ -22,7 +22,7 @@ class AlbumResource extends JsonResource
             'year' => $this->year,
             'description' => $this->description,
             'has_explicit_lyrics' => $this->has_explicit_lyrics,
-            'full_album_price' => $this->full_album_price,
+            'full_album_price' => $this->full_album_price ? $this->full_album_price->getAmount() : null,
             'rank' => $this->rank,
             'is_active' => $this->is_active,
             'deleter' => new UserResource($this->deleter),

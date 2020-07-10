@@ -23,6 +23,7 @@ class UuidModel extends Model
 
         self::creating(function ($model) {
             $model->{$model->getKeyName()} = Uuid::uuid4()->toString();
+            $model->access_code = Uuid::uuid4()->toString();
         });
     }
 }

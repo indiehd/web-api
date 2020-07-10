@@ -11,15 +11,26 @@ class ArtistPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewAny(?User $user)
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the artist.
      *
      * @param  \App\User  $user
      * @param  \App\Artist  $artist
      * @return mixed
      */
-    public function view(User $user, Artist $artist)
+    public function view(?User $user, Artist $artist)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,7 +41,7 @@ class ArtistPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -42,7 +53,7 @@ class ArtistPolicy
      */
     public function update(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 
     /**
@@ -56,7 +67,7 @@ class ArtistPolicy
     {
         // The User must own the Artist.
 
-        return $artist->user->id === $user->id;
+        return $user->is($artist->user);
     }
 
     /**
@@ -68,7 +79,7 @@ class ArtistPolicy
      */
     public function restore(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 
     /**
@@ -80,6 +91,6 @@ class ArtistPolicy
      */
     public function forceDelete(User $user, Artist $artist)
     {
-        //
+        return $user->is($artist->user);
     }
 }

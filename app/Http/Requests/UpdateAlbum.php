@@ -35,10 +35,10 @@ class UpdateAlbum extends FormRequest
         return [
             'title' => 'string|max:255',
             'alt_title' => 'string|max:255',
-            'year' => 'integer|min:1900|max:' . (string)(date('Y') + 1),
+            'year' => 'integer|min:1900|max:' . (string) (date('Y') + 1),
             'description' => 'max:4096',
             'has_explicit_lyrics' => 'boolean',
-            'full_album_price' => 'between:0.00,999.99',
+            'full_album_price' => 'between:0,99999',
             'is_active' => 'boolean',
         ];
     }

@@ -17,6 +17,8 @@ class CreateCatalogEntitiesTable extends Migration
             $table->increments('id');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('company')->nullable();
+            $table->string('title')->nullable();
             $table->string('email')->nullable(); // alternate correspondence email
             $table->string('address_one');
             $table->string('address_two')->nullable();

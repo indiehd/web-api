@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 
 class UserController extends ApiController
 {
+    protected $shouldAuthorize = true;
 
     /**
      * Should return the <RepositoryInterface>::class
