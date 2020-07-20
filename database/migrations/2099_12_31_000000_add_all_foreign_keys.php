@@ -19,6 +19,10 @@ class AddAllForeignKeys extends Migration
             #$table->foreign('catalog_id')->references('id')->on('catalogs');
         });
 
+        Schema::table('genres', function (Blueprint $table) {
+            $table->foreign('approver_id', 'approver_id_fk')->references('id')->on('users');
+        });
+
         Schema::table('album_genre', function (Blueprint $table) {
             $table->foreign('album_id', 'album_id_fk')->references('id')->on('albums');
             $table->foreign('genre_id', 'genre_id_fk')->references('id')->on('genres');
