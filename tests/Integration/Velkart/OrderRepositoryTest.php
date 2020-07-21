@@ -1,20 +1,29 @@
 <?php
 
-namespace Tests\Feature\Repositories;
+namespace Tests\Integration\Velkart;
 
-use App\OrderItem;
-use CountriesSeeder;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
+use Tests\TestCase;
 
-class OrderRepositoryTest extends RepositoryCrudTestCase
+class OrderRepositoryTest extends TestCase
 {
+    use RefreshDatabase;
+
+    /**
+     * @var OrderRepositoryContract $repo
+     */
+    protected $repo;
+
     /**
      * @var UserRepositoryInterface $user
      */
@@ -26,9 +35,9 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     protected $account;
 
     /**
-     * @var OrderItemRepositoryInterface $orderItem
+     * @var DigitalAssetRepositoryInterface $digitalAsset
      */
-    protected $orderItem;
+    protected $digitalAsset;
 
     /**
      * @var ProfileRepositoryInterface $profile
@@ -46,11 +55,18 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     protected $album;
 
     /**
+     * @var ProductRepositoryContract $product
+     */
+    protected $product;
+
+    /**
      * @inheritdoc
      */
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->setRepository();
 
         $this->seed(CountriesSeeder::class);
 
@@ -58,13 +74,15 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
 
         $this->account = resolve(AccountRepositoryInterface::class);
 
-        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
+        $this->digitalAsset = resolve(DigitalAssetRepositoryInterface::class);
 
         $this->profile = resolve(ProfileRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
+
+        $this->product = resolve(ProductRepositoryContract::class);
     }
 
     /**
@@ -72,7 +90,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
      */
     public function setRepository()
     {
-        $this->repo = resolve(OrderRepositoryInterface::class);
+        $this->repo = resolve(OrderRepositoryContract::class);
     }
 
     /**
@@ -80,10 +98,10 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
      */
     public function testCreateStoresNewResource()
     {
-        $order = factory($this->repo->class())->make();
+        $order = factory($this->repo->modelClass())->make();
 
         $this->assertInstanceOf(
-            $this->repo->class(),
+            $this->repo->modelClass(),
             $this->repo->create($order->toArray())
         );
     }
@@ -94,19 +112,21 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateUpdatesResource()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->raw()
+            factory($this->repo->modelClass())->raw()
         );
 
         $newValue = $this->createUser()->id;
 
-        $property = 'user_id';
+        $property = 'customer_id';
 
         $this->repo->update($order->id, [
             $property => $newValue,
         ]);
 
+        #dd($this->repo->findById($order->id));
+
         $this->assertTrue(
-            $this->repo->findById($order->id)->{$property} === $newValue
+            $this->repo->findById($order->id)->{$property} == $newValue
         );
     }
 
@@ -116,12 +136,12 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateReturnsModelInstance()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->raw()
+            factory($this->repo->modelClass())->raw()
         );
 
         $updated = $this->repo->update($order->id, []);
 
-        $this->assertInstanceOf($this->repo->class(), $updated);
+        $this->assertTrue($updated);
     }
 
     /**
@@ -130,7 +150,7 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     public function testDeleteDeletesResource()
     {
         $order = $this->repo->create(
-            factory($this->repo->class())->raw()
+            factory($this->repo->modelClass())->raw()
         );
 
         $order->delete();
@@ -143,16 +163,16 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that when an Order Item is related to an Order, the Order has
-     * one or more Order Items.
+     * Ensure that when an Digital Asset is related to a Product, the Product has
+     * one or more Digital Assets.
      *
      * @return void
      */
-    public function testWhenOrderRelatedToOrderItemsItHasManyItems()
+    public function testWhenDigitalAssetRelatedToProductItBelongsToProduct()
     {
-        $item = $this->orderItem->create($this->makeOrderItem()->toArray());
+        $asset = $this->digitalAsset->create($this->makeDigitalAsset()->toArray());
 
-        $this->assertInstanceOf($this->orderItem->class(), $item->order->items()->first());
+        $this->assertInstanceOf($this->product->modelClass(), $asset->product);
     }
 
     /**
@@ -200,22 +220,22 @@ class OrderRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Makes an Order Item.
+     * Makes a Digital Asset.
      *
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
-    protected function makeOrderItem()
+    protected function makeDigitalAsset()
     {
         $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
-        $order = $this->repo->create(
-            factory($this->repo->class())->raw()
-        );
+        #$order = $this->repo->create(
+        #    factory($this->repo->modelClass())->raw()
+        #);
 
-        return factory($this->orderItem->class())->make([
-            'order_id' => $order->id,
-            'orderable_id' => $album->id,
-            'orderable_type' => $this->album->class(),
+        return factory($this->digitalAsset->class())->make([
+            #'product_id' => $order->id,
+            'asset_id' => $album->id,
+            'asset_type' => $this->album->class(),
         ]);
     }
 }

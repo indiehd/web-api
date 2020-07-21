@@ -361,7 +361,7 @@ class OrderControllerTest extends ControllerTestCase
      * Make an Order Item.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
     protected function makeOrderItem($properties = [])
     {

@@ -5,8 +5,8 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use App\Contracts\DigitalAssetRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
@@ -22,14 +22,14 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     protected $flacFile;
 
     /**
-     * @var OrderRepositoryInterface $order
+     * @var OrderRepositoryContract $order
      */
     protected $order;
 
     /**
-     * @var OrderItemRepositoryInterface $orderItem
+     * @var DigitalAssetRepositoryInterface $digitalAsset
      */
-    protected $orderItem;
+    protected $digitalAsset;
 
     /**
      * @inheritdoc
@@ -44,9 +44,9 @@ class SongRepositoryTest extends RepositoryCrudTestCase
 
         $this->flacFile = resolve(FlacFileRepositoryInterface::class);
 
-        $this->order = resolve(OrderRepositoryInterface::class);
+        $this->order = resolve(OrderRepositoryContract::class);
 
-        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
+        $this->digitalAsset = resolve(DigitalAssetRepositoryInterface::class);
     }
 
     /**
@@ -143,16 +143,20 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      *
      * @return void
      */
-    public function testWhenSongSoldItMorphsManyOrderItems()
+    public function testWhenSongSoldItMorphsManyDigitalAsset()
     {
         $song = $this->createSong();
 
-        $this->orderItem->create($this->makeOrderItem([
-            'orderable_id' => $song->id,
-            'orderable_type' => $this->repo->class(),
+        $this->digitalAsset->create($this->makeDigitalAsset([
+            'asset_id' => $song->id,
+            'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        $this->assertInstanceOf($this->orderItem->class(), $song->copiesSold->first());
+        $order = factory($this->order->modelClass())->create();
+
+        $order->products()->save($song->asset->product);
+
+        $this->assertInstanceOf($this->digitalAsset->class(), $song->copiesSold->first());
     }
 
     /**
@@ -168,22 +172,19 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make an Order Item.
+     * Make a Digital Asset.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
-    protected function makeOrderItem($properties = [])
+    protected function makeDigitalAsset($properties = [])
     {
-        return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->raw()
-            )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
+        return factory($this->digitalAsset->class())->make([
+            'asset_id' => $properties['asset_id'] ?? $this->album->create(
                 // TODO This method doesn't exist here; add it.
                 $this->makeAlbum()->toArray()
             )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+            'asset_type' => $properties['asset_type'] ?? $this->album->class(),
         ]);
     }
 }

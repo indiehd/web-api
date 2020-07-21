@@ -2,15 +2,14 @@
 
 namespace Tests\Feature\Featured;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-use Carbon\Carbon;
-
-use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
+use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class FeaturedArtistEligibilityTest extends TestCase
 {
@@ -42,6 +41,11 @@ class FeaturedArtistEligibilityTest extends TestCase
     protected $eligibleArtists = [];
 
     /**
+     * @var $digitalAsset DigitalAssetRepositoryInterface
+     */
+    protected $digitalAsset;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
@@ -57,6 +61,8 @@ class FeaturedArtistEligibilityTest extends TestCase
         $this->song = resolve(SongRepositoryInterface::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
+
+        $this->digitalAsset = resolve(DigitalAssetRepositoryInterface::class);
 
         // Artists that DO NOT meet every condition...
 
@@ -207,21 +213,18 @@ class FeaturedArtistEligibilityTest extends TestCase
     }
 
     /**
-     * Make an Order Item.
+     * Make a Digital Asset.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
-    protected function makeOrderItem($properties = [])
+    protected function makeDigitalAsset($properties = [])
     {
-        return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                    factory($this->order->class())->raw()
-                )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->repo->create(
+        return factory($this->digitalAsset->class())->make([
+            'asset_id' => $properties['asset_id'] ?? $this->repo->create(
                     $this->makeAlbum()->toArray()
                 )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->repo->class(),
+            'asset_type' => $properties['aaset_type'] ?? $this->repo->class(),
         ]);
     }
 }
