@@ -15,7 +15,9 @@ class CreateGenresTable extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->unique();
+            $table->timestamp('approved_at')->nullable();
+            $table->unsignedBigInteger('approver_id')->nullable();
             $table->timestamps();
         });
     }
