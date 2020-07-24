@@ -163,7 +163,7 @@ class OrderRepositoryTest extends TestCase
     }
 
     /**
-     * Ensure that when an Digital Asset is related to a Product, the Product has
+     * Ensure that when a Digital Asset is related to a Product, the Product has
      * one or more Digital Assets.
      *
      * @return void
@@ -228,12 +228,7 @@ class OrderRepositoryTest extends TestCase
     {
         $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
-        #$order = $this->repo->create(
-        #    factory($this->repo->modelClass())->raw()
-        #);
-
         return factory($this->digitalAsset->class())->make([
-            #'product_id' => $order->id,
             'asset_id' => $album->id,
             'asset_type' => $this->album->class(),
         ]);

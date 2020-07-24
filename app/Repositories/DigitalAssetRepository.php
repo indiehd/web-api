@@ -45,16 +45,16 @@ class DigitalAssetRepository extends CrudRepository implements DigitalAssetRepos
 
     public function create(array $data)
     {
-        #try {
+        try {
             return $this->model()->create($data);
-        #} catch (QueryException $e) {
-        #    // If Integrity Constraint violation, the same item has already
-        #    // been added to the Order, and we should simply ignore the failure.
+        } catch (QueryException $e) {
+            // If Integrity Constraint violation, the same item has already
+            // been added to the Order, and we should simply ignore the failure.
 
-        #    if ($e->getCode() !== '23000') {
-        #        throw $e;
-        #    }
-        #}
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+        }
     }
 
     public function findByIds($productId, $assetId, $assetType)

@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
-use App\Contracts\FlacFileRepositoryInterface;
-use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 use App\Contracts\DigitalAssetRepositoryInterface;
+use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
 {

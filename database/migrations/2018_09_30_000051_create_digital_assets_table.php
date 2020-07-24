@@ -15,7 +15,6 @@ class CreateDigitalAssetsTable extends Migration
     {
         Schema::create('digital_assets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            #$table->string('sku')->unique()->nullable();
             $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('asset_id');
             $table->string('asset_type');

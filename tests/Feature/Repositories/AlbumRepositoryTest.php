@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\CartRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
-use App\Contracts\DigitalAssetRepositoryInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
