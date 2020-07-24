@@ -60,7 +60,7 @@ class OrderRepositoryTest extends TestCase
     protected $product;
 
     /**
-     * @inheritdoc
+     * Set-up the test.
      */
     public function setUp(): void
     {
@@ -86,7 +86,7 @@ class OrderRepositoryTest extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * Set the underlying repository.
      */
     public function setRepository()
     {
@@ -94,7 +94,7 @@ class OrderRepositoryTest extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * Ensure that the create method stores a new resources.
      */
     public function testCreateStoresNewResource()
     {
@@ -107,7 +107,7 @@ class OrderRepositoryTest extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * Ensure that the update method updates an existing resource.
      */
     public function testUpdateUpdatesResource()
     {
@@ -123,17 +123,15 @@ class OrderRepositoryTest extends TestCase
             $property => $newValue,
         ]);
 
-        #dd($this->repo->findById($order->id));
-
         $this->assertTrue(
             $this->repo->findById($order->id)->{$property} == $newValue
         );
     }
 
     /**
-     * @inheritdoc
+     * Ensure that the update method returns boolean true.
      */
-    public function testUpdateReturnsModelInstance()
+    public function testUpdateReturnsTrue()
     {
         $order = $this->repo->create(
             factory($this->repo->modelClass())->raw()
@@ -145,7 +143,7 @@ class OrderRepositoryTest extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * Ensure that the delete method deletes an existing resource.
      */
     public function testDeleteDeletesResource()
     {
