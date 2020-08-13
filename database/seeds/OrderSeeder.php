@@ -1,10 +1,10 @@
 <?php
 
-use App\OrderItem;
-use App\Album;
-use App\Song;
+use Illuminate\Database\Seeder;
+use IndieHD\Velkart\Models\Eloquent\Cart;
+use IndieHD\Velkart\Models\Eloquent\Order;
 
-class OrderSeeder extends BaseSeeder
+class OrderSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,40 +13,17 @@ class OrderSeeder extends BaseSeeder
      */
     public function run()
     {
-        $orderSeedCount = 10;
+        $carts = Cart::inRandomOrder()->take(rand(10, 20))->get();
 
-        $orderItemSeedCount = 10;
+        foreach ($carts as $cart) {
+            factory(Order::class)->create([
+                'cart_id' => $cart->id,
+            ])
+                ->each(function ($order) use ($cart) {
+                    $products = unserialize($cart->content);
 
-        $orderable = [
-            App\Song::class,
-            App\Album::class
-        ];
-
-        for ($i = 1; $i <= $orderSeedCount; $i++) {
-
-            $this->log('Creating an Order');
-            $cart = factory(App\Order::class)->create();
-
-            for ($j = 1; $j <= $orderItemSeedCount; $j++) {
-                $type = $orderable[rand(0, count($orderable) - 1)];
-                $this->log("Creating an Order item for $type");
-
-                if ($type === 'App\Album') {
-                    $entity = factory(Album::class)->create();
-                } elseif ($type === 'App\Song') {
-                    $album = factory(Album::class)->create();
-
-                    $song = Song::where('album_id', $album->id)->inRandomOrder()->first();
-
-                    $entity = $song;
-                }
-
-                factory(OrderItem::class)->create([
-                    'order_id' => $cart->id,
-                    'orderable_id' => $entity->id,
-                    'orderable_type' => $type
-                ]);
-            }
+                    $order->products()->saveMany($products);
+                });
         }
     }
 }

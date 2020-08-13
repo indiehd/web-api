@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Album extends Model
 {
-    protected $guarded = ['id'];
+    // TODO 'songs' is here only to prevent an exception when the repository
+    // attempts to include it as a column while inserting/updating; needs fixing.
+
+    protected $guarded = ['id', 'songs'];
 
     protected $casts = [
         'full_album_price' => Money::class,
@@ -42,6 +45,11 @@ class Album extends Model
 
     public function copiesSold()
     {
-        return $this->morphMany(OrderItem::class, 'orderable');
+        return $this->morphMany(DigitalAsset::class, 'asset');
+    }
+
+    public function asset()
+    {
+        return $this->morphOne(DigitalAsset::class, 'asset');
     }
 }

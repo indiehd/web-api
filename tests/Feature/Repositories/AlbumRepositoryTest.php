@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\CartRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
@@ -34,14 +35,19 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected $genre;
 
     /**
-     * @var OrderRepositoryInterface $order
+     * @var CartRepositoryContract $cart
+     */
+    protected $cart;
+
+    /**
+     * @var OrderRepositoryContract $order
      */
     protected $order;
 
     /**
-     * @var OrderItemRepositoryInterface $orderItem
+     * @var DigitalAssetRepositoryInterface $digitalAsset
      */
-    protected $orderItem;
+    protected $digitalAsset;
 
     /**
      * @inheritdoc
@@ -60,9 +66,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $this->genre = resolve(GenreRepositoryInterface::class);
 
-        $this->order = resolve(OrderRepositoryInterface::class);
+        $this->cart = resolve(CartRepositoryContract::class);
 
-        $this->orderItem = resolve(OrderItemRepositoryInterface::class);
+        $this->order = resolve(OrderRepositoryContract::class);
+
+        $this->digitalAsset = resolve(DigitalAssetRepositoryInterface::class);
     }
 
     /**
@@ -169,21 +177,25 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that when a copy of an Album is sold, the Album morphs many Order
-     * Items.
+     * Ensure that when a copy of an Album is sold, the Album morphs many
+     * Digital Assets.
      *
      * @return void
      */
-    public function testWhenAlbumSoldItMorphsManyOrderItem()
+    public function testWhenAlbumSoldItMorphsManyDigitalAsset()
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        $this->orderItem->create($this->makeOrderItem([
-            'orderable_id' => $album->id,
-            'orderable_type' => $this->repo->class(),
+        $this->digitalAsset->create($this->makeDigitalAsset([
+            'asset_id' => $album->id,
+            'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        $this->assertInstanceOf($this->orderItem->class(), $album->copiesSold->first());
+        $order = factory($this->order->modelClass())->create();
+
+        $order->products()->save($album->asset->product);
+
+        $this->assertInstanceOf($this->digitalAsset->class(), $album->copiesSold->first());
     }
 
     /**
@@ -218,21 +230,18 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make an Order Item.
+     * Make a Digital Asset.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
-    protected function makeOrderItem($properties = [])
+    protected function makeDigitalAsset(array $properties = [])
     {
-        return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->raw()
-            )->id,
-            'orderable_id' => $properties['orderable_id'] ?? $this->repo->create(
+        return factory($this->digitalAsset->class())->make([
+            'asset_id' => $properties['asset_id'] ?? $this->repo->create(
                 $this->makeAlbum()->toArray()
             )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->repo->class(),
+            'asset_type' => $properties['asset_type'] ?? $this->repo->class(),
         ]);
     }
 }

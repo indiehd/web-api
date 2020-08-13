@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Controllers;
 
-use CountriesSeeder;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use CountriesSeeder;
+use IndieHD\Velkart\Contracts\OrderRepositoryContract;
 
 class OrderControllerTest extends ControllerTestCase
 {
@@ -50,9 +50,11 @@ class OrderControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
+        $this->markTestSkipped('The Order implementation is being reworked');
+
         $this->seed(CountriesSeeder::class);
 
-        $this->order = resolve(OrderRepositoryInterface::class);
+        $this->order = resolve(OrderRepositoryContract::class);
 
         $this->orderItem = resolve(OrderItemRepositoryInterface::class);
 
@@ -85,7 +87,9 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $this->order->create([]);
+        $order = factory($this->order->modelClass())->raw();
+
+        $this->order->create($order);
 
         $this->json('GET', route('orders.index'))
             ->assertStatus(200)
@@ -102,7 +106,9 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = $this->order->create([]);
+        $order = factory($this->order->modelClass())->raw();
+
+        $order = $this->order->create($order);
 
         $this->json('GET', route('orders.show', ['id' => $order->id]))
             ->assertStatus(200)
@@ -355,14 +361,14 @@ class OrderControllerTest extends ControllerTestCase
      * Make an Order Item.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
     protected function makeOrderItem($properties = [])
     {
+        $order = factory($this->order->modelClass())->create();
+
         return factory($this->orderItem->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                    factory($this->order->class())->raw()
-                )->id,
+            'order_id' => $properties['order_id'] ?? $order->id,
             'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
                     $this->makeAlbum()->toArray()
                 )->id,

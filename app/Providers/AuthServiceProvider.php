@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Contracts;
 use App\Policies;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
             = Policies\FeaturedPolicy::class;
         $this->policies[resolve(Contracts\GenreRepositoryInterface::class)->class()] = Policies\GenrePolicy::class;
         $this->policies[resolve(Contracts\LabelRepositoryInterface::class)->class()] = Policies\LabelPolicy::class;
-        $this->policies[resolve(Contracts\OrderRepositoryInterface::class)->class()] = Policies\OrderPolicy::class;
+        $this->policies[resolve(OrderRepositoryContract::class)->modelClass()] = Policies\OrderPolicy::class;
         $this->policies[resolve(Contracts\SongRepositoryInterface::class)->class()] = Policies\SongPolicy::class;
         $this->policies[resolve(Contracts\UserRepositoryInterface::class)->class()] = Policies\UserPolicy::class;
 

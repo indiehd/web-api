@@ -2,25 +2,25 @@
 
 namespace App\Repositories;
 
+use App\Contracts\DigitalAssetRepositoryInterface;
+use App\DigitalAsset;
 use Illuminate\Database\QueryException;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\OrderItem;
 
-class OrderItemRepository extends CrudRepository implements OrderItemRepositoryInterface
+class DigitalAssetRepository extends CrudRepository implements DigitalAssetRepositoryInterface
 {
     /**
      * @var string $class
      */
-    protected $class = OrderItem::class;
+    protected $class = DigitalAsset::class;
 
     /**
-     * @var OrderItem $orderItem
+     * @var DigitalAsset $digitalAsset
      */
-    protected $orderItem;
+    protected $digitalAsset;
 
-    public function __construct(OrderItem $orderItem)
+    public function __construct(DigitalAsset $digitalAsset)
     {
-        $this->orderItem = $orderItem;
+        $this->digitalAsset = $digitalAsset;
     }
 
     /**
@@ -36,11 +36,11 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
     /**
      * Returns the Repository's Model instance.
      *
-     * @return OrderItem
+     * @return DigitalAsset
      */
     public function model()
     {
-        return $this->orderItem;
+        return $this->digitalAsset;
     }
 
     public function create(array $data)
@@ -57,12 +57,12 @@ class OrderItemRepository extends CrudRepository implements OrderItemRepositoryI
         }
     }
 
-    public function findByOrderId($orderId, $orderableId, $orderableType)
+    public function findByIds($productId, $assetId, $assetType)
     {
         return $this->model()->where([
-            'order_id' => $orderId,
-            'orderable_id' => $orderableId,
-            'orderable_type' => $orderableType
+            'product_id' => $productId,
+            'asset_id' => $assetId,
+            'asset_type' => $assetType
         ])->first();
     }
 }

@@ -2,22 +2,17 @@
 
 namespace App;
 
-class Order extends UuidModel
-{
-    protected $guarded = ['id'];
+use IndieHD\Velkart\Models\Eloquent\Order as VelkartOrder;
 
+class Order extends VelkartOrder
+{
     protected $casts = [
-        'user_id' => 'int',
+        'customer_id' => 'int',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-    }
-
-    public function items()
-    {
-        return $this->hasMany(OrderItem::class);
     }
 
     public function user()

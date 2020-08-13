@@ -36,6 +36,11 @@ class Song extends Model
 
     public function copiesSold()
     {
-        return $this->morphMany(OrderItem::class, 'orderable');
+        return $this->morphMany(DigitalAsset::class, 'asset');
+    }
+
+    public function asset()
+    {
+        return $this->morphOne(DigitalAsset::class, 'asset');
     }
 }

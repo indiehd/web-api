@@ -1,9 +1,11 @@
 <?php
 
+use App\DigitalAsset;
 use App\Sku;
 use App\Song;
 use App\FlacFile;
 use Faker\Generator as Faker;
+use IndieHD\Velkart\Models\Eloquent\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +36,17 @@ $factory->define(Song::class, function (Faker $faker) {
         'album_id' => null, // passed during creation
         #'is_in_back_catalog' => $faker->boolean(95),
     ];
+});
+
+$factory->afterCreating(Song::class, function ($song, $faker) {
+    $song->asset()->save(factory(DigitalAsset::class)->make([
+        'product_id' => factory(Product::class)->create([
+            'name' => $song->name,
+            'slug' => Str::slug($song->name),
+            'description' => null,
+            'price' => '10', // TODO Represent this with Money\Money via $song->price.
+        ])->id,
+        'asset_id' => $song->id,
+        'asset_type' => App\Song::class,
+    ]));
 });

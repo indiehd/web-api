@@ -46,13 +46,8 @@ class AddAllForeignKeys extends Migration
             $table->foreign('country_code', 'profiles_country_code_fk')->references('code')->on('countries');
         });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->foreign('user_id', 'users_user_id_fk')->references('id')->on('users');
-        });
-
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->foreign('order_id', 'orders_order_id_fk')->references('id')->on('orders');
-            $table->unique(['order_id', 'orderable_id', 'orderable_type'], 'unique_order_item_cols');
+        Schema::table('digital_assets', function (Blueprint $table) {
+            $table->foreign('product_id', 'product_id_fk')->references('id')->on('products');
         });
     }
 
