@@ -8,6 +8,7 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
@@ -134,6 +135,43 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
         $album->genres()->attach($genre->id);
 
         $this->assertInstanceOf($this->album->class(), $genre->albums->first());
+    }
+
+    /**
+     * Ensure that attempts to create a Genre whose name is identical to an
+     * existing Genre cause an exception to be thrown.
+     *
+     * @return void
+     */
+    public function testWhenGenreNameAlreadyExistsExceptionIsThrown()
+    {
+        $this->repo->create(
+            factory($this->repo->class())->raw(['name' => 'Foo'])
+        );
+
+        try {
+            $this->repo->create(
+                factory($this->repo->class())->raw(['name' => 'Foo'])
+            );
+        } catch (QueryException $e) {
+            $this->assertEquals($e->getCode(), '23000');
+        }
+    }
+
+    /**
+     * Ensure that the `approved_at` and `approver_id` fields are null upon
+     * initial creation.
+     *
+     * @return void
+     */
+    public function testWhenGenreIsCreatedApprovalFieldsAreNull()
+    {
+        $genre = $this->repo->create(
+            factory($this->repo->class())->raw(['name' => 'Foo'])
+        );
+
+        $this->assertNull($genre->approved_at);
+        $this->assertNull($genre->approver);
     }
 
     /**

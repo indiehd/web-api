@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrderItemsTable extends Migration
+class CreateDigitalAssetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateOrderItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->increments('id');
-            $table->uuid('order_id');
-            $table->unsignedInteger('orderable_id');
-            $table->string('orderable_type');
+        Schema::create('digital_assets', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedInteger('asset_id');
+            $table->string('asset_type');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateOrderItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('digital_assets');
     }
 }

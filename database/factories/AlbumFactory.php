@@ -1,11 +1,12 @@
 <?php
 
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
+use App\DigitalAsset;
 use App\Genre;
 use Faker\Generator as Faker;
-
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\AlbumRepositoryInterface;
-use App\Contracts\SongRepositoryInterface;
+use IndieHD\Velkart\Models\Eloquent\Product;
 
 $artist = resolve(ArtistRepositoryInterface::class);
 $album = resolve(AlbumRepositoryInterface::class);
@@ -55,6 +56,19 @@ $factory->afterCreating($album->class(), function ($album, $faker) use ($song) {
 
         $s->album()->associate($album)->save();
     }
+
+    // Create and associate a Digital Asset.
+
+    $album->asset()->save(factory(DigitalAsset::class)->make([
+        'product_id' => factory(Product::class)->create([
+            'name' => $album->title,
+            'slug' => Str::slug($album->title),
+            'description' => $album->description,
+            'price' => $album->full_album_price ?? ($album->songs->count() * 100),
+        ])->id,
+        'asset_id' => $album->id,
+        'asset_type' => App\Album::class,
+    ]));
 
     // Fetch and attach some Genres.
 

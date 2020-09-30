@@ -16,7 +16,7 @@ use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\FeaturedRepositoryInterface;
 
 use App\Repositories\AccountRepository;
@@ -31,7 +31,7 @@ use App\Repositories\GenreRepository;
 use App\Repositories\LabelRepository;
 use App\Repositories\SongRepository;
 use App\Repositories\OrderRepository;
-use App\Repositories\OrderItemRepository;
+use App\Repositories\DigitalAssetRepository;
 use App\Repositories\FeaturedRepository;
 
 use App\Artist;
@@ -39,13 +39,12 @@ use App\Album;
 use App\Genre;
 use App\Label;
 use App\User;
-use App\OrderItem;
+use App\DigitalAsset;
 use App\Observers\ArtistObserver;
 use App\Observers\AlbumObserver;
 use App\Observers\GenreObserver;
 use App\Observers\LabelObserver;
 use App\Observers\UserObserver;
-use App\Observers\OrderItemObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -78,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(LabelRepositoryInterface::class, LabelRepository::class);
         $this->app->bind(SongRepositoryInterface::class, SongRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
-        $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+        $this->app->bind(DigitalAssetRepositoryInterface::class, DigitalAssetRepository::class);
         $this->app->bind(FeaturedRepositoryInterface::class, FeaturedRepository::class);
 
         Artist::observe(ArtistObserver::class);
@@ -86,6 +85,5 @@ class AppServiceProvider extends ServiceProvider
         Genre::observe(GenreObserver::class);
         Label::observe(LabelObserver::class);
         User::observe(UserObserver::class);
-        OrderItem::observe(OrderItemObserver::class);
     }
 }

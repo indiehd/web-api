@@ -19,6 +19,10 @@ class AddAllForeignKeys extends Migration
             #$table->foreign('catalog_id')->references('id')->on('catalogs');
         });
 
+        Schema::table('genres', function (Blueprint $table) {
+            $table->foreign('approver_id', 'approver_id_fk')->references('id')->on('users');
+        });
+
         Schema::table('album_genre', function (Blueprint $table) {
             $table->foreign('album_id', 'album_id_fk')->references('id')->on('albums');
             $table->foreign('genre_id', 'genre_id_fk')->references('id')->on('genres');
@@ -42,13 +46,8 @@ class AddAllForeignKeys extends Migration
             $table->foreign('country_code', 'profiles_country_code_fk')->references('code')->on('countries');
         });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->foreign('user_id', 'users_user_id_fk')->references('id')->on('users');
-        });
-
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->foreign('order_id', 'orders_order_id_fk')->references('id')->on('orders');
-            $table->unique(['order_id', 'orderable_id', 'orderable_type'], 'unique_order_item_cols');
+        Schema::table('digital_assets', function (Blueprint $table) {
+            $table->foreign('product_id', 'product_id_fk')->references('id')->on('products');
         });
     }
 

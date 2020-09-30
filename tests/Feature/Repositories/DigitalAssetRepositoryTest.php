@@ -2,16 +2,17 @@
 
 namespace Tests\Feature\Repositories;
 
-use CountriesSeeder;
-use App\Contracts\OrderRepositoryInterface;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\SongRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 
-class OrderItemRepositoryTest extends RepositoryCrudTestCase
+class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
 {
     /**
      * @var ProfileRepositoryInterface $profile
@@ -34,7 +35,12 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     protected $song;
 
     /**
-     * @var OrderRepositoryInterface $order
+     * @var ProductRepositoryContract $order
+     */
+    protected $product;
+
+    /**
+     * @var OrderRepositoryContract $order
      */
     protected $order;
 
@@ -55,7 +61,9 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
 
         $this->song = resolve(SongRepositoryInterface::class);
 
-        $this->order = resolve(OrderRepositoryInterface::class);
+        $this->product = resolve(ProductRepositoryContract::class);
+
+        $this->order = resolve(OrderRepositoryContract::class);
     }
 
     /**
@@ -63,7 +71,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function setRepository()
     {
-        $this->repo = resolve(OrderItemRepositoryInterface::class);
+        $this->repo = resolve(DigitalAssetRepositoryInterface::class);
     }
 
     /**
@@ -71,7 +79,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function testCreateStoresNewResource()
     {
-        $item = $this->makeOrderItem();
+        $item = $this->makeDigitalAsset();
 
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -84,13 +92,13 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function testUpdateUpdatesResource()
     {
-        $item = $this->repo->create($this->makeOrderItem()->toArray());
+        $item = $this->repo->create($this->makeDigitalAsset()->toArray());
 
         $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
 
         $newValue = $album->id;
 
-        $property = 'orderable_id';
+        $property = 'asset_id';
 
         $this->repo->update($item->id, [
             $property => $newValue,
@@ -106,7 +114,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function testUpdateReturnsModelInstance()
     {
-        $item = $this->repo->create($this->makeOrderItem()->toArray());
+        $item = $this->repo->create($this->makeDigitalAsset()->toArray());
 
         $updated = $this->repo->update($item->id, []);
 
@@ -118,7 +126,7 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
      */
     public function testDeleteDeletesResource()
     {
-        $item = $this->repo->create($this->makeOrderItem()->toArray());
+        $item = $this->repo->create($this->makeDigitalAsset()->toArray());
 
         $item->delete();
 
@@ -130,62 +138,32 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Ensure that deleting the last Order Item in an Order causes the Order
-     * to be deleted, too.
-     */
-    public function testDeleteLastItemDeletesOrder()
-    {
-        $item = $this->repo->create($this->makeOrderItem()->toArray());
-
-        $item->delete();
-
-        try {
-            $this->assertNull($this->order->findById($item->order_id));
-        } catch (ModelNotFoundException $e) {
-            $this->assertTrue(true);
-        }
-    }
-
-    /**
-     * Ensure that when an Order is related to an Order Item, the Order
-     * Item belongs to an Order.
+     * Ensure that a sold Album morphs to Asset.
      *
      * @return void
      */
-    public function testWhenOrderItemRelatedToOrderItBelongsToOrder()
+    public function testWhenAlbumSoldItMorphsToAsset()
     {
-        $item = $this->repo->create($this->makeOrderItem()->toArray());
+        $soldAlbum = $this->repo->create($this->makeDigitalAsset()->toArray());
 
-        $this->assertInstanceOf($this->order->class(), $item->order);
+        $this->assertInstanceOf($this->album->class(), $soldAlbum->asset);
     }
 
     /**
-     * Ensure that a sold Album morphs to Orderable.
+     * Ensure that a sold Song morphs to Asset.
      *
      * @return void
      */
-    public function testWhenAlbumSoldItMorphsToOrderable()
-    {
-        $soldAlbum = $this->repo->create($this->makeOrderItem()->toArray());
-
-        $this->assertInstanceOf($this->album->class(), $soldAlbum->orderable);
-    }
-
-    /**
-     * Ensure that a sold Song morphs to Orderable.
-     *
-     * @return void
-     */
-    public function testWhenSongSoldItMorphsToOrderable()
+    public function testWhenSongSoldItMorphsToAsset()
     {
         $song = $this->createSong();
 
-        $soldSong = $this->repo->create($this->makeOrderItem([
-            'orderable_id' => $song->id,
-            'orderable_type' => $this->song->class(),
+        $soldSong = $this->repo->create($this->makeDigitalAsset([
+            'asset_id' => $song->id,
+            'asset_type' => $this->song->class(),
         ])->toArray());
 
-        $this->assertInstanceOf($this->song->class(), $soldSong->orderable);
+        $this->assertInstanceOf($this->song->class(), $soldSong->asset);
     }
 
     /**
@@ -243,21 +221,19 @@ class OrderItemRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
-     * Make an Order Item.
+     * Make a Digital Asset.
      *
      * @param array $properties
-     * @return \App\OrderItem
+     * @return \App\DigitalAsset
      */
-    protected function makeOrderItem($properties = [])
+    protected function makeDigitalAsset($properties = [])
     {
         return factory($this->repo->class())->make([
-            'order_id' => $properties['order_id'] ?? $this->order->create(
-                factory($this->order->class())->raw()
-            )->id,
-            'orderable_id' => $properties['orderable_id'] ?? factory($this->album->class())->create(
+            'product_id' => $properties['product_id'] ?? factory($this->product->modelClass())->create()->id,
+            'asset_id' => $properties['asset_id'] ?? factory($this->album->class())->create(
                 $this->makeAlbum()->toArray()
             )->id,
-            'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
+            'asset_type' => $properties['asset_type'] ?? $this->album->class(),
         ]);
     }
 }
