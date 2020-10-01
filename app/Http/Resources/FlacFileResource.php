@@ -33,8 +33,6 @@ class FlacFileResource extends JsonResource
             'play_time_seconds' => $this->play_time_seconds,
             'md5_data_source' => $this->md5_data_source,
             'sha256' => $this->sha256,
-            'songs' => SongResource::collection($this->songs)
-
         ];
     }
 }

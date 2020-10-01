@@ -18,7 +18,7 @@ class SongResource extends JsonResource
             'id'=> $this->id,
             'name' => $this->name,
             'alt_name' => $this->alt_name,
-            'flac_file' => new FlacFileResource($this->flac_file),
+            'flac_file' => new FlacFileResource($this->flacFile),
             'track_number' => $this->track_number,
             'preview_start' => $this->preview_start,
             'is_active' => $this->is_active,

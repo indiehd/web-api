@@ -3,16 +3,14 @@
 namespace Tests\Feature\Controllers;
 
 use App\Contracts\AlbumRepositoryInterface;
-use CountriesSeeder;
-use App\Song;
-use App\FlacFile;
-use App\Contracts\SongRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-#use App\Http\Resources\ArtistResource;
-#use App\Http\Resources\AlbumResource;
+use App\Contracts\SongRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\FlacFile;
+use App\Song;
+use CountriesSeeder;
 
 class SongControllerTest extends ControllerTestCase
 {
@@ -50,21 +48,20 @@ class SongControllerTest extends ControllerTestCase
         $this->catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
     }
 
-    protected function getExactJson(Song $model)
+    protected function getExactJson(Song $model): array
     {
         return [
             'id' => $model->id,
             'name' => $model->name,
             'alt_name' => $model->alt_name,
-            'flac_file' => $model->flac_file,
-            'preview_start' => number_format($model->preview_start, 3),
             'track_number' => $model->track_number,
-            'is_active' => (int) $model->is_active,
+            'preview_start' => $model->preview_start,
+            'is_active' => $model->is_active,
             'deleted_at' => null,
         ];
     }
 
-    protected function getExactJsonWithFlacFile(FlacFile $model)
+    protected function getExactJsonWithFlacFile(FlacFile $model): array
     {
         return [
             'id' => $model->id,
@@ -72,7 +69,7 @@ class SongControllerTest extends ControllerTestCase
         ];
     }
 
-    protected function getJsonStructureForLabel()
+    protected function getJsonStructureForLabel(): array
     {
         return [
             'id',
@@ -87,13 +84,13 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create();
+        $album = factory($this->album->class())->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.index'))
             ->assertStatus(200)
-            ->assertJsonFragment(
+            ->assertJson(['data' => [
                 $this->getExactJson($album->songs->first())
-            );
+            ]]);
     }
 
     /**
@@ -102,12 +99,12 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create();
+        $album = factory($this->album->class())->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
-            ->assertExactJson([
-                'data' => $this->getExactJson($album->songs->first())
+            ->assertJson(['data' =>
+                $this->getExactJson($album->songs->first())
             ]);
     }
 
@@ -117,14 +114,14 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongBelongsToFlacFileReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create();
+        $album = factory($this->album->class())->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
-            ->assertExactJson([
-                'data' => $this->getExactJsonWithFlacFile(
+            ->assertJson([
+                'data' => ['flac_file' => $this->getExactJsonWithFlacFile(
                     $album->songs->first()->flacFile
                 )
-            ]);
+            ]]);
     }
 }
