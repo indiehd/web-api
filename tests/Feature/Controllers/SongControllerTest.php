@@ -109,8 +109,8 @@ class SongControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that a request for an existing record returns OK HTTP status and
-     * the expected JSON string.
+     * Ensure that a request for an existing record with the specified
+     * relationship returns OK HTTP status and the expected JSON string.
      */
     public function testShowWhenSongBelongsToFlacFileReturnsOkStatusAndExpectedJsonStructure()
     {

@@ -70,7 +70,7 @@ class GenreControllerTest extends ControllerTestCase
     }
 
     /**
-     * Ensure that Create requests when the user is not authorized result in
+     * Ensure that Delete requests when the user is not authorized result in
      * Forbidden HTTP status.
      */
     public function testDeleteWhenNotAuthorizedReturnsUnauthorizedStatus()
