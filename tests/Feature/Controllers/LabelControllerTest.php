@@ -178,6 +178,8 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testDeleteWhenNotAuthorizedReturnsUnauthorizedStatus()
     {
+        factory($this->label->class())->create();
+
         $this->json('DELETE', route('labels.destroy', ['id' => 1]))
             ->assertStatus(403);
     }
