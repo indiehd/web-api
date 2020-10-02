@@ -30,7 +30,8 @@ class SongPolicy
      */
     public function view(?User $user, Song $song)
     {
-        return $song->is_active || $user->is($song->artist->user);
+        return ($song->album->is_active && $song->is_active)
+            || $song->album->artist->user->is($user);
     }
 
     /**

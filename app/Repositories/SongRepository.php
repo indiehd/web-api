@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Song;
 use App\Contracts\SongRepositoryInterface;
+use App\Song;
 
 class SongRepository extends CrudRepository implements SongRepositoryInterface
 {
@@ -30,5 +30,18 @@ class SongRepository extends CrudRepository implements SongRepositoryInterface
     public function model()
     {
         return $this->song;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function all()
+    {
+        return $this->model()
+            ->whereHas('album', function ($q) {
+                $q->where('is_active', 1);
+            })
+            ->where('is_active', 1)
+            ->get();
     }
 }

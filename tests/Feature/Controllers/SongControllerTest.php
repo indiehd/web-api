@@ -94,6 +94,39 @@ class SongControllerTest extends ControllerTestCase
     }
 
     /**
+     * Ensure that Songs on inactive Albums are excluded, regardless of the
+     * Songs' individual statuses.
+     */
+    public function testAllExcludesSongsOnInactiveAlbums()
+    {
+        factory($this->album->class())->create(['is_active' => 0]);
+
+        $this->json('GET', route('songs.index'))
+            ->assertStatus(200)
+            ->assertExactJson(['data' => []]);
+    }
+
+    /**
+     * Ensure that inactive Songs are excluded (regardless of the Album's status).
+     */
+    public function testAllExcludesInactiveSongs()
+    {
+        $album = factory($this->album->class())->create(['is_active' => 1]);
+
+        $song = $album->songs->first();
+
+        $song->is_active = 0;
+
+        $song->save();
+
+        $r = $this->json('GET', route('songs.index'));
+
+        $songIds = collect(json_decode($r->getContent(), true)['data'])->pluck('id')->toArray();
+
+        $this->assertFalse(in_array($album->songs->first()->id, $songIds));
+    }
+
+    /**
      * Ensure that a request for an existing record returns OK HTTP status and
      * the expected JSON string.
      */
@@ -123,5 +156,82 @@ class SongControllerTest extends ControllerTestCase
                     $album->songs->first()->flacFile
                 )
             ]]);
+    }
+
+    /**
+     * Ensure that when a Song is inactive and a User is not logged-in,
+     * access is denied.
+     */
+    public function testShowWhenSongIsInactiveAndNoUserReturnsAccessDenied()
+    {
+        $album = factory($this->album->class())->create(['is_active' => 1]);
+
+        $song = $album->songs->first();
+
+        $song->is_active = 0;
+
+        $song->save();
+
+        $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
+            ->assertStatus(403);
+    }
+
+    /**
+     * Ensure that when a Song is inactive and a User is logged-in, but the User
+     * doesn't own the Song, access is denied.
+     */
+    public function testShowWhenSongIsInactiveAndUserNotOwnerReturnsAccessDenied()
+    {
+        $album = factory($this->album->class())->create(['is_active' => 1]);
+
+        $song = $album->songs->first();
+
+        $song->is_active = 0;
+
+        $song->save();
+
+        $this->actingAs(factory($this->user->class())->create())
+            ->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
+            ->assertStatus(403);
+    }
+
+    /**
+     * Ensure that when a Song is inactive, but the User owns the Song,
+     * access is allowed.
+     */
+    public function testShowWhenSongIsInactiveOwnerCanStillView()
+    {
+        $album = factory($this->album->class())->create();
+
+        $song = $album->songs->first();
+
+        $song->is_active = 0;
+
+        $song->save();
+
+        $this->actingAs($album->artist->user)
+            ->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
+            ->assertStatus(200);
+    }
+
+    /**
+     * Ensure that when a Song is active, but its parent Album is inactive,
+     * and a User is not logged-in, access is denied. (The logic here is that an
+     * Album's active/inactive status "overrides" the individual Song's status
+     * for non-owners; the owner has access regardless of both the Album and
+     * Song's statuses.)
+     */
+    public function testShowWhenSongIsActiveButAlbumIsInactiveAndNoUserReturnsAccessDenied()
+    {
+        $album = factory($this->album->class())->create(['is_active' => 0]);
+
+        $song = $album->songs->first();
+
+        $song->is_active = 1;
+
+        $song->save();
+
+        $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
+            ->assertStatus(403);
     }
 }
