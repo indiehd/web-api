@@ -16,7 +16,7 @@ class SongPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -28,9 +28,10 @@ class SongPolicy
      * @param  \App\Song  $song
      * @return mixed
      */
-    public function view(User $user, Song $song)
+    public function view(?User $user, Song $song)
     {
-        return $song->is_active || $user->is($song->artist->user);
+        return ($song->album->is_active && $song->is_active)
+            || $song->album->artist->user->is($user);
     }
 
     /**

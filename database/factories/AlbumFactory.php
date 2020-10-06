@@ -40,7 +40,7 @@ $factory->define($album->class(), function (Faker $faker) use ($artist, $song) {
 
 $factory->state($album->class(), 'withSongs', function ($faker) use ($song) {
     return [
-        'songs' => factory($song->class(), rand(1, 20))->make(),
+        'songs' => factory($song->class(), rand(1, 20))->make(['is_active' => 1]),
     ];
 });
 
@@ -51,7 +51,8 @@ $factory->afterCreating($album->class(), function ($album, $faker) use ($song) {
     for ($i = 1; $i < rand(2, 21); $i++) {
         $s = factory($song->class())->create([
             'album_id' => $album->id,
-            'track_number' => $i
+            'track_number' => $i,
+            'is_active' => 1,
         ]);
 
         $s->album()->associate($album)->save();

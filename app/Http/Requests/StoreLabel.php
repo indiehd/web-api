@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use App\Contracts\LabelRepositoryInterface;
+
 class StoreLabel extends FormRequest
 {
     /**
@@ -13,7 +15,13 @@ class StoreLabel extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        if (is_null($this->user())) {
+            return false;
+        }
+
+        $labelRepository = resolve(LabelRepositoryInterface::class);
+
+        return $this->user()->can('create', $labelRepository->class());
     }
 
     /**
