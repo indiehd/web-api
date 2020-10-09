@@ -1,5 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Country;
+
 class CountriesSeeder extends BaseSeeder
 {
     /**
@@ -10,7 +14,7 @@ class CountriesSeeder extends BaseSeeder
     public function run()
     {
         foreach ($this->countries() as $code => $country) {
-            App\Country::create([
+            Country::create([
                 'code' => $code,
                 'name' => $country
             ]);

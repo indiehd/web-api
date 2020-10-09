@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class FeaturedSeeder extends Seeder
+class AlbumsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +13,6 @@ class FeaturedSeeder extends Seeder
      */
     public function run()
     {
-        Artisan::call('feature:process');
+        factory(App\Album::class, 50)->create();
     }
 }

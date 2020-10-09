@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use IndieHD\Velkart\Models\Eloquent\Cart;
 use IndieHD\Velkart\Models\Eloquent\Product;
 
