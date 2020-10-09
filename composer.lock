@@ -843,12 +843,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/indiehd/velkart.git",
-                "reference": "163a09e670607253ba23e6d89743a26328b1ac91"
+                "reference": "baa84a6b98d3f9d15bd09dde69500ef07c6a4e51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/indiehd/velkart/zipball/163a09e670607253ba23e6d89743a26328b1ac91",
-                "reference": "163a09e670607253ba23e6d89743a26328b1ac91",
+                "url": "https://api.github.com/repos/indiehd/velkart/zipball/baa84a6b98d3f9d15bd09dde69500ef07c6a4e51",
+                "reference": "baa84a6b98d3f9d15bd09dde69500ef07c6a4e51",
                 "shasum": ""
             },
             "require": {
@@ -891,7 +891,7 @@
                 }
             ],
             "description": "An extensible shopping cart built upon clean-coding principles and designed for Laravel.",
-            "time": "2020-07-10T00:18:28+00:00"
+            "time": "2020-07-21T18:25:39+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7399,5 +7399,6 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
