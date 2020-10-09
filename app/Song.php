@@ -24,11 +24,6 @@ class Song extends Model
         return $this->belongsTo(Album::class);
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
     public function flacFile()
     {
         return $this->belongsTo(FlacFile::class);
