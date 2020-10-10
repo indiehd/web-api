@@ -21,16 +21,6 @@ class ApiRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
      * Map all API Routes here.
      *
      */
@@ -46,11 +36,15 @@ class ApiRouteServiceProvider extends ServiceProvider
         $this->apiRoute('featured', 'FeaturedController')
             ->add('artists', 'artists', 'get', 'artists');
 
+        // TODO Commented-out until tests are updated for "new" Order implementation.
+        
+        /*
         $this->apiRoute('orders', 'OrderController')
             ->except(['store', 'update'])
             ->add('/storeOrder', 'storeOrder', 'post')
             ->add('/addItems/{orderId}', 'addItems', 'post')
             ->add('/removeItems/{orderId}', 'removeItems', 'delete');
+        */
     }
 
     protected function apiRoute($prefix, $controller)
