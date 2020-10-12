@@ -37,10 +37,10 @@ class ApiRouteTest extends TestCase
         parent::setUp();
 
         $this->service = new MockApiRouteServiceProvider($this->app);
+        $this->app->register($this->service);
         $this->service->boot();
 
         $this->router = resolve(Router::class);
-
     }
 
     public function test_router_can_be_constructed()

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 class GenresSeeder extends BaseSeeder
 {
     /**

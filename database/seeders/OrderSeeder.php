@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use IndieHD\Velkart\Models\Eloquent\Cart;
 use IndieHD\Velkart\Models\Eloquent\Order;

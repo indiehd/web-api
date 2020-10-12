@@ -1,8 +1,8 @@
 language: php
 
 php:
-  - '7.2'
   - '7.3'
+  - '7.4'
 
 addons:
   mariadb: '10.3'
@@ -10,20 +10,20 @@ addons:
 sudo: false
 
 before_script:
-- wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
-- chmod +x send.sh
-- cp .env.testing .env
-- composer install --prefer-source --no-interaction
-- php artisan key:generate
+  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - cp .env.testing .env
+  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
+  - php artisan key:generate
 
 before_install:
-- mysql -e 'CREATE DATABASE indiehd_test;'
-- mysql -e "CREATE USER 'homestead'@'%' IDENTIFIED BY 'secret';"
-- mysql --user=root -e "GRANT ALL PRIVILEGES ON indiehd_test.* TO 'homestead'@'%' WITH GRANT OPTION;"
-- mysql --user=root -e 'FLUSH PRIVILEGES;'
+  - mysql -e 'CREATE DATABASE indiehd_test;'
+  - mysql -e "CREATE USER 'homestead'@'%' IDENTIFIED BY 'secret';"
+  - mysql --user=root -e "GRANT ALL PRIVILEGES ON indiehd_test.* TO 'homestead'@'%' WITH GRANT OPTION;"
+  - mysql --user=root -e 'FLUSH PRIVILEGES;'
 
 services:
-- mysql
+  - mysql
 
 script:
   - mkdir -p build/logs

@@ -7,11 +7,6 @@ use App\Services\ApiRoute;
 
 class MockApiRouteServiceProvider extends RouteServiceProvider
 {
-    public function boot()
-    {
-        parent::boot();
-    }
-
     public function map()
     {
         $this->apiRoute('test', 'TestController')
