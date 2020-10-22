@@ -1,79 +1,90 @@
 <?php
 
-use App\Contracts\AlbumRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\SongRepositoryInterface;
+namespace Database\Factories;
+
+use App\Album;
+use App\Artist;
 use App\DigitalAsset;
 use App\Genre;
-use Faker\Generator as Faker;
+use App\Song;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use IndieHD\Velkart\Models\Eloquent\Product;
 
-$artist = resolve(ArtistRepositoryInterface::class);
-$album = resolve(AlbumRepositoryInterface::class);
-$song = resolve(SongRepositoryInterface::class);
+class AlbumFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Album::class;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+    public function configure()
+    {
+        return $this->afterCreating(function (Album $album) {
 
-$factory->define($album->class(), function (Faker $faker) use ($artist, $song) {
+            // Create and associate some Songs.
 
-    return [
-        'artist_id' => function() use ($artist) {
-            return factory($artist->class())->create()->id;
-        },
-        'title' => $faker->company,
-        'alt_title' => $faker->company,
-        'year' => $faker->year('now'),
-        'description' => $faker->sentence(10),
-        'has_explicit_lyrics' => $faker->boolean(25),
-        'is_active' => $faker->boolean(80),
-    ];
-});
+            $songs = rand(2, 21);
 
-$factory->state($album->class(), 'withSongs', function ($faker) use ($song) {
-    return [
-        'songs' => factory($song->class(), rand(1, 20))->make(['is_active' => 1]),
-    ];
-});
+            for ($i = 1; $i < $songs; $i++) {
+                Song::factory()->create([
+                    'album_id' => $album->id,
+                    'track_number' => $i,
+                    'is_active' => 1,
+                ]);
+            }
 
-$factory->afterCreating($album->class(), function ($album, $faker) use ($song) {
+            // Create and associate a Digital Asset.
 
-    // Create and associate some Songs.
+            $album = $album->fresh(['songs']);
 
-    for ($i = 1; $i < rand(2, 21); $i++) {
-        $s = factory($song->class())->create([
-            'album_id' => $album->id,
-            'track_number' => $i,
-            'is_active' => 1,
-        ]);
+            $album->asset()->save(DigitalAsset::factory()->make([
+                'product_id' => Product::factory()->create([
+                    'name' => $album->title,
+                    'slug' => Str::slug($album->title),
+                    'description' => $album->description,
+                    'price' => $album->full_album_price ?? ($album->songs->count() * 100),
+                ])->id,
+                'asset_id' => $album->id,
+                'asset_type' => App\Album::class,
+            ]));
 
-        $s->album()->associate($album)->save();
+            // Fetch and attach some Genres.
+
+            $genres = Genre::inRandomOrder()->take(rand(1, 10))->get();
+
+            $album->genres()->attach($genres->pluck('id'));
+        });
     }
 
-    // Create and associate a Digital Asset.
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $faker = $this->faker;
 
-    $album->asset()->save(factory(DigitalAsset::class)->make([
-        'product_id' => factory(Product::class)->create([
-            'name' => $album->title,
-            'slug' => Str::slug($album->title),
-            'description' => $album->description,
-            'price' => $album->full_album_price ?? ($album->songs->count() * 100),
-        ])->id,
-        'asset_id' => $album->id,
-        'asset_type' => App\Album::class,
-    ]));
+        return [
+            'artist_id' => Artist::factory(),
+            'title' => $faker->company,
+            'alt_title' => $faker->company,
+            'year' => $faker->year('now'),
+            'description' => $faker->sentence(10),
+            'has_explicit_lyrics' => $faker->boolean(25),
+            'is_active' => $faker->boolean(80),
+        ];
+    }
 
-    // Fetch and attach some Genres.
-
-    $genres = Genre::inRandomOrder()->take(rand(1, 10))->get();
-
-    $album->genres()->attach($genres->pluck('id'));
-});
+    public function withSongs()
+    {
+        return $this->state(function () {
+            return [
+                'songs' => Song::factory()->count(rand(1, 20))->make(['is_active' => 1]),
+            ];
+        });
+    }
+}

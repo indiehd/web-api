@@ -1,9 +1,28 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(App\Label::class, function (Faker $faker) {
-    return [
+use App\Label;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-    ];
-});
+class LabelFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Label::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            //
+        ];
+    }
+}
