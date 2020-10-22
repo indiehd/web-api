@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87b388084532d1db881a567fab655a8c",
+    "content-hash": "86d518e74befde0786853006e9bb08be",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -348,20 +348,6 @@
                 "uppercase",
                 "words"
             ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Finflector",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-05-29T15:13:26+00:00"
         },
         {
@@ -423,20 +409,6 @@
                 "lexer",
                 "parser",
                 "php"
-            ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Flexer",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-05-25T17:44:05+00:00"
         },
@@ -5321,20 +5293,6 @@
                 "constructor",
                 "instantiate"
             ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Finstantiator",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-05-29T17:27:14+00:00"
         },
         {
@@ -5839,58 +5797,6 @@
                 "test"
             ],
             "time": "2020-07-09T08:09:16+00:00"
-        },
-        {
-            "name": "laravel/legacy-factories",
-            "version": "v1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/legacy-factories.git",
-                "reference": "57117fdf788520a04c99f86205155f2799271af9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/legacy-factories/zipball/57117fdf788520a04c99f86205155f2799271af9",
-                "reference": "57117fdf788520a04c99f86205155f2799271af9",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/macroable": "^8.0",
-                "php": "^7.3",
-                "symfony/finder": "^3.4|^4.0|^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Illuminate\\Database\\Eloquent\\LegacyFactoryServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "files": [
-                    "helpers.php"
-                ],
-                "psr-4": {
-                    "Illuminate\\Database\\Eloquent\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The legacy version of the Laravel Eloquent factories.",
-            "homepage": "http://laravel.com",
-            "time": "2020-06-09T15:09:18+00:00"
         },
         {
             "name": "mockery/mockery",
