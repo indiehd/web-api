@@ -89,7 +89,7 @@ class IndexRouteTest extends ControllerTestCase
 
     protected function createAlbums(int $num)
     {
-        return factory($this->album->class())->times($num)->create([
+        return $this->factory($this->album)->times($num)->create([
             'is_active' => true,
             'has_explicit_lyrics' => false,
         ]);

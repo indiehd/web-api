@@ -9,11 +9,16 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 
 class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
 {
+    use WithFaker;
+
     /**
      * @var ProfileRepositoryInterface $profile
      */
@@ -94,7 +99,7 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
     {
         $item = $this->repo->create($this->makeDigitalAsset()->toArray());
 
-        $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
+        $album = $this->factory($this->album)->create($this->makeAlbum()->toArray());
 
         $newValue = $album->id;
 
@@ -175,8 +180,8 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
     protected function createAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->raw(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->raw(
+                $this->factory($this->profile)->raw()
             )
         );
 
@@ -184,7 +189,7 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->album->class())->create($properties);
+        return $this->factory($this->album)->create($properties);
     }
 
     /**
@@ -196,8 +201,8 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
     protected function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->raw(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->raw(
+                $this->factory($this->profile)->raw()
             )
         );
 
@@ -205,7 +210,7 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->album->class())->make($properties);
+        return $this->factory($this->album)->make($properties);
     }
 
     /**
@@ -215,7 +220,7 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createSong()
     {
-        $album = factory($this->album->class())->create();
+        $album = $this->factory($this->album)->create();
 
         return $album->songs()->first();
     }
@@ -228,9 +233,24 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeDigitalAsset($properties = [])
     {
-        return factory($this->repo->class())->make([
-            'product_id' => $properties['product_id'] ?? factory($this->product->modelClass())->create()->id,
-            'asset_id' => $properties['asset_id'] ?? factory($this->album->class())->create(
+        $this->setUpFaker();
+
+        $title = $this->faker->title;
+
+        $product = resolve(ProductRepositoryContract::class)->create([
+            'name' => $title,
+            'slug' => Str::slug($title),
+            'description' => $this->faker->words(5, true),
+            'price' => $this->faker->numberBetween(10, 20),
+            'sku' => $this->faker->unique()->numberBetween(1111111, 999999),
+            'cover' => UploadedFile::fake()->image('product.png', 600, 600),
+            'quantity' => 10,
+            'status' => 1,
+        ]);
+
+        return $this->factory()->make([
+            'product_id' => $properties['product_id'] ?? $product->id,
+            'asset_id' => $properties['asset_id'] ?? $this->factory($this->album)->create(
                 $this->makeAlbum()->toArray()
             )->id,
             'asset_type' => $properties['asset_type'] ?? $this->album->class(),

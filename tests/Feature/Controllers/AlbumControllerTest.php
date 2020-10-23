@@ -50,9 +50,9 @@ class AlbumControllerTest extends ControllerTestCase
 
     protected function createArtist()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
-        factory($this->profile->class())->create(
+        $this->factory($this->profile)->create(
             [
                 'profilable_id' => $artist->id,
                 'profilable_type' => $this->artist->class()
@@ -64,7 +64,7 @@ class AlbumControllerTest extends ControllerTestCase
 
     protected function createAlbum()
     {
-        return factory($this->album->class())->create([
+        return $this->factory($this->album)->create([
             'is_active' => true,
             'has_explicit_lyrics' => false,
         ]);
@@ -120,9 +120,9 @@ class AlbumControllerTest extends ControllerTestCase
 
     public function testStoreWithValidInputReturnsOkStatusAndExpectedJsonStructure()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
-        $album = factory($this->album->class())->state('withSongs')->make();
+        $album = $this->factory($this->album)->withSongs()->make();
 
         $album->full_album_price = 999;
 
@@ -142,7 +142,7 @@ class AlbumControllerTest extends ControllerTestCase
 
     public function testStoreWithInvalidInputReturnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
         $this->actingAs($artist->user)
             ->json('POST', route('albums.store'), [])
@@ -158,7 +158,8 @@ class AlbumControllerTest extends ControllerTestCase
         $album = $this->createAlbum();
 
         $this->json(
-            'PUT', route('albums.update', ['id' => $album->id]),
+            'PUT',
+            route('albums.update', ['id' => $album->id]),
             $this->getAllInputsInValidState()
         )
             ->assertStatus(403);

@@ -144,16 +144,16 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = $this->createUser();
 
         $artist = $this->artist->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
-        factory($this->catalogEntity->class())->create([
+        $this->factory($this->catalogEntity)->create([
             'user_id' => $user->id,
             'catalogable_id' => $artist->id,
             'catalogable_type' => $this->artist->class()
         ]);
 
-        factory($this->profile->class())->create([
+        $this->factory($this->profile)->create([
             'profilable_id' => $artist->id,
             'profilable_type' => $this->artist->class()
         ]);
@@ -163,16 +163,16 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $user = $this->createUser();
 
         $label = $this->label->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
-        factory($this->catalogEntity->class())->create([
+        $this->factory($this->catalogEntity)->create([
             'user_id' => $user->id,
             'catalogable_id' => $label->id,
             'catalogable_type' => $this->label->class()
         ]);
 
-        factory($this->profile->class())->create([
+        $this->factory($this->profile)->create([
             'profilable_id' => $label->id,
             'profilable_type' => $this->label->class()
         ]);
@@ -187,13 +187,13 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createUser()
     {
-        $user = factory($this->user->class())->make();
+        $user = $this->factory($this->user)->make();
 
         $user = $this->user->create([
             'email' => $user->email,
             'name' => $user->name,
             'password' => $user->password,
-            'account' => factory($this->account->class())->raw()
+            'account' => $this->factory($this->account)->raw()
         ]);
 
         return $user;
@@ -207,10 +207,10 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
     protected function makeProfile()
     {
         $artist = $this->artist->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
-        $profile = factory($this->repo->class())->make([
+        $profile = $this->factory()->make([
             'profilable_id' => $artist->id,
             'profilable_type' => $this->repo->class(),
         ]);

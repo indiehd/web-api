@@ -53,7 +53,7 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
         // the Account. So, to test this repository independently, we'll simply
         // delete the previously-associated account and store a new one.
 
-        $account = factory($this->repo->class())->make(['user_id' => $user->id]);
+        $account = $this->factory()->make(['user_id' => $user->id]);
 
         $user->account->delete();
 
@@ -143,9 +143,9 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeUser(array $userProperties = [], array $accountProperties = [])
     {
-        $user = factory($this->user->class())->make($userProperties);
+        $user = $this->factory($this->user)->make($userProperties);
 
-        $account = factory($this->repo->class())->make($accountProperties);
+        $account = $this->factory()->make($accountProperties);
 
         $user = $this->user->create([
             'email' => $user->email,

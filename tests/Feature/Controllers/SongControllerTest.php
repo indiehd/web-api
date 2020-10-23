@@ -84,7 +84,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.index'))
             ->assertStatus(200)
@@ -99,7 +99,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testAllExcludesSongsOnInactiveAlbums()
     {
-        factory($this->album->class())->create(['is_active' => 0]);
+        $this->factory($this->album)->create(['is_active' => 0]);
 
         $this->json('GET', route('songs.index'))
             ->assertStatus(200)
@@ -111,7 +111,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testAllExcludesInactiveSongs()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $song = $album->songs->first();
 
@@ -132,13 +132,12 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
             ->assertJson(['data' =>
-                $this->getExactJson($album->songs->first())
-            ]);
+            $this->getExactJson($album->songs->first())]);
     }
 
     /**
@@ -147,15 +146,15 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongBelongsToFlacFileReturnsOkStatusAndExpectedJsonStructure()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
             ->assertJson([
                 'data' => ['flac_file' => $this->getExactJsonWithFlacFile(
                     $album->songs->first()->flacFile
-                )
-            ]]);
+                )]
+            ]);
     }
 
     /**
@@ -164,7 +163,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongIsInactiveAndNoUserReturnsAccessDenied()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $song = $album->songs->first();
 
@@ -182,7 +181,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongIsInactiveAndUserNotOwnerReturnsAccessDenied()
     {
-        $album = factory($this->album->class())->create(['is_active' => 1]);
+        $album = $this->factory($this->album)->create(['is_active' => 1]);
 
         $song = $album->songs->first();
 
@@ -190,7 +189,7 @@ class SongControllerTest extends ControllerTestCase
 
         $song->save();
 
-        $this->actingAs(factory($this->user->class())->create())
+        $this->actingAs($this->factory($this->user)->create())
             ->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(403);
     }
@@ -201,7 +200,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongIsInactiveOwnerCanStillView()
     {
-        $album = factory($this->album->class())->create();
+        $album = $this->factory($this->album)->create();
 
         $song = $album->songs->first();
 
@@ -223,7 +222,7 @@ class SongControllerTest extends ControllerTestCase
      */
     public function testShowWhenSongIsActiveButAlbumIsInactiveAndNoUserReturnsAccessDenied()
     {
-        $album = factory($this->album->class())->create(['is_active' => 0]);
+        $album = $this->factory($this->album)->create(['is_active' => 0]);
 
         $song = $album->songs->first();
 

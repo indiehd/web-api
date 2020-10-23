@@ -35,7 +35,7 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
      */
     public function testCreateStoresNewResource()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
         $featured = $this->repo->create([
             'featurable_id' => $artist->id,
@@ -50,7 +50,7 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
      */
     public function testUpdateUpdatesResource()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
         $featured = $this->repo->create([
             'featurable_id' => $artist->id,
@@ -71,7 +71,7 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
      */
     public function testUpdateReturnsModelInstance()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
         $featured = $this->repo->create([
             'featurable_id' => $artist->id,
@@ -88,7 +88,7 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
      */
     public function testDeleteDeletesResource()
     {
-        $artist = factory($this->artist->class())->create();
+        $artist = $this->factory($this->artist)->create();
 
         $featured = $this->repo->create([
             'featurable_id' => $artist->id,
