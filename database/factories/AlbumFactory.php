@@ -3,13 +3,15 @@
 namespace Database\Factories;
 
 use App\Album;
-use App\Artist;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\DigitalAssetRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
 use App\DigitalAsset;
 use App\Genre;
-use App\Song;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use IndieHD\Velkart\Models\Eloquent\Product;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 
 class AlbumFactory extends Factory
 {
@@ -29,7 +31,7 @@ class AlbumFactory extends Factory
             $songs = rand(2, 21);
 
             for ($i = 1; $i < $songs; $i++) {
-                Song::factory()->create([
+                static::factoryForModel(resolve(SongRepositoryInterface::class)->class())->create([
                     'album_id' => $album->id,
                     'track_number' => $i,
                     'is_active' => 1,
@@ -40,12 +42,16 @@ class AlbumFactory extends Factory
 
             $album = $album->fresh(['songs']);
 
-            $album->asset()->save(DigitalAsset::factory()->make([
-                'product_id' => Product::factory()->create([
+            $album->asset()->save(static::factoryForModel(resolve(DigitalAssetRepositoryInterface::class)->class())->make([
+                'product_id' => resolve(ProductRepositoryContract::class)->create([
                     'name' => $album->title,
                     'slug' => Str::slug($album->title),
                     'description' => $album->description,
                     'price' => $album->full_album_price ?? ($album->songs->count() * 100),
+                    'sku' => $this->faker->unique()->numberBetween(1111111, 999999),
+                    'cover' => UploadedFile::fake()->image('product.png', 600, 600),
+                    'quantity' => 10,
+                    'status' => 1,
                 ])->id,
                 'asset_id' => $album->id,
                 'asset_type' => App\Album::class,
@@ -69,7 +75,7 @@ class AlbumFactory extends Factory
         $faker = $this->faker;
 
         return [
-            'artist_id' => Artist::factory(),
+            'artist_id' => static::factoryForModel(resolve(ArtistRepositoryInterface::class)->class()),
             'title' => $faker->company,
             'alt_title' => $faker->company,
             'year' => $faker->year('now'),
@@ -83,7 +89,7 @@ class AlbumFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'songs' => Song::factory()->count(rand(1, 20))->make(['is_active' => 1]),
+                'songs' => static::factoryForModel(resolve(SongRepositoryInterface::class)->class())->count(rand(1, 20))->make(['is_active' => 1]),
             ];
         });
     }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\CatalogEntity;
-use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use Faker\Provider\en_US\Address;
 use Faker\Provider\en_US\Company;

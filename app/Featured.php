@@ -7,12 +7,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Contracts\ArtistRepositoryInterface;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Featured extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'featurable_id',
         'featurable_type',

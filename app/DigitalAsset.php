@@ -2,14 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use IndieHD\Velkart\Models\Eloquent\Product;
 
 class DigitalAsset extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'product_id',
         'asset_id',

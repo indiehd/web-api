@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Artist;
-use App\CatalogEntity;
-use App\Label;
-use App\Profile;
-use App\User;
+use App\Contracts\CatalogEntityRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ArtistFactory extends Factory
@@ -21,14 +21,13 @@ class ArtistFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Artist $artist) {
-
-            CatalogEntity::factory()->creatte([
-                'user_id' => User::factory()->create()->id,
+            static::factoryForModel(resolve(CatalogEntityRepositoryInterface::class)->class())->create([
+                'user_id' => static::factoryForModel(resolve(UserRepositoryInterface::class)->class())->create()->id,
                 'catalogable_id' => $artist->id,
                 'catalogable_type' => Artist::class
             ]);
 
-            Profile::factory()->create([
+            static::factoryForModel(resolve(ProfileRepositoryInterface::class)->class())->create([
                 'profilable_id' => $artist->id,
                 'profilable_type' => Artist::class
             ]);
@@ -51,7 +50,7 @@ class ArtistFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'label_id' => Label::factory()->create()->id
+                'label_id' => static::factoryForModel(resolve(LabelRepositoryInterface::class)->class())->create()->id
             ];
         });
     }

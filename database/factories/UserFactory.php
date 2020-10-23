@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Account;
+use App\Contracts\AccountRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -19,7 +19,7 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-            $user->account()->save(Account::factory()->make());
+            $user->account()->save(static::factoryForModel(resolve(AccountRepositoryInterface::class)->class())->make());
         });
     }
 
