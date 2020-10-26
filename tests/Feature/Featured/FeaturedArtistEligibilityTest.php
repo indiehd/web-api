@@ -8,6 +8,7 @@ use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -94,13 +95,13 @@ class FeaturedArtistEligibilityTest extends TestCase
             $song->delete();
         });
 
-        $song = factory($this->song->class())->make([
+        $song = Factory::factoryForModel($this->song->class())->make([
             'track_number' => 1,
             'is_active' => false,
             'album_id' => $album->id
         ]);
 
-        factory($this->song->class())->create($song->toArray());
+        Factory::factoryForModel($this->song->class())->create($song->toArray());
 
         // One Artist that DOES meet every condition.
 
@@ -179,7 +180,7 @@ class FeaturedArtistEligibilityTest extends TestCase
      */
     protected function createArtist(array $properties = [])
     {
-        return factory($this->artist->class())->create($properties);
+        return Factory::factoryForModel($this->artist->class())->create($properties);
     }
 
     /**
@@ -194,7 +195,7 @@ class FeaturedArtistEligibilityTest extends TestCase
 
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
-        return factory($this->album->class())->create($properties);
+        return Factory::factoryForModel($this->album->class())->create($properties);
     }
 
     /**
@@ -209,7 +210,7 @@ class FeaturedArtistEligibilityTest extends TestCase
 
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
-        return factory($this->album->class())->make($properties);
+        return Factory::factoryForModel($this->album->class())->make($properties);
     }
 
     /**
@@ -220,10 +221,10 @@ class FeaturedArtistEligibilityTest extends TestCase
      */
     protected function makeDigitalAsset($properties = [])
     {
-        return factory($this->digitalAsset->class())->make([
+        return Factory::factoryForModel($this->digitalAsset->class())->make([
             'asset_id' => $properties['asset_id'] ?? $this->repo->create(
-                    $this->makeAlbum()->toArray()
-                )->id,
+                $this->makeAlbum()->toArray()
+            )->id,
             'asset_type' => $properties['aaset_type'] ?? $this->repo->class(),
         ]);
     }

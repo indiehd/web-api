@@ -12,6 +12,7 @@ use Artisan;
 use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FeaturedArtisanCommandTest extends TestCase
 {
@@ -113,7 +114,7 @@ class FeaturedArtisanCommandTest extends TestCase
      */
     protected function createArtist(array $properties = [])
     {
-        return factory($this->artist->class())->create($properties);
+        return Factory::factoryForModel($this->artist->class())->create($properties);
     }
 
     /**
@@ -128,7 +129,7 @@ class FeaturedArtisanCommandTest extends TestCase
 
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
-        return factory($this->album->class())->create($properties);
+        return Factory::factoryForModel($this->album->class())->create($properties);
     }
 
     /**
@@ -143,7 +144,7 @@ class FeaturedArtisanCommandTest extends TestCase
 
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
-        return factory($this->album->class())->make($properties);
+        return Factory::factoryForModel($this->album->class())->make($properties);
     }
 
     /**
@@ -160,7 +161,7 @@ class FeaturedArtisanCommandTest extends TestCase
 
         // Use the withSongs factory state.
 
-        $album = factory($this->album->class())
+        $album = Factory::factoryForModel($this->album->class())
             ->state('withSongs')
             ->make($properties);
 
