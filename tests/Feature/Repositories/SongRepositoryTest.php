@@ -6,9 +6,9 @@ use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContract;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
 {
@@ -21,6 +21,11 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      * @var FlacFileRepositoryInterface $flacFile
      */
     protected $flacFile;
+
+    /**
+     * @var OrderStatusRepositoryContract $orderStatus
+     */
+    protected $orderStatus;
 
     /**
      * @var OrderRepositoryContract $order
@@ -44,6 +49,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->flacFile = resolve(FlacFileRepositoryInterface::class);
+
+        $this->orderStatus = resolve(OrderStatusRepositoryContract::class);
 
         $this->order = resolve(OrderRepositoryContract::class);
 
@@ -153,12 +160,13 @@ class SongRepositoryTest extends RepositoryCrudTestCase
             'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        // TODO create real order
-        // $order = factoryForModel($this->order->modelClass())->create();
-        //
-        // $order->products()->save($song->asset->product);
-        //
-        // $this->assertInstanceOf($this->digitalAsset->class(), $song->copiesSold->first());
+        $status = $this->orderStatus->create(['name' => 'Completed']);
+
+        $order = $this->order->create(['order_status_id' => $status->id]);
+
+        $order->products()->attach($song->asset->product, ['price' => $song->asset->product->price]);
+
+        $this->assertInstanceOf($this->digitalAsset->class(), $song->copiesSold->first());
     }
 
     /**

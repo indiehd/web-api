@@ -9,8 +9,9 @@ use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use IndieHD\Velkart\Contracts\Repositories\Eloquent\CartRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
@@ -35,9 +36,14 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected $genre;
 
     /**
-     * @var CartRepositoryContract $cart
+     * @var ProductRepositoryContract $product
      */
-    protected $cart;
+    protected $product;
+
+    /**
+     * @var OrderStatusRepositoryContract $orderStatus
+     */
+    protected $orderStatus;
 
     /**
      * @var OrderRepositoryContract $order
@@ -66,7 +72,9 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $this->genre = resolve(GenreRepositoryInterface::class);
 
-        $this->cart = resolve(CartRepositoryContract::class);
+        $this->product = resolve(ProductRepositoryContract::class);
+
+        $this->orderStatus = resolve(OrderStatusRepositoryContract::class);
 
         $this->order = resolve(OrderRepositoryContract::class);
 
@@ -191,12 +199,13 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
             'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        // TODO make real order
-        // $order = $this->factory($this->order->modelClass())->create();
-        //
-        // $order->products()->save($album->asset->product);
-        //
-        // $this->assertInstanceOf($this->digitalAsset->class(), $album->copiesSold->first());
+        $status = $this->orderStatus->create(['name' => 'Completed']);
+
+        $order = $this->order->create(['order_status_id' => $status->id]);
+
+        $order->products()->attach($album->asset->product, ['price' => $album->asset->product->price]);
+
+        $this->assertInstanceOf($this->digitalAsset->class(), $album->copiesSold->first());
     }
 
     /**
