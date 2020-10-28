@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tests\TestCase;
 
@@ -12,7 +13,7 @@ abstract class ControllerTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    public function factory($repo = null): Factory
+    public function factory(BaseRepository $repo = null): Factory
     {
         $modelName = $repo ? $repo->class() : $this->guessModel();
 
