@@ -143,6 +143,18 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
     }
 
     /**
+     * Ensure that an Album (Digital Asset) belongs to a Product.
+     *
+     * @return void
+     */
+    public function testAlbumBelongsToProduct()
+    {
+        $album = $this->repo->create($this->makeDigitalAsset()->toArray());
+
+        $this->assertInstanceOf($this->product->modelClass(), $album->product);
+    }
+
+    /**
      * Ensure that a sold Album morphs to Asset.
      *
      * @return void
@@ -152,6 +164,23 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
         $soldAlbum = $this->repo->create($this->makeDigitalAsset()->toArray());
 
         $this->assertInstanceOf($this->album->class(), $soldAlbum->asset);
+    }
+
+    /**
+     * Ensure that a Song (Digital Asset) belongs to a Product.
+     *
+     * @return void
+     */
+    public function testSongBelongsToProduct()
+    {
+        $properties = [
+            'asset_id' => $this->factory($this->album)->create()->songs->first()->id,
+            'asset_type' => $this->song->class(),
+        ];
+
+        $song = $this->repo->create($this->makeDigitalAsset($properties)->toArray());
+
+        $this->assertInstanceOf($this->product->modelClass(), $song->product);
     }
 
     /**
