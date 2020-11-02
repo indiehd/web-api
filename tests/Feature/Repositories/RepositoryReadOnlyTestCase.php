@@ -2,17 +2,18 @@
 
 namespace Tests\Feature\Repositories;
 
-use Tests\TestCase;
-
+use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 abstract class RepositoryReadOnlyTestCase extends TestCase
 {
     use RefreshDatabase;
 
     /**
-     * @var $repo
+     * @var BaseRepository
      */
     protected $repo;
 
@@ -29,6 +30,13 @@ abstract class RepositoryReadOnlyTestCase extends TestCase
      * @return void
      */
     abstract public function setRepository();
+
+    public function factory($repo = null): Factory
+    {
+        $repo = $repo ?: $this->repo;
+
+        return Factory::factoryForModel($repo->class());
+    }
 
     /**
      * Ensure that the $repo property is instantiable.

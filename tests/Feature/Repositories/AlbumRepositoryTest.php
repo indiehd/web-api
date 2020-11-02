@@ -9,8 +9,9 @@ use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use IndieHD\Velkart\Contracts\Repositories\Eloquent\CartRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
@@ -35,9 +36,14 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected $genre;
 
     /**
-     * @var CartRepositoryContract $cart
+     * @var ProductRepositoryContract $product
      */
-    protected $cart;
+    protected $product;
+
+    /**
+     * @var OrderStatusRepositoryContract $orderStatus
+     */
+    protected $orderStatus;
 
     /**
      * @var OrderRepositoryContract $order
@@ -66,7 +72,9 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         $this->genre = resolve(GenreRepositoryInterface::class);
 
-        $this->cart = resolve(CartRepositoryContract::class);
+        $this->product = resolve(ProductRepositoryContract::class);
+
+        $this->orderStatus = resolve(OrderStatusRepositoryContract::class);
 
         $this->order = resolve(OrderRepositoryContract::class);
 
@@ -169,7 +177,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         $album = $this->repo->create($this->makeAlbum()->toArray());
 
-        $genre = $this->genre->create(factory($this->genre->class())->raw());
+        $genre = $this->genre->create($this->factory($this->genre)->raw());
 
         $album->genres()->attach($genre->id);
 
@@ -191,9 +199,11 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
             'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        $order = factory($this->order->modelClass())->create();
+        $status = $this->orderStatus->create(['name' => 'Completed']);
 
-        $order->products()->save($album->asset->product);
+        $order = $this->order->create(['order_status_id' => $status->id]);
+
+        $order->products()->attach($album->asset->product, ['price' => $album->asset->product->price]);
 
         $this->assertInstanceOf($this->digitalAsset->class(), $album->copiesSold->first());
     }
@@ -207,8 +217,8 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     protected function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->make(
+                $this->factory($this->profile)->raw()
             )->toArray()
         );
 
@@ -218,8 +228,8 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
 
         // Use the withSongs factory state.
 
-        $album = factory($this->repo->class())
-            ->state('withSongs')
+        $album = $this->factory()
+            ->withSongs()
             ->make($properties);
 
         // Cast the songs to an array, too.
@@ -237,7 +247,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeDigitalAsset(array $properties = [])
     {
-        return factory($this->digitalAsset->class())->make([
+        return $this->factory($this->digitalAsset)->make([
             'asset_id' => $properties['asset_id'] ?? $this->repo->create(
                 $this->makeAlbum()->toArray()
             )->id,

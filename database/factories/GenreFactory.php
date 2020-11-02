@@ -1,22 +1,28 @@
 <?php
 
+namespace Database\Factories;
+
 use App\Genre;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class GenreFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Genre::class;
 
-$factory->define(Genre::class, function (Faker $faker) {
-
-    return [
-        'name' => $faker->words(rand(1, 3), true)
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->words(rand(1, 3), true)
+        ];
+    }
+}

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Casts;
 
 use App\Album;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Money\Money;
 use Tests\TestCase;
@@ -55,7 +56,7 @@ class MoneyTest extends TestCase
     /** @test */
     public function testCanStore()
     {
-        $album = factory(Album::class)->make(['full_album_price' => 999]);
+        $album = Factory::factoryForModel(Album::class)->make(['full_album_price' => 999]);
 
         $price = $album->full_album_price;
 

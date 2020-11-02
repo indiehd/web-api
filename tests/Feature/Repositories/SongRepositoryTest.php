@@ -8,6 +8,7 @@ use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
+use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContract;
 
 class SongRepositoryTest extends RepositoryCrudTestCase
 {
@@ -20,6 +21,11 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      * @var FlacFileRepositoryInterface $flacFile
      */
     protected $flacFile;
+
+    /**
+     * @var OrderStatusRepositoryContract $orderStatus
+     */
+    protected $orderStatus;
 
     /**
      * @var OrderRepositoryContract $order
@@ -43,6 +49,8 @@ class SongRepositoryTest extends RepositoryCrudTestCase
         $this->album = resolve(AlbumRepositoryInterface::class);
 
         $this->flacFile = resolve(FlacFileRepositoryInterface::class);
+
+        $this->orderStatus = resolve(OrderStatusRepositoryContract::class);
 
         $this->order = resolve(OrderRepositoryContract::class);
 
@@ -152,9 +160,11 @@ class SongRepositoryTest extends RepositoryCrudTestCase
             'asset_type' => $this->repo->class(),
         ])->toArray());
 
-        $order = factory($this->order->modelClass())->create();
+        $status = $this->orderStatus->create(['name' => 'Completed']);
 
-        $order->products()->save($song->asset->product);
+        $order = $this->order->create(['order_status_id' => $status->id]);
+
+        $order->products()->attach($song->asset->product, ['price' => $song->asset->product->price]);
 
         $this->assertInstanceOf($this->digitalAsset->class(), $song->copiesSold->first());
     }
@@ -166,7 +176,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createSong()
     {
-        $album = factory($this->album->class())->create();
+        $album = $this->factory($this->album)->create();
 
         return $album->songs()->first();
     }
@@ -179,7 +189,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
      */
     protected function makeDigitalAsset($properties = [])
     {
-        return factory($this->digitalAsset->class())->make([
+        return $this->factory($this->digitalAsset)->make([
             'asset_id' => $properties['asset_id'] ?? $this->album->create(
                 // TODO This method doesn't exist here; add it.
                 $this->makeAlbum()->toArray()

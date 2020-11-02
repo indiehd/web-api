@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Contracts\RepositoryShouldRead;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-abstract class BaseRepository
+abstract class BaseRepository implements RepositoryShouldRead
 {
-    abstract public function model();
-
     /**
      * @return mixed
      */

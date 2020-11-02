@@ -46,7 +46,7 @@ class FeaturedControllerTest extends ControllerTestCase
             'is_active' => true,
         ])->save();
 
-        factory($this->featured->class())->create([
+        $this->factory($this->featured)->create([
             'featurable_id' => $artist->id,
             'featurable_type' => $this->artist->class(),
         ]);
@@ -75,7 +75,7 @@ class FeaturedControllerTest extends ControllerTestCase
      */
     protected function createArtist(array $properties = [])
     {
-        return factory($this->artist->class())->create($properties);
+        return $this->factory($this->artist)->create($properties);
     }
 
     /**
@@ -90,6 +90,6 @@ class FeaturedControllerTest extends ControllerTestCase
 
         $properties['artist_id'] = $properties['artist_id'] ?? $this->createArtist()->id;
 
-        return factory($this->album->class())->make($properties);
+        return $this->factory($this->album)->make($properties);
     }
 }

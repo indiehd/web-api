@@ -56,7 +56,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function testCreateStoresNewResource()
     {
-        $genre = factory($this->repo->class())->make();
+        $genre = $this->factory()->make();
 
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -70,7 +70,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateUpdatesResource()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $newValue = 'Some New Genre';
@@ -92,7 +92,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateReturnsModelInstance()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $updated = $this->repo->update($genre->id, []);
@@ -106,7 +106,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function testDeleteDeletesResource()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $genre->delete();
@@ -126,10 +126,10 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
      */
     public function testWhenGenreAssociatedWithAlbumItHasManyAlbums()
     {
-        $album = factory($this->album->class())->create($this->makeAlbum()->toArray());
+        $album = $this->factory($this->album)->create($this->makeAlbum()->toArray());
 
         $genre = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $album->genres()->attach($genre->id);
@@ -146,12 +146,12 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function testWhenGenreNameAlreadyExistsExceptionIsThrown()
     {
         $this->repo->create(
-            factory($this->repo->class())->raw(['name' => 'Foo'])
+            $this->factory()->raw(['name' => 'Foo'])
         );
 
         try {
             $this->repo->create(
-                factory($this->repo->class())->raw(['name' => 'Foo'])
+                $this->factory()->raw(['name' => 'Foo'])
             );
         } catch (QueryException $e) {
             $this->assertEquals($e->getCode(), '23000');
@@ -167,7 +167,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     public function testWhenGenreIsCreatedApprovalFieldsAreNull()
     {
         $genre = $this->repo->create(
-            factory($this->repo->class())->raw(['name' => 'Foo'])
+            $this->factory()->raw(['name' => 'Foo'])
         );
 
         $this->assertNull($genre->approved_at);
@@ -183,8 +183,8 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     protected function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->make(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->make(
+                $this->factory($this->profile)->raw()
             )->toArray()
         );
 
@@ -192,6 +192,6 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        return factory($this->album->class())->make($properties);
+        return $this->factory($this->album)->make($properties);
     }
 }

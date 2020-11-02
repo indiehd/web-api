@@ -64,7 +64,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
      */
     public function testCreateStoresNewResource()
     {
-        $flacFile = factory($this->repo->class())->make();
+        $flacFile = $this->factory()->make();
 
         $this->assertInstanceOf(
             $this->repo->class(),
@@ -78,7 +78,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateUpdatesResource()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $newValue = Str::random(32);
@@ -100,7 +100,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function testUpdateReturnsModelInstance()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $updated = $this->repo->update($flacFile->id, []);
@@ -114,7 +114,7 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
     public function testDeleteDeletesResource()
     {
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory()->raw()
         );
 
         $flacFile->delete();
@@ -138,8 +138,8 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
         // Is there any compelling reason to make this more DRY?
 
         $artist = $this->artist->create(
-            factory($this->artist->class())->raw(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->raw(
+                $this->factory($this->profile)->raw()
             )
         );
 
@@ -147,10 +147,10 @@ class FlacFileRepositoryTest extends RepositoryCrudTestCase
 
         $properties['artist_id'] = $artist->id;
 
-        $album = factory($this->album->class())->create(['artist_id' => $artist->id]);
+        $album = $this->factory($this->album)->create(['artist_id' => $artist->id]);
 
         $flacFile = $this->repo->create(
-            factory($this->repo->class())->raw()
+            $this->factory($this->repo)->raw()
         );
 
         $album->songs()->first()->flacFile()->associate($flacFile)->save();

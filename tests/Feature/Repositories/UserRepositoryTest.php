@@ -157,13 +157,13 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      */
     protected function createUser()
     {
-        $user = factory($this->user->class())->make();
+        $user = $this->factory($this->user)->make();
 
         $user = $this->user->create([
             'email' => $user->email,
             'name' => $user->name,
             'password' => $user->password,
-            'account' => factory($this->account->class())->raw()
+            'account' => $this->factory($this->account)->raw()
         ]);
 
         return $user;
@@ -181,11 +181,11 @@ class UserRepositoryTest extends RepositoryCrudTestCase
     {
         $user = $this->createUser();
 
-        $profile = factory($this->profile->class())->make();
+        $profile = $this->factory($this->profile)->make();
 
         $entity = $type->create(array_merge($profile->toArray(), $entityProperties));
 
-        return factory($this->catalogEntity->class())->make(array_merge([
+        return $this->factory($this->catalogEntity)->make(array_merge([
             'catalogable_id' => $entity->id,
             'catalogable_type' => $type->class(),
             'user_id' => $user->id

@@ -34,7 +34,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     protected function createArtist()
     {
-        return factory($this->artist->class())->create();
+        return $this->factory($this->artist)->create();
     }
 
     protected function getJsonStructure()
@@ -88,7 +88,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withValidInput_returnsOkStatusAndExpectedJsonStructure()
     {
-        $user = factory($this->user->class())->create();
+        $user = $this->factory($this->user)->create();
 
         $this
             ->actingAs($user)
@@ -101,7 +101,7 @@ class ArtistControllerTest extends ControllerTestCase
 
     public function test_store_withInvalidInput_returnsUnprocessableEntityStatusAndExpectedJsonStructure()
     {
-        $user = factory($this->user->class())->create();
+        $user = $this->factory($this->user)->create();
 
         $this
             ->actingAs($user)

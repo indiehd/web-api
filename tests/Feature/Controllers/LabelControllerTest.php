@@ -85,7 +85,7 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $model = factory($this->label->class())->create();
+        $model = $this->factory($this->label)->create();
 
         $this->json('GET', route('labels.index'))
             ->assertStatus(200)
@@ -100,7 +100,7 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $model = factory($this->label->class())->create();
+        $model = $this->factory($this->label)->create();
 
         $this->json('GET', route('labels.show', ['id' => $model->id]))
             ->assertStatus(200)
@@ -115,10 +115,11 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testShowWhenLabelHasArtistsAndAlbumsReturnsOkStatusAndExpectedJsonStructure()
     {
-        $artist = factory($this->artist->class())
-            ->state('onLabel')->create();
+        $artist = $this->factory($this->artist)
+            ->onLabel()
+            ->create();
 
-        factory($this->album->class())->create(
+        $this->factory($this->album)->create(
             ['artist_id' => $artist->id]
         );
 
@@ -144,9 +145,9 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testStoreReturnsOkStatusAndExpectedJsonStructure()
     {
-        $user = factory($this->user->class())->create();
+        $user = $this->factory($this->user)->create();
 
-        $catalogEntity = factory($this->catalogEntity->class())->make([
+        $catalogEntity = $this->factory($this->catalogEntity)->make([
             'email' => 'foo@bar.com',
             'is_active' => false,
             'user_id' => $user->id,
@@ -154,7 +155,7 @@ class LabelControllerTest extends ControllerTestCase
             'deleter_id' => null,
         ]);
 
-        $profile = factory($this->profile->class())->make([
+        $profile = $this->factory($this->profile)->make([
             'official_url' => 'https://foo.com',
         ]);
 
@@ -178,7 +179,7 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testDeleteWhenNotAuthorizedReturnsUnauthorizedStatus()
     {
-        factory($this->label->class())->create();
+        $this->factory($this->label)->create();
 
         $this->json('DELETE', route('labels.destroy', ['id' => 1]))
             ->assertStatus(403);
@@ -189,11 +190,11 @@ class LabelControllerTest extends ControllerTestCase
      */
     public function testDeleteReturnsOkStatus()
     {
-        $user = factory($this->user->class())->create();
+        $user = $this->factory($this->user)->create();
 
-        $label = factory($this->label->class())->create();
+        $label = $this->factory($this->label)->create();
 
-        $catalogEntity = factory($this->catalogEntity->class())->create([
+        $catalogEntity = $this->factory($this->catalogEntity)->create([
             'email' => 'foo@bar.com',
             'is_active' => false,
             'user_id' => $user->id,
@@ -203,7 +204,7 @@ class LabelControllerTest extends ControllerTestCase
             'catalogable_type' => $this->label->class(),
         ]);
 
-        factory($this->profile->class())->create([
+        $this->factory($this->profile)->create([
             'official_url' => 'https://foo.com',
             'profilable_id' => $label->id,
             'profilable_type' => $this->label->class(),

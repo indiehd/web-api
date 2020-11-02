@@ -87,7 +87,8 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = factory($this->order->modelClass())->raw();
+        // TODO don't use factory
+        $order = $this->factory($this->order)->raw();
 
         $this->order->create($order);
 
@@ -106,7 +107,8 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = factory($this->order->modelClass())->raw();
+        // TODO don't use factory
+        $order = $this->factory($this->order)->raw();
 
         $order = $this->order->create($order);
 
@@ -188,9 +190,11 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem2 = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.add_items', ['orderId' => $order->id]),
-                ['items' => [$orderItem1, $orderItem2]]
-            )
+        $this->json(
+            'POST',
+            route('orders.add_items', ['orderId' => $order->id]),
+            ['items' => [$orderItem1, $orderItem2]]
+        )
             ->assertStatus(201)
             ->assertJsonStructure([
                 'data' => $this->getJsonStructure()
@@ -209,7 +213,9 @@ class OrderControllerTest extends ControllerTestCase
 
         $orderItem = $this->makeOrderItem()->toArray();
 
-        $this->json('POST', route('orders.add_items', ['orderId' => $order->id]),
+        $this->json(
+            'POST',
+            route('orders.add_items', ['orderId' => $order->id]),
             ['items' => [$orderItem, $orderItem]]
         )
             ->assertStatus(201)
@@ -224,7 +230,8 @@ class OrderControllerTest extends ControllerTestCase
      */
     public function testDestroyWithValidInputReturnsOkStatusAndExpectedJsonStructure()
     {
-        $order = factory($this->order->class())->create();
+        // TODO don't use factory
+        $order = $this->factory($this->order)->create();
 
         $this->json('DELETE', route('orders.destroy', ['id' => $order->id]))
             ->assertStatus(200)
@@ -296,12 +303,12 @@ class OrderControllerTest extends ControllerTestCase
      */
     protected function createUser()
     {
-        $user = factory($this->user->class())->make();
+        $user = $this->factory($this->user)->make();
 
         $user = $this->user->create([
             'email' => $user->email,
             'password' => $user->password,
-            'account' => factory($this->account->class())->raw()
+            'account' => $this->factory($this->account)->raw()
         ]);
 
         return $user;
@@ -316,8 +323,8 @@ class OrderControllerTest extends ControllerTestCase
     protected function makeAlbum(array $properties = [])
     {
         $artist = $this->artist->create(
-            factory($this->artist->class())->raw(
-                factory($this->profile->class())->raw()
+            $this->factory($this->artist)->raw(
+                $this->factory($this->profile)->raw()
             )
         );
 
@@ -327,8 +334,8 @@ class OrderControllerTest extends ControllerTestCase
 
         // Use the withSongs factory state.
 
-        $album = factory($this->album->class())
-            ->state('withSongs')
+        $album = $this->factory($this->album)
+            ->withSongs()
             ->make($properties);
 
         // Cast the songs to an array, too.
@@ -346,11 +353,11 @@ class OrderControllerTest extends ControllerTestCase
     protected function createSong()
     {
         $album = $this->album->create(
-            factory($this->album->class())->raw()
+            $this->factory($this->album)->raw()
         );
 
         return $this->song->create(
-            factory($this->song->class())->raw([
+            $this->factory($this->song)->raw([
                 'album_id' => $album->id,
                 'track_number' => 1,
             ])
@@ -365,13 +372,14 @@ class OrderControllerTest extends ControllerTestCase
      */
     protected function makeOrderItem($properties = [])
     {
-        $order = factory($this->order->modelClass())->create();
+        // TODO don't use factory
+        $order = $this->factory($this->order)->create();
 
-        return factory($this->orderItem->class())->make([
+        return $this->factory($this->orderItem)->make([
             'order_id' => $properties['order_id'] ?? $order->id,
             'orderable_id' => $properties['orderable_id'] ?? $this->album->create(
-                    $this->makeAlbum()->toArray()
-                )->id,
+                $this->makeAlbum()->toArray()
+            )->id,
             'orderable_type' => $properties['orderable_type'] ?? $this->album->class(),
         ]);
     }

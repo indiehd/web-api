@@ -35,7 +35,7 @@ class GenreControllerTest extends ControllerTestCase
      */
     public function testAllReturnsOkStatusAndExpectedJsonStructure()
     {
-        $genre = factory($this->genre->class())->create();
+        $genre = $this->factory($this->genre)->create();
 
         $this->json('GET', route('genres.index'))
             ->assertStatus(200)
@@ -50,7 +50,7 @@ class GenreControllerTest extends ControllerTestCase
      */
     public function testShowReturnsOkStatusAndExpectedJsonStructure()
     {
-        $genre = factory($this->genre->class())->create();
+        $genre = $this->factory($this->genre)->create();
 
         $this->json('GET', route('genres.show', ['id' => $genre->id]))
             ->assertStatus(200)
@@ -75,7 +75,7 @@ class GenreControllerTest extends ControllerTestCase
      */
     public function testDeleteWhenNotAuthorizedReturnsUnauthorizedStatus()
     {
-        factory($this->genre->class())->create();
+        $this->factory($this->genre)->create();
 
         $this->json('DELETE', route('genres.destroy', ['id' => 1]))
             ->assertStatus(403);

@@ -1,38 +1,57 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\LabelRepositoryInterface;
+use App\Artist;
 use App\Contracts\CatalogEntityRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$artist = resolve(ArtistRepositoryInterface::class);
-$label = resolve(LabelRepositoryInterface::class);
-$catalogEntity = resolve(CatalogEntityRepositoryInterface::class);
-$user = resolve(UserRepositoryInterface::class);
-$profile = resolve(ProfileRepositoryInterface::class);
+class ArtistFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Artist::class;
 
-$factory->define($artist->class(), function (Faker $faker) {
-    return [];
-});
+    public function configure()
+    {
+        return $this->afterCreating(function (Artist $artist) {
+            static::factoryForModel(resolve(CatalogEntityRepositoryInterface::class)->class())->create([
+                'user_id' => static::factoryForModel(resolve(UserRepositoryInterface::class)->class())->create()->id,
+                'catalogable_id' => $artist->id,
+                'catalogable_type' => Artist::class
+            ]);
 
-$factory->state($artist->class(), 'onLabel', [
-    'label_id' => function() use ($label) {
-        return factory($label->class())->create()->id;
-    },
-]);
+            static::factoryForModel(resolve(ProfileRepositoryInterface::class)->class())->create([
+                'profilable_id' => $artist->id,
+                'profilable_type' => Artist::class
+            ]);
+        });
+    }
 
-$factory->afterCreating($artist->class(), function ($a, $faker) use ($artist, $catalogEntity, $user, $profile) {
-    factory($catalogEntity->class())->create([
-        'user_id' => factory($user->class())->create()->id,
-        'catalogable_id' => $a->id,
-        'catalogable_type' => $artist->class()
-    ]);
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            //
+        ];
+    }
 
-    factory($profile->class())->create([
-        'profilable_id' => $a->id,
-        'profilable_type' => $artist->class()
-    ]);
-});
+    public function onLabel()
+    {
+        return $this->state(function () {
+            return [
+                'label_id' => static::factoryForModel(resolve(LabelRepositoryInterface::class)->class())->create()->id
+            ];
+        });
+    }
+}
