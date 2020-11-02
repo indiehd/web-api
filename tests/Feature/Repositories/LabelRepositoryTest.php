@@ -3,43 +3,43 @@
 namespace Tests\Feature\Repositories;
 
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use App\Contracts\AlbumRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LabelRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var AccountRepositoryInterface $account
+     * @var AccountRepositoryInterface
      */
     protected $account;
 
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var CatalogEntityRepositoryInterface $catalogEntity
+     * @var CatalogEntityRepositoryInterface
      */
     protected $catalogEntity;
 
     /**
-     * @var UserRepositoryInterface $user
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
@@ -131,7 +131,7 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
         $label = $this->repo->create($profile->toArray());
 
         $this->factory($this->artist)->create([
-            'label_id' => $label->id
+            'label_id' => $label->id,
         ]);
 
         $label->delete();
@@ -159,14 +159,14 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
         $catalogEntity = $this->factory($this->catalogEntity)->make([
             'user_id' => $user->id,
             'catalogable_id' => $label->id,
-            'catalogable_type' => $this->repo->class()
+            'catalogable_type' => $this->repo->class(),
         ]);
 
         $this->catalogEntity->create($catalogEntity->toArray());
 
         $profile = $this->factory($this->profile)->make([
             'profilable_id' => $label->id,
-            'profilable_type' => $this->repo->class()
+            'profilable_type' => $this->repo->class(),
         ]);
 
         $this->profile->create($profile->toArray());
@@ -232,9 +232,9 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
             $this->factory($this->profile)->raw(['label_id' => $label->id])
         );
 
-        #$this->album->create(
+        //$this->album->create(
         $this->factory($this->album)->create(['artist_id' => $artist->id]);
-        #);
+        //);
 
         $this->assertInstanceOf($this->album->class(), $artist->label->albums->first());
     }

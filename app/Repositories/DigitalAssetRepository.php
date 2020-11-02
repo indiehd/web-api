@@ -9,12 +9,12 @@ use Illuminate\Database\QueryException;
 class DigitalAssetRepository extends CrudRepository implements DigitalAssetRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = DigitalAsset::class;
 
     /**
-     * @var DigitalAsset $digitalAsset
+     * @var DigitalAsset
      */
     protected $digitalAsset;
 
@@ -62,7 +62,7 @@ class DigitalAssetRepository extends CrudRepository implements DigitalAssetRepos
         return $this->model()->where([
             'product_id' => $productId,
             'asset_id' => $assetId,
-            'asset_type' => $assetType
+            'asset_type' => $assetType,
         ])->first();
     }
 }

@@ -50,7 +50,7 @@ class AccountFactory extends Factory
             'country_code' => $true ? 'US' : null,
             'postal_code' => $true ? $faker->postcode : null,
             'phone' => $true ? $faker->phoneNumber : null,
-            'alt_phone' => $true ? ($faker->boolean(15) ?: $faker->phoneNumber) : null
+            'alt_phone' => $true ? ($faker->boolean(15) ?: $faker->phoneNumber) : null,
         ];
     }
 }

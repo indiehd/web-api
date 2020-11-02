@@ -57,7 +57,7 @@ class CatalogEntityFactory extends Factory
             'approver_id' => $faker->boolean(50) ? $user->model()::inRandomOrder()->first()->id : null,
             'deleter_id' => $faker->boolean(15) ? $user->model()::inRandomOrder()->first()->id : null,
             'catalogable_id' => null, // should be overwritten on creation
-            'catalogable_type' => null // should be overwritten on creation
+            'catalogable_type' => null, // should be overwritten on creation
         ];
     }
 }

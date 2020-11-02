@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Contracts\LabelRepositoryInterface;
+use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyLabel extends FormRequest
 {

@@ -21,7 +21,7 @@ trait IsProfilable
             'country_code' => $country_code,
             'profile_url' => $profile_url,
             'profilable_id' => $model->id,
-            'profilable_type' => $this->class
+            'profilable_type' => $this->class,
         ]);
     }
 

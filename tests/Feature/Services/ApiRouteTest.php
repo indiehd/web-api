@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class ApiRouteTest extends TestCase
 {
-
     protected $methods = [
         'index' => 'get',
         'show' => 'get',
@@ -18,19 +17,18 @@ class ApiRouteTest extends TestCase
         'destroy' => 'delete',
 
         'whatever' => 'get',
-        'another' => 'post'
+        'another' => 'post',
     ];
 
     /**
-     * @var ApiRoute $service
+     * @var ApiRoute
      */
     protected $service;
 
     /**
-     * @var Router $router
+     * @var Router
      */
     protected $router;
-
 
     public function setUp(): void
     {
@@ -66,7 +64,7 @@ class ApiRouteTest extends TestCase
         $this->assertNotNull(
             $this->router
                 ->getRoutes()
-                ->getByName("except.index")
+                ->getByName('except.index')
         );
     }
 
@@ -75,7 +73,7 @@ class ApiRouteTest extends TestCase
         $this->assertNull(
             $this->router
                 ->getRoutes()
-                ->getByName("except.update")
+                ->getByName('except.update')
         );
     }
 
@@ -84,7 +82,9 @@ class ApiRouteTest extends TestCase
         $methods = array_keys($this->methods);
 
         foreach ($methods as $method) {
-            if ($method === 'index') continue;
+            if ($method === 'index') {
+                continue;
+            }
 
             $this->assertNull(
                 $this->router
@@ -168,11 +168,9 @@ class ApiRouteTest extends TestCase
 
     protected function has_namespace($route, $namespace = 'App\Http\Controllers\Api')
     {
-        return (
+        return
             $namespace === $this->router
                 ->getRoutes()
-                ->getByName($route)->action['namespace']
-        );
+                ->getByName($route)->action['namespace'];
     }
-
 }

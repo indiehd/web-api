@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Contracts\AlbumRepositoryInterface;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAlbum extends FormRequest
 {
@@ -35,7 +35,7 @@ class UpdateAlbum extends FormRequest
         return [
             'title' => 'string|max:255',
             'alt_title' => 'string|max:255',
-            'year' => 'integer|min:1900|max:' . (string) (date('Y') + 1),
+            'year' => 'integer|min:1900|max:'.(string) (date('Y') + 1),
             'description' => 'max:4096',
             'has_explicit_lyrics' => 'boolean',
             'full_album_price' => 'between:0,99999',

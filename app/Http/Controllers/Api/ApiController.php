@@ -9,52 +9,52 @@ use Illuminate\Http\Resources\Json\JsonResource;
 abstract class ApiController extends Controller
 {
     /**
-     * When true authorization is enabled
+     * When true authorization is enabled.
      *
      * @var bool
      */
     protected $shouldAuthorize = false;
 
     /**
-     * @var \App\Contracts\RepositoryShouldCrud|\App\Contracts\RepositoryShouldRead $repository
+     * @var \App\Contracts\RepositoryShouldCrud|\App\Contracts\RepositoryShouldRead
      */
     private $repository;
 
     /**
-     * Should return the <RepositoryInterface>::class
+     * Should return the <RepositoryInterface>::class.
      *
      * @return string
      */
     abstract public function repository();
 
     /**
-     * @var string $resource
+     * @var string
      */
     private $resource;
 
     /**
-     * Should return the <Resource>::class
+     * Should return the <Resource>::class.
      *
      * @return string
      */
     abstract public function resource();
 
     /**
-     * Should return <StoreRequest>::class
+     * Should return <StoreRequest>::class.
      *
      * @return string
      */
     abstract public function storeRequest();
 
     /**
-     * Should return <UpdateRequest>::class
+     * Should return <UpdateRequest>::class.
      *
      * @return string
      */
     abstract public function updateRequest();
 
     /**
-     * Should return <DestroyRequest>::class
+     * Should return <DestroyRequest>::class.
      *
      * @return string
      */
@@ -84,16 +84,16 @@ abstract class ApiController extends Controller
 
         $this->validate($request, [
             'paginate' => 'numeric|min:1|max:100',
-            'limit' => 'numeric|min:1'
+            'limit' => 'numeric|min:1',
         ]);
 
         $hasPaginate = $request->has('paginate');
         $hasLimit = $request->has('limit');
 
-        if ($hasPaginate && !$hasLimit) {
+        if ($hasPaginate && ! $hasLimit) {
             $models = $this->repository
                 ->paginate($request->get('paginate'));
-        } elseif ($hasLimit && !$hasPaginate) {
+        } elseif ($hasLimit && ! $hasPaginate) {
             $models = $this->repository
                 ->limit($request->get('limit'));
         } elseif ($hasPaginate && $hasLimit) {
@@ -103,7 +103,6 @@ abstract class ApiController extends Controller
                     $request->get('paginate')
                 );
         }
-
 
         return $this->resource::collection(
             isset($models) ? $models : $this->repository->all()
@@ -137,7 +136,6 @@ abstract class ApiController extends Controller
         if ($this->shouldAuthorize) {
             $this->authorize('view', $this->repository->findById($id));
         }
-
 
         return new $this->resource($this->repository->findById($id));
     }

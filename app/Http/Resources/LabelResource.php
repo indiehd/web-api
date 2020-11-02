@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Contracts\ArtistRepositoryInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LabelResource extends JsonResource

@@ -2,22 +2,20 @@
 
 namespace Tests\Feature\Controllers;
 
-use CountriesSeeder;
-
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
+use CountriesSeeder;
 
 class ArtistControllerTest extends ControllerTestCase
 {
-
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
@@ -70,8 +68,8 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    $this->getJsonStructure()
-                ]
+                    $this->getJsonStructure(),
+                ],
             ]);
     }
 
@@ -82,7 +80,7 @@ class ArtistControllerTest extends ControllerTestCase
         $this->json('GET', route('artists.show', ['id' => $artist->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -95,7 +93,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->json('POST', route('artists.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -109,7 +107,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 
@@ -126,7 +124,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->json('PUT', route('artists.update', ['id' => $artist->id]), $inputs)
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -140,7 +138,7 @@ class ArtistControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 

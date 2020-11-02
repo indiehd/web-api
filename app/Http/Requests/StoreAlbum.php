@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 use App\Contracts\AlbumRepositoryInterface;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAlbum extends FormRequest
 {
@@ -35,7 +34,7 @@ class StoreAlbum extends FormRequest
             'artist_id' => 'required|integer|exists:artists,id',
             'title' => 'required|string|max:255',
             'alt_title' => 'string|max:255',
-            'year' => 'required|integer|min:1900|max:' . (string)(date('Y') + 1),
+            'year' => 'required|integer|min:1900|max:'.(string) (date('Y') + 1),
             'description' => 'max:4096',
             'has_explicit_lyrics' => 'required|boolean',
             'full_album_price' => 'between:0,99999',

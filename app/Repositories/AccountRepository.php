@@ -8,7 +8,7 @@ use App\Contracts\AccountRepositoryInterface;
 class AccountRepository extends CrudRepository implements AccountRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Account::class;
 

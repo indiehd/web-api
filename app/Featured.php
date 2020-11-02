@@ -2,11 +2,9 @@
 
 namespace App;
 
-use Carbon\Carbon;
-
-use Illuminate\Database\Eloquent\Model;
-
 use App\Contracts\ArtistRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class Featured extends Model
 {

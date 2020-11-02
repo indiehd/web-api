@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Featured;
-use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\FeaturableRepositoryInterface;
+use App\Contracts\FeaturedRepositoryInterface;
+use App\Featured;
 
 class FeaturedRepository extends CrudRepository implements FeaturedRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Featured::class;
 

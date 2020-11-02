@@ -2,15 +2,15 @@
 
 namespace App\Repositories;
 
-use DB;
 use App\Album;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use DB;
 
 class AlbumRepository extends CrudRepository implements AlbumRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Album::class;
 

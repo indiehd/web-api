@@ -16,7 +16,7 @@ class CountriesSeeder extends BaseSeeder
         foreach ($this->countries() as $code => $country) {
             Country::create([
                 'code' => $code,
-                'name' => $country
+                'name' => $country,
             ]);
         }
     }

@@ -13,7 +13,7 @@ class GenresSeeder extends BaseSeeder
     {
         foreach ($this->genres() as $genre) {
             App\Genre::create([
-                'name' => $genre
+                'name' => $genre,
             ]);
         }
     }
@@ -189,7 +189,7 @@ class GenresSeeder extends BaseSeeder
             'Liquid Dubstep',
             'Chillstep',
             'Drumstep',
-            'Dram Rock'
+            'Dram Rock',
         ];
     }
 }

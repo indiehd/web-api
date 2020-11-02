@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use DB;
 use App\Artist;
+use DB;
 
 class ArtistObserver
 {

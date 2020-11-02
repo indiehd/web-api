@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Controllers;
 
-use CountriesSeeder;
-
+use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use App\Contracts\AccountRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Contracts\Hashing\Hasher;
 
 class UserControllerTest extends ControllerTestCase
@@ -67,7 +66,7 @@ class UserControllerTest extends ControllerTestCase
             'email' => 'foo@bar.com',
             'name' => 'Foobius Barius',
             'password' => 'secretsauce',
-            'account' => $this->getAllAccountInputsInValidState()
+            'account' => $this->getAllAccountInputsInValidState(),
         ];
     }
 
@@ -96,7 +95,7 @@ class UserControllerTest extends ControllerTestCase
         $this->json('GET', route('users.show', ['id' => $user->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -105,7 +104,7 @@ class UserControllerTest extends ControllerTestCase
         $this->json('POST', route('users.store'), $this->getAllInputsInValidState())
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -115,7 +114,7 @@ class UserControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 
@@ -132,7 +131,7 @@ class UserControllerTest extends ControllerTestCase
             ->json('PUT', route('users.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -146,7 +145,7 @@ class UserControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 
@@ -182,7 +181,7 @@ class UserControllerTest extends ControllerTestCase
         $this->json('POST', route('users.store'), $inputs)
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
 
         $user = $this->user->model()->where('email', $inputs['email'])->first();
@@ -201,7 +200,7 @@ class UserControllerTest extends ControllerTestCase
             ->json('PUT', route('users.update', ['id' => $user->id]), $inputs)
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
 
         $user = $this->user->findById($user->id);

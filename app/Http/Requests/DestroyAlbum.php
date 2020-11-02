@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Contracts\AlbumRepositoryInterface;
+use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyAlbum extends FormRequest
 {

@@ -14,32 +14,32 @@ use IndieHD\Velkart\Contracts\OrderRepositoryContract;
 class OrderControllerTest extends ControllerTestCase
 {
     /**
-     * @var $order OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     protected $order;
 
     /**
-     * @var $order OrderItemRepositoryInterface
+     * @var OrderItemRepositoryInterface
      */
     protected $orderItem;
 
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var $account AccountRepositoryInterface
+     * @var AccountRepositoryInterface
      */
     protected $account;
 
     /**
-     * @var $album AlbumRepositoryInterface
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
@@ -96,8 +96,8 @@ class OrderControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    $this->getJsonStructure()
-                ]
+                    $this->getJsonStructure(),
+                ],
             ]);
     }
 
@@ -115,7 +115,7 @@ class OrderControllerTest extends ControllerTestCase
         $this->json('GET', route('orders.show', ['id' => $order->id]))
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -140,7 +140,7 @@ class OrderControllerTest extends ControllerTestCase
         $this->json('POST', route('orders.store_order'), ['items' => $orderItem])
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -157,7 +157,7 @@ class OrderControllerTest extends ControllerTestCase
         $this->json('POST', route('orders.store_order'), ['items' => [$orderItem1, $orderItem2]])
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -174,7 +174,7 @@ class OrderControllerTest extends ControllerTestCase
         $this->json('POST', route('orders.add_items', ['orderId' => $order->id]), ['items' => $orderItem])
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -197,7 +197,7 @@ class OrderControllerTest extends ControllerTestCase
         )
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -220,7 +220,7 @@ class OrderControllerTest extends ControllerTestCase
         )
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructure()
+                'data' => $this->getJsonStructure(),
             ]);
     }
 
@@ -308,7 +308,7 @@ class OrderControllerTest extends ControllerTestCase
         $user = $this->user->create([
             'email' => $user->email,
             'password' => $user->password,
-            'account' => $this->factory($this->account)->raw()
+            'account' => $this->factory($this->account)->raw(),
         ]);
 
         return $user;

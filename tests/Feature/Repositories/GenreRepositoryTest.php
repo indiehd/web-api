@@ -2,28 +2,28 @@
 
 namespace Tests\Feature\Repositories;
 
-use CountriesSeeder;
+use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\AlbumRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
 class GenreRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 

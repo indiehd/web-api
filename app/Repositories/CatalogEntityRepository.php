@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Contracts\CatalogEntityRepositoryInterface;
 use App\CatalogEntity;
+use App\Contracts\CatalogEntityRepositoryInterface;
 
 class CatalogEntityRepository extends CrudRepository implements CatalogEntityRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = CatalogEntity::class;
 
     /**
-     * @var CatalogEntity $catalogEntity
+     * @var CatalogEntity
      */
     protected $catalogEntity;
 

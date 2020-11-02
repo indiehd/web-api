@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use DB;
 use App\Album;
+use DB;
 
 class AlbumObserver
 {

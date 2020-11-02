@@ -38,7 +38,7 @@ class DigitalAssetFactory extends Factory
                 'status'      => 1,
             ])->id,
             'asset_id' => null, // should be overwritten on creation
-            'asset_type' => null // should be overwritten on creation
+            'asset_type' => null, // should be overwritten on creation
         ];
     }
 }

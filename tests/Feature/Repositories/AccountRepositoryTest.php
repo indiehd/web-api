@@ -2,21 +2,21 @@
 
 namespace Tests\Feature\Repositories;
 
-use CountriesSeeder;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AccountRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var $country CountryRepositoryInterface
+     * @var CountryRepositoryInterface
      */
     protected $country;
 

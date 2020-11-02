@@ -2,15 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use App\User;
 use Illuminate\Contracts\Hashing\Hasher;
 
 class UserRepository extends CrudRepository implements UserRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = User::class;
 
@@ -87,7 +87,7 @@ class UserRepository extends CrudRepository implements UserRepositoryInterface
     {
         $model = $this->findById($id);
 
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = $this->hasher->make($data['password']);
         }
 

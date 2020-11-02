@@ -24,12 +24,12 @@ class ArtistFactory extends Factory
             static::factoryForModel(resolve(CatalogEntityRepositoryInterface::class)->class())->create([
                 'user_id' => static::factoryForModel(resolve(UserRepositoryInterface::class)->class())->create()->id,
                 'catalogable_id' => $artist->id,
-                'catalogable_type' => Artist::class
+                'catalogable_type' => Artist::class,
             ]);
 
             static::factoryForModel(resolve(ProfileRepositoryInterface::class)->class())->create([
                 'profilable_id' => $artist->id,
-                'profilable_type' => Artist::class
+                'profilable_type' => Artist::class,
             ]);
         });
     }
@@ -50,7 +50,7 @@ class ArtistFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'label_id' => static::factoryForModel(resolve(LabelRepositoryInterface::class)->class())->create()->id
+                'label_id' => static::factoryForModel(resolve(LabelRepositoryInterface::class)->class())->create()->id,
             ];
         });
     }

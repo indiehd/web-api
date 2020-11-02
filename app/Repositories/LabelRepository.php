@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Label;
 use App\Contracts\LabelRepositoryInterface;
+use App\Label;
 use App\Traits\IsProfilable;
 
 class LabelRepository extends CrudRepository implements LabelRepositoryInterface
@@ -11,7 +11,7 @@ class LabelRepository extends CrudRepository implements LabelRepositoryInterface
     use IsProfilable;
 
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Label::class;
 

@@ -23,7 +23,7 @@ class FeaturedFactory extends Factory
     {
         return [
             'featurable_id' => null, // should be overridden on creation
-            'featurable_type' => null // should be overridden on creation
+            'featurable_type' => null, // should be overridden on creation
         ];
     }
 }

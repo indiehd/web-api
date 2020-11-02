@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\FlacFile;
 use App\Contracts\FlacFileRepositoryInterface;
+use App\FlacFile;
 
 class FlacFileRepository extends CrudRepository implements FlacFileRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = FlacFile::class;
 
     /**
-     * @var \App\FlacFile $flacFile
+     * @var \App\FlacFile
      */
     protected $flacFile;
 

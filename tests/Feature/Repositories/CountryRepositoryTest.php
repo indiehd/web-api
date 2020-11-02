@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Repositories;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Contracts\CountryRepositoryInterface;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CountryRepositoryTest extends RepositoryReadonlyTestCase
 {

@@ -6,7 +6,6 @@ use App\Album;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use App\DigitalAsset;
 use App\Genre;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;

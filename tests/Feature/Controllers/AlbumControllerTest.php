@@ -2,36 +2,35 @@
 
 namespace Tests\Feature\Controllers;
 
-use CountriesSeeder;
-
 use App\Album;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Resources\AlbumResource;
+use CountriesSeeder;
 use Illuminate\Support\Arr;
 use Money\Money;
 
 class AlbumControllerTest extends ControllerTestCase
 {
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var UserRepositoryInterface $user
+     * @var UserRepositoryInterface
      */
     protected $user;
 
@@ -55,7 +54,7 @@ class AlbumControllerTest extends ControllerTestCase
         $this->factory($this->profile)->create(
             [
                 'profilable_id' => $artist->id,
-                'profilable_type' => $this->artist->class()
+                'profilable_type' => $this->artist->class(),
             ]
         );
 
@@ -95,8 +94,8 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(200)
             ->assertExactJson([
                 'data' => [
-                    Arr::except($this->getJsonStructure($album), ['artist', 'songs'])
-                ]
+                    Arr::except($this->getJsonStructure($album), ['artist', 'songs']),
+                ],
             ]);
     }
 
@@ -108,7 +107,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('GET', route('albums.show', ['id' => $album->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => Arr::except($this->getJsonStructure($album), ['artist', 'songs'])
+                'data' => Arr::except($this->getJsonStructure($album), ['artist', 'songs']),
             ]);
     }
 
@@ -136,7 +135,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('POST', route('albums.store'), $albumAsArray)
             ->assertStatus(201)
             ->assertJson([
-                'data' => Arr::except($this->getJsonStructure($album), ['id'])
+                'data' => Arr::except($this->getJsonStructure($album), ['id']),
             ]);
     }
 
@@ -149,7 +148,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 
@@ -177,7 +176,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->json('PUT', route('albums.update', ['id' => $album->id]), $albumAsArray)
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => Arr::except($this->getJsonStructure($album), ['artist'])
+                'data' => Arr::except($this->getJsonStructure($album), ['artist']),
             ]);
     }
 
@@ -190,7 +189,7 @@ class AlbumControllerTest extends ControllerTestCase
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors'
+                'errors',
             ]);
     }
 

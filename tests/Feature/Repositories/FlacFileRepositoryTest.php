@@ -2,34 +2,34 @@
 
 namespace Tests\Feature\Repositories;
 
-use Illuminate\Support\Str;
-use App\Contracts\ProfileRepositoryInterface;
-use CountriesSeeder;
-use App\Contracts\FlacFileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
+use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var $album AlbumRepositoryInterface
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $song SongRepositoryInterface
+     * @var SongRepositoryInterface
      */
     protected $song;
 
