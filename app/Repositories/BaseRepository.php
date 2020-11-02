@@ -27,6 +27,7 @@ abstract class BaseRepository implements RepositoryShouldRead
         if ($paginate) {
             $page = LengthAwarePaginator::resolveCurrentPage();
             $items = $results->slice(($page * $paginate) - $paginate, $paginate)->all();
+
             return new LengthAwarePaginator($items, count($results), $paginate);
         }
 

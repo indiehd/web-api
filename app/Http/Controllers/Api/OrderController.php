@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\OrderItemRepositoryInterface;
+use App\Contracts\OrderRepositoryInterface;
+use App\Http\Requests\DestroyOrder;
+use App\Http\Requests\StoreOrder;
+use App\Http\Requests\UpdateOrder;
+use App\Http\Resources\OrderResource;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Contracts\OrderItemRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
-use App\Http\Requests\StoreOrder;
-use App\Http\Requests\UpdateOrder;
-use App\Http\Requests\DestroyOrder;
-use App\Http\Resources\OrderResource;
 
 class OrderController extends ApiController
 {
@@ -27,7 +27,7 @@ class OrderController extends ApiController
     }
 
     /**
-     * Should return the <RepositoryInterface>::class
+     * Should return the <RepositoryInterface>::class.
      *
      * @return string
      */
@@ -37,7 +37,7 @@ class OrderController extends ApiController
     }
 
     /**
-     * Should return the <Resource>::class
+     * Should return the <Resource>::class.
      *
      * @return string
      */
@@ -47,7 +47,7 @@ class OrderController extends ApiController
     }
 
     /**
-     * Should return <StoreRequest>::class
+     * Should return <StoreRequest>::class.
      *
      * @return string
      */
@@ -60,7 +60,7 @@ class OrderController extends ApiController
     }
 
     /**
-     * Should return <UpdateRequest>::class
+     * Should return <UpdateRequest>::class.
      *
      * @return string
      */
@@ -70,7 +70,7 @@ class OrderController extends ApiController
     }
 
     /**
-     * Should return <DestroyRequest>::class
+     * Should return <DestroyRequest>::class.
      *
      * @return string
      */

@@ -9,48 +9,48 @@ use Illuminate\Support\Str;
 class ApiRoute
 {
     /**
-     * @var string $namespace
+     * @var string
      */
     protected $namespace = 'App\Http\Controllers\Api';
 
     /**
-     * @var $prefix
+     * @var
      */
     private $prefix;
 
     /**
-     * @var $controller
+     * @var
      */
     private $controller;
 
     /**
-     * @var array $routes
+     * @var array
      */
     private $routes = [
         'index' => [
             'uri' => '/',
             'httpMethod' => 'get',
-            'action' => 'index'
+            'action' => 'index',
         ],
         'show' => [
             'uri' => '/{id}',
             'httpMethod' => 'get',
-            'action' => 'show'
+            'action' => 'show',
         ],
         'store' => [
             'uri' => '/create',
             'httpMethod' => 'post',
-            'action' => 'store'
+            'action' => 'store',
         ],
         'update' => [
             'uri' => '/{id}',
             'httpMethod' => 'put',
-            'action' => 'update'
+            'action' => 'update',
         ],
         'destroy' => [
             'uri' => '/{id}',
             'httpMethod' => 'delete',
-            'action' => 'destroy'
+            'action' => 'destroy',
         ],
     ];
 
@@ -96,12 +96,14 @@ class ApiRoute
     public function except(array $routes)
     {
         $this->routes = Arr::except($this->routes, $routes);
+
         return $this->defaults();
     }
 
     public function only(array $routes)
     {
         $this->routes = Arr::only($this->routes, $routes);
+
         return $this->defaults();
     }
 

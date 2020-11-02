@@ -25,7 +25,7 @@ class CountryResource extends JsonResource
             'pay_pal_supported' => $this->pay_pal_supported,
             'accounts' => AccountResource::collection($this->whenLoaded('accounts')),
             'profiles' => ProfileResource::collection($this->whenLoaded('profiles')),
-            'catalog_entities' => CatalogResource::collection($this->whenLoaded('catalog_entities'))
+            'catalog_entities' => CatalogResource::collection($this->whenLoaded('catalog_entities')),
         ];
     }
 }

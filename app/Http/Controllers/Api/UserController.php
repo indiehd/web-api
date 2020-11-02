@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\UserRepositoryInterface;
+use App\Http\Requests\DestroyUser;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
-use App\Http\Requests\DestroyUser;
 use App\Http\Resources\UserResource;
 
 class UserController extends ApiController
@@ -13,7 +13,7 @@ class UserController extends ApiController
     protected $shouldAuthorize = true;
 
     /**
-     * Should return the <RepositoryInterface>::class
+     * Should return the <RepositoryInterface>::class.
      *
      * @return string
      */
@@ -23,7 +23,7 @@ class UserController extends ApiController
     }
 
     /**
-     * Should return the <Resource>::class
+     * Should return the <Resource>::class.
      *
      * @return string
      */
@@ -33,7 +33,7 @@ class UserController extends ApiController
     }
 
     /**
-     * Should return <StoreRequest>::class
+     * Should return <StoreRequest>::class.
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class UserController extends ApiController
     }
 
     /**
-     * Should return <UpdateRequest>::class
+     * Should return <UpdateRequest>::class.
      *
      * @return string
      */
@@ -53,7 +53,7 @@ class UserController extends ApiController
     }
 
     /**
-     * Should return <DestroyRequest>::class
+     * Should return <DestroyRequest>::class.
      *
      * @return string
      */

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSongsTable extends Migration
 {
@@ -26,8 +26,8 @@ class CreateSongsTable extends Migration
             $table->boolean('requires_shipping')->default(false);
             $table->boolean('is_active')->default(true);
             // TODO Uncomment these once the back-catalog is implemented.
-            #$table->boolean('is_in_back_catalog')->default(false);
-            #$table->unsignedInteger('catalog_id');
+            //$table->boolean('is_in_back_catalog')->default(false);
+            //$table->unsignedInteger('catalog_id');
             $table->unsignedInteger('album_id');
             $table->unique(['album_id', 'track_number'], 'unique_track_per_album');
             $table->softDeletes();

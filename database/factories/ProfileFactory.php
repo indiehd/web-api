@@ -48,7 +48,7 @@ class ProfileFactory extends Factory
             'profile_url' => trim(substr($faker->slug(), 0, rand(1, 64)), '-'), // ensure reasonable length and no resultant leading/trailing dashes
             'rank' => $faker->boolean(80) ? $faker->numberBetween(1, 100000) : null,
             'profilable_id' => null, // should be overwritten on creation
-            'profilable_type' => null // should be overwritten on creation
+            'profilable_type' => null, // should be overwritten on creation
         ];
     }
 }

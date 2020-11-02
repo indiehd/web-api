@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Genre;
 use App\Contracts\GenreRepositoryInterface;
+use App\Genre;
 
 class GenreControllerTest extends ControllerTestCase
 {
@@ -40,7 +40,7 @@ class GenreControllerTest extends ControllerTestCase
         $this->json('GET', route('genres.index'))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => [$this->getExactJson($genre)]
+                'data' => [$this->getExactJson($genre)],
             ]);
     }
 
@@ -55,7 +55,7 @@ class GenreControllerTest extends ControllerTestCase
         $this->json('GET', route('genres.show', ['id' => $genre->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getExactJson($genre)
+                'data' => $this->getExactJson($genre),
             ]);
     }
 

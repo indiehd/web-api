@@ -14,7 +14,7 @@ class UpdateOrder extends FormRequest
      */
     public function authorize()
     {
-        return !empty(Order::find($this->route('orderId')));
+        return ! empty(Order::find($this->route('orderId')));
     }
 
     /**

@@ -10,17 +10,17 @@ use CountriesSeeder;
 class FeaturedControllerTest extends ControllerTestCase
 {
     /**
-     * @var FeaturedRepositoryInterface $featured
+     * @var FeaturedRepositoryInterface
      */
     protected $featured;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
@@ -54,7 +54,7 @@ class FeaturedControllerTest extends ControllerTestCase
         $this->json('GET', route('featured.artists'))
             ->assertStatus(200)
             ->assertJsonStructure([
-                'data' => [$this->getJsonStructure()]
+                'data' => [$this->getJsonStructure()],
             ]);
     }
 

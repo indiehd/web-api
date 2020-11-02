@@ -2,39 +2,36 @@
 
 namespace Tests\Feature\Featured;
 
-use Carbon\Carbon;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-use Artisan;
-
-use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\FeaturedRepositoryInterface;
+use Artisan;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class FeaturedArtisanCommandTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
-     * @var $featured FeaturedRepositoryInterface
+     * @var FeaturedRepositoryInterface
      */
     protected $featured;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var $expectedValues array
+     * @var array
      */
     protected $expectedValues = [];
 

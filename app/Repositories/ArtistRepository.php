@@ -12,7 +12,7 @@ class ArtistRepository extends CrudRepository implements ArtistRepositoryInterfa
     use IsProfilable;
 
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Artist::class;
 
@@ -39,7 +39,7 @@ class ArtistRepository extends CrudRepository implements ArtistRepositoryInterfa
     public function create(array $data)
     {
         $model = $this->model()->create([
-            'label_id' => $data['label_id'] ?? null
+            'label_id' => $data['label_id'] ?? null,
         ]);
 
         $this->createProfile(

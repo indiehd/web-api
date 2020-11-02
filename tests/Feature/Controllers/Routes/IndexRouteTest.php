@@ -21,7 +21,7 @@ class IndexRouteTest extends ControllerTestCase
         return [
             'data',
             'links',
-            'meta'
+            'meta',
         ];
     }
 
@@ -60,7 +60,7 @@ class IndexRouteTest extends ControllerTestCase
 
         $this->json('GET', route('albums.index'), [
             'limit' => 8,
-            'paginate' => 2
+            'paginate' => 2,
         ])
             ->assertStatus(200)
             ->assertJsonStructure($this->paginatedJsonStructure())
@@ -75,14 +75,14 @@ class IndexRouteTest extends ControllerTestCase
         $this->json('GET', route('albums.index'), [
             'limit' => 8,
             'paginate' => 3,
-            'page' => 2
+            'page' => 2,
         ])
             ->assertStatus(200)
             ->assertJsonStructure($this->paginatedJsonStructure())
             ->assertJsonFragment([
                 'per_page' => 3,
                 'current_page' => 2,
-                'total' => 8
+                'total' => 8,
             ])
             ->assertJsonCount(3, 'data');
     }

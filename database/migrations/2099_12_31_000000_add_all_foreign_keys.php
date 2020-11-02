@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddAllForeignKeys extends Migration
 {
@@ -16,7 +16,7 @@ class AddAllForeignKeys extends Migration
         Schema::table('songs', function (Blueprint $table) {
             $table->foreign('flac_file_id', 'flac_file_id_fk')->references('id')->on('flac_files');
             // TODO Uncomment these once the referenced objects exist.
-            #$table->foreign('catalog_id')->references('id')->on('catalogs');
+            //$table->foreign('catalog_id')->references('id')->on('catalogs');
         });
 
         Schema::table('genres', function (Blueprint $table) {

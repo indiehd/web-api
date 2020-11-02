@@ -8,12 +8,12 @@ use App\Song;
 class SongRepository extends CrudRepository implements SongRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Song::class;
 
     /**
-     * @var \App\Song $song
+     * @var \App\Song
      */
     protected $song;
 

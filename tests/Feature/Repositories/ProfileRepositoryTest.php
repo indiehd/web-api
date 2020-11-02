@@ -4,41 +4,41 @@ namespace Tests\Feature\Repositories;
 
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\LabelRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProfileRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var AccountRepositoryInterface $account
+     * @var AccountRepositoryInterface
      */
     protected $account;
 
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var LabelRepositoryInterface $label
+     * @var LabelRepositoryInterface
      */
     protected $label;
 
     /**
-     * @var UserRepositoryInterface $user
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var CatalogEntityRepositoryInterface $catalogEntity
+     * @var CatalogEntityRepositoryInterface
      */
     protected $catalogEntity;
 
@@ -150,12 +150,12 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $this->factory($this->catalogEntity)->create([
             'user_id' => $user->id,
             'catalogable_id' => $artist->id,
-            'catalogable_type' => $this->artist->class()
+            'catalogable_type' => $this->artist->class(),
         ]);
 
         $this->factory($this->profile)->create([
             'profilable_id' => $artist->id,
-            'profilable_type' => $this->artist->class()
+            'profilable_type' => $this->artist->class(),
         ]);
 
         $this->assertInstanceOf($this->profile->class(), $artist->profile);
@@ -169,12 +169,12 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
         $this->factory($this->catalogEntity)->create([
             'user_id' => $user->id,
             'catalogable_id' => $label->id,
-            'catalogable_type' => $this->label->class()
+            'catalogable_type' => $this->label->class(),
         ]);
 
         $this->factory($this->profile)->create([
             'profilable_id' => $label->id,
-            'profilable_type' => $this->label->class()
+            'profilable_type' => $this->label->class(),
         ]);
 
         $this->assertInstanceOf($this->profile->class(), $label->profile);
@@ -193,7 +193,7 @@ class ProfileRepositoryTest extends RepositoryCrudTestCase
             'email' => $user->email,
             'name' => $user->name,
             'password' => $user->password,
-            'account' => $this->factory($this->account)->raw()
+            'account' => $this->factory($this->account)->raw(),
         ]);
 
         return $user;

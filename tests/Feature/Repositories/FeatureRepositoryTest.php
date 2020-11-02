@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\FeaturedRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\FeaturedRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FeatureRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 

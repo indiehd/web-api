@@ -13,27 +13,27 @@ use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContrac
 class SongRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var FlacFileRepositoryInterface $flacFile
+     * @var FlacFileRepositoryInterface
      */
     protected $flacFile;
 
     /**
-     * @var OrderStatusRepositoryContract $orderStatus
+     * @var OrderStatusRepositoryContract
      */
     protected $orderStatus;
 
     /**
-     * @var OrderRepositoryContract $order
+     * @var OrderRepositoryContract
      */
     protected $order;
 
     /**
-     * @var DigitalAssetRepositoryInterface $digitalAsset
+     * @var DigitalAssetRepositoryInterface
      */
     protected $digitalAsset;
 

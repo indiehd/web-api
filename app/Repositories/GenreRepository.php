@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Genre;
 use App\Contracts\GenreRepositoryInterface;
+use App\Genre;
 
 class GenreRepository extends CrudRepository implements GenreRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Genre::class;
 
     /**
-     * @var \App\Genre $genre
+     * @var \App\Genre
      */
     protected $genre;
 

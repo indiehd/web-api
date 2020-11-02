@@ -89,7 +89,7 @@ class SongControllerTest extends ControllerTestCase
         $this->json('GET', route('songs.index'))
             ->assertStatus(200)
             ->assertJson(['data' => [
-                $this->getExactJson($album->songs->first())
+                $this->getExactJson($album->songs->first()),
             ]]);
     }
 
@@ -136,8 +136,7 @@ class SongControllerTest extends ControllerTestCase
 
         $this->json('GET', route('songs.show', ['id' => $album->songs->first()->id]))
             ->assertStatus(200)
-            ->assertJson(['data' =>
-            $this->getExactJson($album->songs->first())]);
+            ->assertJson(['data' => $this->getExactJson($album->songs->first())]);
     }
 
     /**
@@ -153,7 +152,7 @@ class SongControllerTest extends ControllerTestCase
             ->assertJson([
                 'data' => ['flac_file' => $this->getExactJsonWithFlacFile(
                     $album->songs->first()->flacFile
-                )]
+                )],
             ]);
     }
 
@@ -218,7 +217,7 @@ class SongControllerTest extends ControllerTestCase
      * and a User is not logged-in, access is denied. (The logic here is that an
      * Album's active/inactive status "overrides" the individual Song's status
      * for non-owners; the owner has access regardless of both the Album and
-     * Song's statuses.)
+     * Song's statuses.).
      */
     public function testShowWhenSongIsActiveButAlbumIsInactiveAndNoUserReturnsAccessDenied()
     {

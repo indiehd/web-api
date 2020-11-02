@@ -15,6 +15,7 @@ abstract class CrudRepository extends BaseRepository
     {
         $model = $this->findById($id);
         $model->update($data);
+
         return $model;
     }
 

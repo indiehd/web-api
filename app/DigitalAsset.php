@@ -10,7 +10,7 @@ class DigitalAsset extends Model
     protected $fillable = [
         'product_id',
         'asset_id',
-        'asset_type'
+        'asset_type',
     ];
 
     protected $casts = [

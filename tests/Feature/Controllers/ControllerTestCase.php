@@ -4,10 +4,9 @@ namespace Tests\Feature\Controllers;
 
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Tests\TestCase;
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 abstract class ControllerTestCase extends TestCase
 {

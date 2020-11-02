@@ -3,15 +3,16 @@
 namespace Tests\Feature\Controllers;
 
 use App\Contracts\AlbumRepositoryInterface;
-use CountriesSeeder;
-use App\Label;
-use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\CatalogEntityRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-#use App\Http\Resources\ArtistResource;
-#use App\Http\Resources\AlbumResource;
+use App\Contracts\UserRepositoryInterface;
+use App\Label;
+use CountriesSeeder;
+
+//use App\Http\Resources\ArtistResource;
+//use App\Http\Resources\AlbumResource;
 
 class LabelControllerTest extends ControllerTestCase
 {
@@ -63,8 +64,8 @@ class LabelControllerTest extends ControllerTestCase
         return [
             'id' => $model->id,
             // TODO These aren't necessary yet, but would look something like this.
-            #'artists' => ArtistResource::collection($model->artists),
-            #'albums' => AlbumResource::collection($model->albums),
+            //'artists' => ArtistResource::collection($model->artists),
+            //'albums' => AlbumResource::collection($model->albums),
             'artists_count' => 1,
             'albums_count' => 1,
         ];
@@ -90,7 +91,7 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('GET', route('labels.index'))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => [$this->getExactJson($model)]
+                'data' => [$this->getExactJson($model)],
             ]);
     }
 
@@ -105,7 +106,7 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('GET', route('labels.show', ['id' => $model->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getExactJson($model)
+                'data' => $this->getExactJson($model),
             ]);
     }
 
@@ -126,7 +127,7 @@ class LabelControllerTest extends ControllerTestCase
         $this->json('GET', route('labels.show', ['id' => $artist->label->id]))
             ->assertStatus(200)
             ->assertExactJson([
-                'data' => $this->getExactJsonWithArtistsAndAlbums($artist->label)
+                'data' => $this->getExactJsonWithArtistsAndAlbums($artist->label),
             ]);
     }
 
@@ -169,7 +170,7 @@ class LabelControllerTest extends ControllerTestCase
             ->json('POST', route('labels.store'), $allInputs)
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => $this->getJsonStructureForLabel()
+                'data' => $this->getJsonStructureForLabel(),
             ]);
     }
 

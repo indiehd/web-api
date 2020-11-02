@@ -20,32 +20,32 @@ class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
     use WithFaker;
 
     /**
-     * @var ProfileRepositoryInterface $profile
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var ArtistRepositoryInterface $artist
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var AlbumRepositoryInterface $album
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var SongRepositoryInterface $song
+     * @var SongRepositoryInterface
      */
     protected $song;
 
     /**
-     * @var ProductRepositoryContract $order
+     * @var ProductRepositoryContract
      */
     protected $product;
 
     /**
-     * @var OrderRepositoryContract $order
+     * @var OrderRepositoryContract
      */
     protected $order;
 

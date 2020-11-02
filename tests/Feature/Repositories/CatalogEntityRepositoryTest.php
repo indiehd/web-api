@@ -2,40 +2,38 @@
 
 namespace Tests\Feature\Repositories;
 
-use DB;
-
-use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $account AccountRepositoryInterface
+     * @var AccountRepositoryInterface
      */
     protected $account;
 
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var $label LabelRepositoryInterface
+     * @var LabelRepositoryInterface
      */
     protected $label;
 
@@ -219,7 +217,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
             'email' => $user->email,
             'name' => $user->name,
             'password' => $user->password,
-            'account' => $this->factory($this->account)->raw()
+            'account' => $this->factory($this->account)->raw(),
         ]);
 
         return $user;
@@ -244,7 +242,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
         return $this->factory()->make(array_merge([
             'catalogable_id' => $entity->id,
             'catalogable_type' => $type->class(),
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ], $catalogableProperties));
     }
 }

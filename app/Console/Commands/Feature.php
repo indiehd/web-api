@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Contracts\ArtistRepositoryInterface;
-use Illuminate\Console\Command;
-
 use App\Contracts\FeaturedRepositoryInterface;
+use Illuminate\Console\Command;
 
 class Feature extends Command
 {

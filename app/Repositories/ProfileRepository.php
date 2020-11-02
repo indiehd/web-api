@@ -8,12 +8,12 @@ use App\Profile;
 class ProfileRepository extends CrudRepository implements ProfileRepositoryInterface
 {
     /**
-     * @var string $class
+     * @var string
      */
     protected $class = Profile::class;
 
     /**
-     * @var Profile $profile
+     * @var Profile
      */
     protected $profile;
 
@@ -23,7 +23,7 @@ class ProfileRepository extends CrudRepository implements ProfileRepositoryInter
     }
 
     /**
-     * Returns the class namespace
+     * Returns the class namespace.
      *
      * @return string
      */
@@ -33,7 +33,7 @@ class ProfileRepository extends CrudRepository implements ProfileRepositoryInter
     }
 
     /**
-     * Returns the Repositories Model instance
+     * Returns the Repositories Model instance.
      *
      * @return Profile
      */

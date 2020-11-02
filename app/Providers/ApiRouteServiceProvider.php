@@ -7,7 +7,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 
 class ApiRouteServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap services.
      *
@@ -22,7 +21,6 @@ class ApiRouteServiceProvider extends ServiceProvider
 
     /**
      * Map all API Routes here.
-     *
      */
     public function map()
     {
@@ -37,7 +35,7 @@ class ApiRouteServiceProvider extends ServiceProvider
             ->add('artists', 'artists', 'get', 'artists');
 
         // TODO Commented-out until tests are updated for "new" Order implementation.
-        
+
         /*
         $this->apiRoute('orders', 'OrderController')
             ->except(['store', 'update'])

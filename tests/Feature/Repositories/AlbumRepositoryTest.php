@@ -16,42 +16,42 @@ use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var $song SongRepositoryInterface
+     * @var SongRepositoryInterface
      */
     protected $song;
 
     /**
-     * @var $genre GenreRepositoryInterface
+     * @var GenreRepositoryInterface
      */
     protected $genre;
 
     /**
-     * @var ProductRepositoryContract $product
+     * @var ProductRepositoryContract
      */
     protected $product;
 
     /**
-     * @var OrderStatusRepositoryContract $orderStatus
+     * @var OrderStatusRepositoryContract
      */
     protected $orderStatus;
 
     /**
-     * @var OrderRepositoryContract $order
+     * @var OrderRepositoryContract
      */
     protected $order;
 
     /**
-     * @var DigitalAssetRepositoryInterface $digitalAsset
+     * @var DigitalAssetRepositoryInterface
      */
     protected $digitalAsset;
 

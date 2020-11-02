@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,37 +15,37 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ArtistRepositoryTest extends RepositoryCrudTestCase
 {
     /**
-     * @var $account AccountRepositoryInterface
+     * @var AccountRepositoryInterface
      */
     protected $account;
 
     /**
-     * @var $profile ProfileRepositoryInterface
+     * @var ProfileRepositoryInterface
      */
     protected $profile;
 
     /**
-     * @var $album AlbumRepositoryInterface
+     * @var AlbumRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $label LabelRepositoryInterface
+     * @var LabelRepositoryInterface
      */
     protected $label;
 
     /**
-     * @var $user UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $user;
 
     /**
-     * @var $catalogEntity CatalogEntityRepositoryInterface
+     * @var CatalogEntityRepositoryInterface
      */
     protected $catalogEntity;
 
     /**
-     * @var $song SongRepositoryInterface
+     * @var SongRepositoryInterface
      */
     protected $song;
 
@@ -160,14 +160,14 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
         $catalogEntity = $this->factory($this->catalogEntity)->make([
             'user_id' => $user->id,
             'catalogable_id' => $artist->id,
-            'catalogable_type' => $this->repo->class()
+            'catalogable_type' => $this->repo->class(),
         ]);
 
         $this->catalogEntity->create($catalogEntity->toArray());
 
         $profile = $this->factory($this->profile)->make([
             'profilable_id' => $artist->id,
-            'profilable_type' => $this->repo->class()
+            'profilable_type' => $this->repo->class(),
         ]);
 
         $this->profile->create($profile->toArray());

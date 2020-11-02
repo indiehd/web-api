@@ -22,7 +22,7 @@ class SkuResource extends JsonResource
             'is_taxable' => $this->is_taxable,
             'requires_shipping' => $this->requires_shipping,
             'is_active' => $this->is_active,
-            'songs' => SongResource::collection($this->songs)
+            'songs' => SongResource::collection($this->songs),
         ];
     }
 }

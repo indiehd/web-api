@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Country;
 use App\Contracts\CountryRepositoryInterface;
+use App\Country;
 
 class CountryRepository extends BaseRepository implements CountryRepositoryInterface
 {
     /**
-     * @var  string  $class
+     * @var  string 
      */
     protected $class = Country::class;
 
     /**
-     * @var  Country  $country
+     * @var  Country 
      */
     protected $country;
 

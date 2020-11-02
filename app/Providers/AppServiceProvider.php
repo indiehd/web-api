@@ -2,49 +2,45 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-
+use App\Album;
+use App\Artist;
 use App\Contracts\AccountRepositoryInterface;
-use App\Contracts\ArtistRepositoryInterface;
-use App\Contracts\ProfileRepositoryInterface;
-use App\Contracts\CatalogEntityRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
 use App\Contracts\AlbumRepositoryInterface;
-use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\ArtistRepositoryInterface;
+use App\Contracts\CatalogEntityRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
-use App\Contracts\GenreRepositoryInterface;
-use App\Contracts\LabelRepositoryInterface;
-use App\Contracts\SongRepositoryInterface;
-use App\Contracts\OrderRepositoryInterface;
 use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\FeaturedRepositoryInterface;
-
-use App\Repositories\AccountRepository;
-use App\Repositories\ArtistRepository;
-use App\Repositories\ProfileRepository;
-use App\Repositories\CatalogEntityRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\AlbumRepository;
-use App\Repositories\FlacFileRepository;
-use App\Repositories\CountryRepository;
-use App\Repositories\GenreRepository;
-use App\Repositories\LabelRepository;
-use App\Repositories\SongRepository;
-use App\Repositories\OrderRepository;
-use App\Repositories\DigitalAssetRepository;
-use App\Repositories\FeaturedRepository;
-
-use App\Artist;
-use App\Album;
+use App\Contracts\FlacFileRepositoryInterface;
+use App\Contracts\GenreRepositoryInterface;
+use App\Contracts\LabelRepositoryInterface;
+use App\Contracts\OrderRepositoryInterface;
+use App\Contracts\ProfileRepositoryInterface;
+use App\Contracts\SongRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use App\Genre;
 use App\Label;
-use App\User;
-use App\DigitalAsset;
-use App\Observers\ArtistObserver;
 use App\Observers\AlbumObserver;
+use App\Observers\ArtistObserver;
 use App\Observers\GenreObserver;
 use App\Observers\LabelObserver;
 use App\Observers\UserObserver;
+use App\Repositories\AccountRepository;
+use App\Repositories\AlbumRepository;
+use App\Repositories\ArtistRepository;
+use App\Repositories\CatalogEntityRepository;
+use App\Repositories\CountryRepository;
+use App\Repositories\DigitalAssetRepository;
+use App\Repositories\FeaturedRepository;
+use App\Repositories\FlacFileRepository;
+use App\Repositories\GenreRepository;
+use App\Repositories\LabelRepository;
+use App\Repositories\OrderRepository;
+use App\Repositories\ProfileRepository;
+use App\Repositories\SongRepository;
+use App\Repositories\UserRepository;
+use App\User;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

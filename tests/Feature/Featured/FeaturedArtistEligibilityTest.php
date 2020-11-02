@@ -17,32 +17,32 @@ class FeaturedArtistEligibilityTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * @var $featured FeaturedRepositoryInterface
+     * @var FeaturedRepositoryInterface
      */
     protected $featured;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $album;
 
     /**
-     * @var $song SongRepositoryInterface
+     * @var SongRepositoryInterface
      */
     protected $song;
 
     /**
-     * @var $artist ArtistRepositoryInterface
+     * @var ArtistRepositoryInterface
      */
     protected $artist;
 
     /**
-     * @var $eligibleArtists array
+     * @var array
      */
     protected $eligibleArtists = [];
 
     /**
-     * @var $digitalAsset DigitalAssetRepositoryInterface
+     * @var DigitalAssetRepositoryInterface
      */
     protected $digitalAsset;
 
@@ -98,7 +98,7 @@ class FeaturedArtistEligibilityTest extends TestCase
         $song = Factory::factoryForModel($this->song->class())->make([
             'track_number' => 1,
             'is_active' => false,
-            'album_id' => $album->id
+            'album_id' => $album->id,
         ]);
 
         Factory::factoryForModel($this->song->class())->create($song->toArray());

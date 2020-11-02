@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\LabelRepositoryInterface;
+use App\Http\Requests\DestroyLabel;
 use App\Http\Requests\StoreLabel;
 use App\Http\Requests\UpdateLabel;
-use App\Http\Requests\DestroyLabel;
 use App\Http\Resources\LabelResource;
 
 class LabelController extends ApiController
@@ -13,7 +13,7 @@ class LabelController extends ApiController
     protected $shouldAuthorize = true;
 
     /**
-     * Sets the RepositoryInterface to resolve
+     * Sets the RepositoryInterface to resolve.
      *
      * @return string
      */
@@ -23,7 +23,7 @@ class LabelController extends ApiController
     }
 
     /**
-     * Sets the ModelResource to resolve
+     * Sets the ModelResource to resolve.
      *
      * @return string
      */
@@ -33,7 +33,7 @@ class LabelController extends ApiController
     }
 
     /**
-     * Sets the StoreRequest to resolve for validation during a store request
+     * Sets the StoreRequest to resolve for validation during a store request.
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class LabelController extends ApiController
     }
 
     /**
-     * Sets the UpdateRequest to resolve for validation during a update request
+     * Sets the UpdateRequest to resolve for validation during a update request.
      *
      * @return string
      */
@@ -53,7 +53,7 @@ class LabelController extends ApiController
     }
 
     /**
-     * Should return <DestroyRequest>::class
+     * Should return <DestroyRequest>::class.
      *
      * @return string
      */

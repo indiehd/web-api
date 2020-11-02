@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Contracts\OrderRepositoryInterface;
+use Illuminate\Foundation\Http\FormRequest;
 
 class DestroyOrder extends FormRequest
 {
@@ -18,7 +18,7 @@ class DestroyOrder extends FormRequest
 
         $model = $repository->findById($this->route('id'));
 
-        return !is_null($model);
+        return ! is_null($model);
     }
 
     /**

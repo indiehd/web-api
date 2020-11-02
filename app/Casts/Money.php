@@ -35,7 +35,7 @@ class Money implements CastsAttributes
             return $value;
         }
 
-        if (!static::$currency) {
+        if (! static::$currency) {
             static::$currency = new Currency(
                 config(self::CURRENCY_CONFIG_KEY) ?: self::CURRENCY_DEFAULT
             );
