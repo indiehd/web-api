@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Seeder;
 
 class AlbumsSeeder extends Seeder
@@ -13,6 +14,6 @@ class AlbumsSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Album::class, 50)->create();
+        Factory::factoryForModel(\App\Album::class)->times(50)->create();
     }
 }
