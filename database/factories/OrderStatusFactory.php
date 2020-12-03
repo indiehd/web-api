@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use IndieHD\Velkart\Models\Eloquent\OrderStatus;
 
-class OrderFactory extends Factory
+class OrderStatusFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Order::class;
+    protected $model = OrderStatus::class;
 
     /**
      * Define the model's default state.
@@ -21,10 +21,8 @@ class OrderFactory extends Factory
      */
     public function definition()
     {
-        $orderStatus = OrderStatusFactory::new();
-
         return [
-            'order_status_id' => $orderStatus,
+            'name' => $this->faker->word,
         ];
     }
 }
