@@ -1036,12 +1036,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/indiehd/velkart.git",
-                "reference": "4ced9b94c88a36a52dfa22567891b743f8911afb"
+                "reference": "2a79241dd295357d567c607ce717e44ba2dc9cad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/indiehd/velkart/zipball/4ced9b94c88a36a52dfa22567891b743f8911afb",
-                "reference": "4ced9b94c88a36a52dfa22567891b743f8911afb",
+                "url": "https://api.github.com/repos/indiehd/velkart/zipball/2a79241dd295357d567c607ce717e44ba2dc9cad",
+                "reference": "2a79241dd295357d567c607ce717e44ba2dc9cad",
                 "shasum": ""
             },
             "require": {
@@ -1089,20 +1089,20 @@
                 "issues": "https://github.com/indiehd/velkart/issues",
                 "source": "https://github.com/indiehd/velkart/tree/master"
             },
-            "time": "2020-11-06T02:56:58+00:00"
+            "time": "2020-12-03T03:10:46+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v8.17.0",
+            "version": "v8.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "09bd79531d3f958f02fa34f1f14197b1716ef29b"
+                "reference": "7618102c4864ac1f1f791c966c0e9a86949d9b83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/09bd79531d3f958f02fa34f1f14197b1716ef29b",
-                "reference": "09bd79531d3f958f02fa34f1f14197b1716ef29b",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/7618102c4864ac1f1f791c966c0e9a86949d9b83",
+                "reference": "7618102c4864ac1f1f791c966c0e9a86949d9b83",
                 "shasum": ""
             },
             "require": {
@@ -1256,7 +1256,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2020-12-01T15:01:58+00:00"
+            "time": "2020-12-02T06:08:43+00:00"
         },
         {
             "name": "laravel/tinker",
