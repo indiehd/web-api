@@ -5,7 +5,7 @@ namespace Tests\Feature\Controllers;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Contracts\Hashing\Hasher;
 
 class UserControllerTest extends ControllerTestCase

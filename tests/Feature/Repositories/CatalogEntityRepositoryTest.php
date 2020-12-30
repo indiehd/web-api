@@ -9,6 +9,7 @@ use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
 {
@@ -44,7 +45,7 @@ class CatalogEntityRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CountriesSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->account = resolve(AccountRepositoryInterface::class);
 

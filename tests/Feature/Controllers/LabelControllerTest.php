@@ -9,7 +9,7 @@ use App\Contracts\LabelRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Label;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 //use App\Http\Resources\ArtistResource;
 //use App\Http\Resources\AlbumResource;

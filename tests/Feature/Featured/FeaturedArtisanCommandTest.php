@@ -9,6 +9,7 @@ use Artisan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Tests\TestCase;
 
 class FeaturedArtisanCommandTest extends TestCase
@@ -42,7 +43,7 @@ class FeaturedArtisanCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed('CountriesSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->featured = resolve(FeaturedRepositoryInterface::class);
 

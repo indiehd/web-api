@@ -10,7 +10,7 @@ use App\Contracts\SongRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\FlacFile;
 use App\Song;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class SongControllerTest extends ControllerTestCase
 {

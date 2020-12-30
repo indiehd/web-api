@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use ReflectionClass;
 
 abstract class TestCase extends BaseTestCase
@@ -12,6 +13,8 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        #$this->seed(CountriesSeeder::class);
     }
 
     protected function isInstantiable($class)

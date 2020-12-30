@@ -7,7 +7,7 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 

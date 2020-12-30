@@ -5,7 +5,7 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\AccountRepositoryInterface;
 use App\Contracts\CountryRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AccountRepositoryTest extends RepositoryCrudTestCase

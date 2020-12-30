@@ -6,7 +6,7 @@ use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\GenreRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 

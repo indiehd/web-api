@@ -5,6 +5,7 @@ namespace Tests\Feature\Repositories;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\FeaturedRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class FeatureRepositoryTest extends RepositoryCrudTestCase
 {
@@ -17,7 +18,7 @@ class FeatureRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CountriesSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
     }

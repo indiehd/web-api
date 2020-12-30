@@ -7,7 +7,7 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;

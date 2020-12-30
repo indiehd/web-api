@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\Routes;
 
 use App\Contracts\AlbumRepositoryInterface;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Tests\Feature\Controllers\ControllerTestCase;
 
 class IndexRouteTest extends ControllerTestCase
@@ -12,6 +13,8 @@ class IndexRouteTest extends ControllerTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->seed(CountriesSeeder::class);
 
         $this->album = resolve(AlbumRepositoryInterface::class);
     }
