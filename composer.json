@@ -1,12 +1,13 @@
 {
-    "name": "laravel/laravel",
+    "name": "indiehd/web-api",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The indieHD API",
     "keywords": [
-        "framework",
+        "music",
+        "ecommerce",
         "laravel"
     ],
-    "license": "MIT",
+    "license": "AGPL-3.0-only",
     "require": {
         "php": "^7.3|^8.0",
         "fideloper/proxy": "^4.4",
