@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Database\Factories\CartFactory;
+use IndieHD\Velkart\Database\Factories\CartFactory;
 use IndieHD\Velkart\Models\Eloquent\Product;
 
 class CartSeeder extends BaseSeeder
