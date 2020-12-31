@@ -9,7 +9,7 @@ use App\Profile;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-function factory_for_model(string $class): Factory
+function factoryForModel(string $class): Factory
 {
     return Factory::factoryForModel($class);
 }
@@ -47,18 +47,18 @@ class AccountsSeeder extends BaseSeeder
                     // users with Artist AND Label Profiles
                     $this->log('Creating a User with Label and Artist Profiles');
 
-                    $user_id = factory_for_model(User::class)->create()->id;
+                    $user_id = factoryForModel(User::class)->create()->id;
 
                     foreach ($catalogable as $item) {
-                        $entity = factory_for_model($item)->create();
+                        $entity = factoryForModel($item)->create();
 
-                        factory_for_model(CatalogEntity::class)->create([
+                        factoryForModel(CatalogEntity::class)->create([
                             'user_id' => $user_id,
                             'catalogable_id' => $entity->id,
                             'catalogable_type' => $item,
                         ]);
 
-                        factory_for_model(Profile::class)->create([
+                        factoryForModel(Profile::class)->create([
                             'profilable_id' => $entity->id,
                             'profilable_type' => $item,
                         ]);
@@ -68,15 +68,15 @@ class AccountsSeeder extends BaseSeeder
                     $type = $catalogable[rand(0, count($catalogable) - 1)];
                     $this->log("Creating a User with a $type Profile");
 
-                    $entity = factory_for_model($type)->create();
+                    $entity = factoryForModel($type)->create();
 
-                    factory_for_model(CatalogEntity::class)->create([
-                        'user_id' => factory_for_model(User::class),
+                    factoryForModel(CatalogEntity::class)->create([
+                        'user_id' => factoryForModel(User::class),
                         'catalogable_id' => $entity->id,
                         'catalogable_type' => $type,
                     ]);
 
-                    factory_for_model(Profile::class)->create([
+                    factoryForModel(Profile::class)->create([
                         'profilable_id' => $entity->id,
                         'profilable_type' => $type,
                     ]);
@@ -84,7 +84,7 @@ class AccountsSeeder extends BaseSeeder
             } else {
                 // users without any Catalogable Entities "Fans"
                 $this->log('Creating a User without any catalogable profiles');
-                factory_for_model(User::class)->create();
+                factoryForModel(User::class)->create();
             }
         }
     }
