@@ -7,9 +7,9 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\FlacFileRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class FlacFileRepositoryTest extends RepositoryCrudTestCase
 {

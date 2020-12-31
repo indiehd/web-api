@@ -14,7 +14,6 @@ class CartSeeder extends BaseSeeder
      */
     public function run()
     {
-
         CartFactory::new()->times(20)->create()
             ->each(function ($cart) {
                 $cart->content = serialize(Product::inRandomOrder()->take(rand(1, 10))->get());

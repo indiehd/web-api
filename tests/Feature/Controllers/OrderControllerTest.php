@@ -8,8 +8,8 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\OrderItemRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
-use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use IndieHD\Velkart\Contracts\OrderRepositoryContract;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class OrderControllerTest extends ControllerTestCase
 {

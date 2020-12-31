@@ -8,12 +8,12 @@ use App\Country;
 class CountryRepository extends BaseRepository implements CountryRepositoryInterface
 {
     /**
-     * @var  string 
+     * @var  string
      */
     protected $class = Country::class;
 
     /**
-     * @var  Country 
+     * @var  Country
      */
     protected $country;
 

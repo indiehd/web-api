@@ -22,7 +22,7 @@ class OrderSeeder extends Seeder
 
         foreach ($carts as $cart) {
             OrderFactory::new()->create()
-                ->each(function ($order) use ($cart) {
+                ->each(function ($order) {
                     // $products = unserialize($cart->content);
 
                     // TODO price error
