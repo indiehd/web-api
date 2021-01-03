@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Money;
 use Illuminate\Database\Eloquent\Model;
 
 class Song extends Model
