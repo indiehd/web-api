@@ -22,7 +22,13 @@ class OrderSeeder extends Seeder
                 ->each(function ($order) use ($cart) {
                     $products = unserialize($cart->content);
 
-                    $order->products()->saveMany($products);
+                    $pricePivots = [];
+
+                    foreach ($products->pluck('price')->toArray() as $price) {
+                        $pricePivots[] = ['price' => $price];
+                    }
+
+                    $order->products()->saveMany($products, $pricePivots);
                 });
         }
     }

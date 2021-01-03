@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
+
 class StaticDataSeeder extends BaseSeeder
 {
     /**
