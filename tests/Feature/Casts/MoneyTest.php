@@ -5,6 +5,7 @@ namespace Tests\Feature\Casts;
 use App\Album;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Money\Money;
 use Tests\TestCase;
 
@@ -15,6 +16,8 @@ class MoneyTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->seed(CountriesSeeder::class);
 
         config(['ihd.currency' => 'EUR']);
     }

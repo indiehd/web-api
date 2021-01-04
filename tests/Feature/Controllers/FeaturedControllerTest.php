@@ -5,7 +5,7 @@ namespace Tests\Feature\Controllers;
 use App\Contracts\AlbumRepositoryInterface;
 use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\FeaturedRepositoryInterface;
-use CountriesSeeder;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class FeaturedControllerTest extends ControllerTestCase
 {

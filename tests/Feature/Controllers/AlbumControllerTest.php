@@ -8,8 +8,8 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use App\Http\Resources\AlbumResource;
-use CountriesSeeder;
 use Illuminate\Support\Arr;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 use Money\Money;
 
 class AlbumControllerTest extends ControllerTestCase

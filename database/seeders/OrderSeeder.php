@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use IndieHD\Velkart\Database\Factories\OrderFactory;
 use IndieHD\Velkart\Models\Eloquent\Cart;
-use IndieHD\Velkart\Models\Eloquent\Order;
 
 class OrderSeeder extends Seeder
 {
@@ -18,9 +18,7 @@ class OrderSeeder extends Seeder
         $carts = Cart::inRandomOrder()->take(rand(10, 20))->get();
 
         foreach ($carts as $cart) {
-            factory(Order::class)->create([
-                'cart_id' => $cart->id,
-            ])
+            OrderFactory::new()->create()
                 ->each(function ($order) use ($cart) {
                     $products = unserialize($cart->content);
 

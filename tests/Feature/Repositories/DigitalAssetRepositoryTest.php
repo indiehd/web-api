@@ -7,13 +7,13 @@ use App\Contracts\ArtistRepositoryInterface;
 use App\Contracts\DigitalAssetRepositoryInterface;
 use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
-use CountriesSeeder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class DigitalAssetRepositoryTest extends RepositoryCrudTestCase
 {

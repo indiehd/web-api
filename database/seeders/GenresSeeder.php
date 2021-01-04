@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Genre;
+
 class GenresSeeder extends BaseSeeder
 {
     /**
@@ -12,7 +14,7 @@ class GenresSeeder extends BaseSeeder
     public function run()
     {
         foreach ($this->genres() as $genre) {
-            App\Genre::create([
+            Genre::create([
                 'name' => $genre,
             ]);
         }

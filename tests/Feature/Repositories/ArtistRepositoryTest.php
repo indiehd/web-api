@@ -11,6 +11,7 @@ use App\Contracts\ProfileRepositoryInterface;
 use App\Contracts\SongRepositoryInterface;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class ArtistRepositoryTest extends RepositoryCrudTestCase
 {
@@ -53,7 +54,7 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CountriesSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->account = resolve(AccountRepositoryInterface::class);
 

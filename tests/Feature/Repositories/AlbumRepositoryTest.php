@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\OrderStatusRepositoryContract;
 use IndieHD\Velkart\Contracts\Repositories\Eloquent\ProductRepositoryContract;
+use IndieHD\Velkart\Database\Seeders\CountriesSeeder;
 
 class AlbumRepositoryTest extends RepositoryCrudTestCase
 {
@@ -62,7 +63,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     {
         parent::setUp();
 
-        $this->seed('CountriesSeeder');
+        $this->seed(CountriesSeeder::class);
 
         $this->artist = resolve(ArtistRepositoryInterface::class);
 

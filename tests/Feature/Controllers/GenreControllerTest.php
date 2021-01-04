@@ -75,9 +75,9 @@ class GenreControllerTest extends ControllerTestCase
      */
     public function testDeleteWhenNotAuthorizedReturnsUnauthorizedStatus()
     {
-        $this->factory($this->genre)->create();
+        $genre = $this->factory($this->genre)->create();
 
-        $this->json('DELETE', route('genres.destroy', ['id' => 1]))
+        $this->json('DELETE', route('genres.destroy', ['id' => $genre->id]))
             ->assertStatus(403);
     }
 }
