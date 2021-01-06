@@ -53,7 +53,7 @@ class AlbumFactory extends Factory
                     'status' => 1,
                 ])->id,
                 'asset_id' => $album->id,
-                'asset_type' => App\Album::class,
+                'asset_type' => Album::class,
             ]));
 
             // Fetch and attach some Genres.

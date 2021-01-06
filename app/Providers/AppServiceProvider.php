@@ -40,6 +40,7 @@ use App\Repositories\ProfileRepository;
 use App\Repositories\SongRepository;
 use App\Repositories\UserRepository;
 use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -61,6 +62,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Factory::guessFactoryNamesUsing(function ($name) {
+            return (string) '\\Database\\Factories\\'.
+                (class_basename($name)).
+                'Factory';
+        });
+
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(AccountRepositoryInterface::class, AccountRepository::class);
         $this->app->bind(ArtistRepositoryInterface::class, ArtistRepository::class);

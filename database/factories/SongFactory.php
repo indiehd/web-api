@@ -21,7 +21,7 @@ class SongFactory extends Factory
 
     public function configure()
     {
-        $this->afterCreating(function (Song $song) {
+        return $this->afterCreating(function (Song $song) {
             $song->asset()->save(static::factoryForModel(resolve(DigitalAssetRepositoryInterface::class)->class())->make([
                 'product_id' => resolve(ProductRepositoryContract::class)->create([
                     'name' => $song->name,
@@ -34,11 +34,9 @@ class SongFactory extends Factory
                     'status'      => 1,
                 ])->id,
                 'asset_id' => $song->id,
-                'asset_type' => App\Song::class,
+                'asset_type' => Song::class,
             ]));
         });
-
-        return $this;
     }
 
     /**
@@ -56,7 +54,6 @@ class SongFactory extends Factory
             'flac_file_id' => static::factoryForModel(resolve(FlacFileRepositoryInterface::class)->class()),
             'track_number' => null, // passed during creation
             'preview_start' => $faker->numberBetween(0, 60),
-            'price' =>  $faker->numberBetween(0, 1000),
             'is_digital' => 1,
             'is_taxable' => 0,
             'requires_shipping' => false,

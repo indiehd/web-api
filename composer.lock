@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "258a932197e0d5448eeb34f1a45ec56c",
+    "content-hash": "d3f3c84f232191634f86bb0d25bfbae7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1036,12 +1036,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/indiehd/velkart.git",
-                "reference": "3abc9f5a101af413682d692babead7278a6ceace"
+                "reference": "6d1420d1ed1dee62a65f06dd955b31b3aeaf2483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/indiehd/velkart/zipball/3abc9f5a101af413682d692babead7278a6ceace",
-                "reference": "3abc9f5a101af413682d692babead7278a6ceace",
+                "url": "https://api.github.com/repos/indiehd/velkart/zipball/6d1420d1ed1dee62a65f06dd955b31b3aeaf2483",
+                "reference": "6d1420d1ed1dee62a65f06dd955b31b3aeaf2483",
                 "shasum": ""
             },
             "require": {
@@ -1092,7 +1092,7 @@
                 "issues": "https://github.com/indiehd/velkart/issues",
                 "source": "https://github.com/indiehd/velkart/tree/master"
             },
-            "time": "2020-12-29T15:08:00+00:00"
+            "time": "2021-01-03T03:52:20+00:00"
         },
         {
             "name": "laravel/framework",

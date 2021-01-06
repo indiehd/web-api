@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Money;
 use Illuminate\Database\Eloquent\Model;
 
 class Song extends Model
@@ -14,7 +13,6 @@ class Song extends Model
         'is_digital' => 'bool',
         'is_taxable' => 'bool',
         'preview_start' => 'float',
-        'price' => Money::class,
         'requires_shipping' => 'bool',
         'track_number' => 'int',
     ];
