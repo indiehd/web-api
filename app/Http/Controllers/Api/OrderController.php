@@ -82,7 +82,7 @@ class OrderController extends ApiController
     /**
      * Create an Order, which requires adding one or more Items to the Order.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      */
     public function storeOrder(StoreOrder $request)
@@ -114,7 +114,7 @@ class OrderController extends ApiController
     /**
      * Add one or more Items to an existing Order.
      *
-     * @param UpdateOrder $request
+     * @param  UpdateOrder  $request
      * @return Response
      */
     public function addItems(UpdateOrder $request)
@@ -146,7 +146,7 @@ class OrderController extends ApiController
     /**
      * Remove one or more Items from an existing Order.
      *
-     * @param UpdateOrder $request
+     * @param  UpdateOrder  $request
      * @return Response
      */
     public function removeItems(UpdateOrder $request)
