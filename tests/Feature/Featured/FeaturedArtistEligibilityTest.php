@@ -176,7 +176,7 @@ class FeaturedArtistEligibilityTest extends TestCase
     /**
      * Create an Artist.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Artist
      */
     protected function createArtist(array $properties = [])
@@ -187,7 +187,7 @@ class FeaturedArtistEligibilityTest extends TestCase
     /**
      * Create an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function createAlbum(array $properties = [])
@@ -202,7 +202,7 @@ class FeaturedArtistEligibilityTest extends TestCase
     /**
      * Make an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function makeAlbum(array $properties = [])
@@ -217,7 +217,7 @@ class FeaturedArtistEligibilityTest extends TestCase
     /**
      * Make a Digital Asset.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\DigitalAsset
      */
     protected function makeDigitalAsset($properties = [])

@@ -177,7 +177,7 @@ class GenreRepositoryTest extends RepositoryCrudTestCase
     /**
      * Make an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function makeAlbum(array $properties = [])

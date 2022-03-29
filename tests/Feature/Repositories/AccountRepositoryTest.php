@@ -137,8 +137,8 @@ class AccountRepositoryTest extends RepositoryCrudTestCase
     /**
      * Make a new User object.
      *
-     * @param array $userProperties
-     * @param array $accountProperties
+     * @param  array  $userProperties
+     * @param  array  $accountProperties
      * @return \App\User
      */
     protected function makeUser(array $userProperties = [], array $accountProperties = [])

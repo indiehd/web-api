@@ -36,7 +36,7 @@ class MakeApiControllerCommand extends GeneratorCommand
     /**
      * Create a new command instance.
      *
-     * @param Filesystem $file
+     * @param  Filesystem  $file
      */
     public function __construct(Filesystem $file)
     {

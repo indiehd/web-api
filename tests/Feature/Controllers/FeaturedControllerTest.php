@@ -70,7 +70,7 @@ class FeaturedControllerTest extends ControllerTestCase
     /**
      * Create an Artist.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Artist
      */
     protected function createArtist(array $properties = [])
@@ -81,7 +81,7 @@ class FeaturedControllerTest extends ControllerTestCase
     /**
      * Make an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function makeAlbum(array $properties = [])
