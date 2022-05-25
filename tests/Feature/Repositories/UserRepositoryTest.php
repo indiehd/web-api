@@ -174,8 +174,8 @@ class UserRepositoryTest extends RepositoryCrudTestCase
      * Make a CatalogEntity.
      *
      * @param $type
-     * @param array $entityProperties
-     * @param array $catalogableProperties
+     * @param  array  $entityProperties
+     * @param  array  $catalogableProperties
      * @return mixed
      */
     protected function makeCatalogEntity($type, array $entityProperties = [], array $catalogableProperties = [])

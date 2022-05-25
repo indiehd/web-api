@@ -16,8 +16,8 @@ abstract class BaseRepository implements RepositoryShouldRead
     }
 
     /**
-     * @param int $limit
-     * @param int|null $paginate
+     * @param  int  $limit
+     * @param  int|null  $paginate
      * @return mixed
      */
     public function limit(int $limit, int $paginate = null)
@@ -35,7 +35,7 @@ abstract class BaseRepository implements RepositoryShouldRead
     }
 
     /**
-     * @param int $paginate
+     * @param  int  $paginate
      * @return mixed
      */
     public function paginate(int $paginate)
@@ -45,6 +45,7 @@ abstract class BaseRepository implements RepositoryShouldRead
 
     /**
      * @return object
+     *
      * @throws \ReflectionException
      */
     public function new()

@@ -32,9 +32,9 @@ class UserRepository extends CrudRepository implements UserRepositoryInterface
     /**
      * UserRepository constructor.
      *
-     * @param User $user
-     * @param AccountRepositoryInterface $account
-     * @param Hasher $hasher
+     * @param  User  $user
+     * @param  AccountRepositoryInterface  $account
+     * @param  Hasher  $hasher
      */
     public function __construct(
         User $user,

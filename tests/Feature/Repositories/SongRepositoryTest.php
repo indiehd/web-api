@@ -185,7 +185,7 @@ class SongRepositoryTest extends RepositoryCrudTestCase
     /**
      * Make a Digital Asset.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\DigitalAsset
      */
     protected function makeDigitalAsset($properties = [])
