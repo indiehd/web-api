@@ -260,8 +260,8 @@ class ArtistRepositoryTest extends RepositoryCrudTestCase
     /**
      * Create a new User.
      *
-     * @param array $userProperties
-     * @param array $accountProperties
+     * @param  array  $userProperties
+     * @param  array  $accountProperties
      * @return \App\User
      */
     protected function createUser(array $userProperties = [], array $accountProperties = [])

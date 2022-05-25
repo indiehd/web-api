@@ -72,8 +72,9 @@ abstract class ApiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request)
@@ -128,7 +129,7 @@ abstract class ApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return JsonResource
      */
     public function show($id)
@@ -143,7 +144,7 @@ abstract class ApiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return JsonResource
      */
     public function update($id)
@@ -162,7 +163,7 @@ abstract class ApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

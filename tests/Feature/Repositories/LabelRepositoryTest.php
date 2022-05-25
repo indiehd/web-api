@@ -243,8 +243,8 @@ class LabelRepositoryTest extends RepositoryCrudTestCase
     /**
      * Create a User.
      *
-     * @param array $userProperties
-     * @param array $accountProperties
+     * @param  array  $userProperties
+     * @param  array  $accountProperties
      * @return \App\User
      */
     protected function createUser(array $userProperties = [], array $accountProperties = [])

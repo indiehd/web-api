@@ -212,7 +212,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * Create an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function makeAlbum(array $properties = [])
@@ -243,7 +243,7 @@ class AlbumRepositoryTest extends RepositoryCrudTestCase
     /**
      * Make a Digital Asset.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\DigitalAsset
      */
     protected function makeDigitalAsset(array $properties = [])

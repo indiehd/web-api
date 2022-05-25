@@ -317,7 +317,7 @@ class OrderControllerTest extends ControllerTestCase
     /**
      * Make an Album.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\Album
      */
     protected function makeAlbum(array $properties = [])
@@ -367,7 +367,7 @@ class OrderControllerTest extends ControllerTestCase
     /**
      * Make an Order Item.
      *
-     * @param array $properties
+     * @param  array  $properties
      * @return \App\DigitalAsset
      */
     protected function makeOrderItem($properties = [])
